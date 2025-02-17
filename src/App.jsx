@@ -1,149 +1,116 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
-// Constants for reusable data
+// Constants
 const NAV_LINKS = [
-  { href: '#menu', text: 'Menu' },
-  { href: '#about', text: 'About' },
-  { href: '#gallery', text: 'Gallery' },
-  { href: '#contact', text: 'Contact' },
-];
-
-const MENU_ITEMS = [
-  {
-    name: 'Tandoori Salmon',
-    price: '$28',
-    desc: 'Norwegian salmon marinated in ginger, garlic, and Kashmiri chili',
-    img: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398',
-  },
-  {
-    name: 'Lamb Shank Rogan Josh',
-    price: '$34',
-    desc: 'Slow-cooked Australian lamb in aromatic Kashmiri spices',
-    img: 'https://images.unsplash.com/photo-1599043513900-ed6fe01d3833',
-  },
-  {
-    name: 'Saffron Risotto',
-    price: '$26',
-    desc: 'Carnaroli rice with saffron, smoked paneer, and microgreens',
-    img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1',
-  },
-];
-
-const SOCIAL_LINKS = [
-  {
-    name: 'Instagram',
-    path: 'M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205...',
-  },
-  {
-    name: 'Facebook',
-    path: 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007...',
-  },
+  { path: '/', text: 'Home' },
+  { path: '/menu', text: 'Menu' },
+  { path: '/about', text: 'About' },
+  { path: '/gallery', text: 'Gallery' },
+  { path: '/contact', text: 'Contact' },
+  { path: '/blog', text: 'Blog' },
 ];
 
 // Reusable Components
 const Button = ({ children, variant = 'primary', ...props }) => (
-  <a
-    className={`px-8 py-3 rounded-full transition-all ${
-      variant === 'primary'
-        ? 'bg-amber-600 text-white hover:bg-amber-700'
-        : 'border-2 border-amber-600 text-amber-600 hover:bg-amber-50'
-    }`}
-    {...props}
-  >
-    {children}
-  </a>
+  // ... same button component as before ...
 );
 
-const SocialIcon = ({ name, path }) => (
-  <a
-    href="#"
-    className="text-gray-400 hover:text-amber-500 transition-colors"
-    aria-label={name}
-  >
-    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-      <path d={path} />
-    </svg>
-  </a>
+const SectionHeader = ({ title, subtitle }) => (
+  <div className="text-center mb-16">
+    <h2 className="text-4xl font-light text-gray-800 mb-4">{title}</h2>
+    {subtitle && <p className="text-gray-600 max-w-2xl mx-auto">{subtitle}</p>}
+  </div>
 );
 
-// Main Sections
-const Navigation = () => (
-  <nav className="bg-white border-b border-gray-100 fixed w-full z-50">
+// Pages
+const HomePage = () => (
+  <>
+    <HeroSection />
+    <FeaturedMenu />
+    <AboutPreview />
+    <Testimonials />
+  </>
+);
+
+const MenuPage = () => (
+  <div className="py-24">
+    <SectionHeader 
+      title="Our Culinary Offerings" 
+      subtitle="Experience the diversity of Indian cuisine through our carefully crafted menu"
+    />
+    <MenuCategories />
+    <ChefsSpecial />
+    <WinePairing />
+  </div>
+);
+
+const AboutPage = () => (
+  <div className="py-24">
+    <SectionHeader title="Our Story" />
+    <HistoryTimeline />
+    <TeamSection />
+    <AwardsRecognition />
+  </div>
+);
+
+// New Components
+const FeaturedMenu = () => (
+  <section className="py-24 bg-amber-50">
     <div className="max-w-7xl mx-auto px-6">
-      <div className="flex justify-between items-center h-20">
-        <div className="flex items-center space-x-2">
-          <span className="text-3xl font-bold text-amber-600" aria-label="Ruchi">रुचि</span>
-          <span className="text-xl font-light text-gray-700 tracking-wide">INDIAN KITCHEN</span>
-        </div>
-        <div className="hidden md:flex items-center space-x-8">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-gray-600 hover:text-amber-600 transition-colors duration-200"
-            >
-              {link.text}
-            </a>
-          ))}
-        </div>
-      </div>
-    </div>
-  </nav>
-);
-
-const HeroSection = () => (
-  <section className="pt-32 pb-24 bg-gradient-to-r from-amber-50 to-amber-100">
-    <div className="max-w-7xl mx-auto px-6 text-center">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-5xl font-light text-gray-800 mb-6 leading-tight">
-          Modern Indian <span className="font-medium">Culinary</span> Experience
-        </h1>
-        <p className="text-lg text-gray-600 mb-8 max-w-xl mx-auto">
-          Where traditional flavors meet contemporary presentation
-        </p>
-        <div className="flex justify-center space-x-4">
-          <Button href="#menu" variant="primary">
-            Explore Menu
-          </Button>
-          <Button href="#contact">
-            Reservations
-          </Button>
-        </div>
+      <SectionHeader
+        title="Chef's Specialties"
+        subtitle="Weekly rotating selections based on seasonal availability"
+      />
+      <div className="grid md:grid-cols-3 gap-8">
+        {/* Menu items with chef recommendations */}
       </div>
     </div>
   </section>
 );
 
-const MenuSection = () => (
-  <section id="menu" className="py-24 bg-amber-50">
+const HistoryTimeline = () => (
+  <div className="max-w-7xl mx-auto px-6">
+    <div className="relative">
+      <div className="absolute left-1/2 w-1 bg-amber-100 h-full"></div>
+      {[
+        { year: '1995', title: 'Family Recipes Foundation' },
+        { year: '2008', title: 'First Restaurant Opening' },
+        { year: '2015', title: 'Michelin Star Recognition' },
+        { year: '2023', title: 'Modern Reinvention' },
+      ].map((item, index) => (
+        <div key={index} className="mb-12 flex justify-between items-center w-full">
+          <div className={`w-5/12 ${index % 2 === 0 ? '' : 'invisible'}`}></div>
+          <div className="w-5 h-5 bg-amber-600 rounded-full z-10"></div>
+          <div className="w-5/12 p-6 bg-white shadow-lg rounded-lg">
+            <h3 className="text-xl font-medium text-amber-600">{item.year}</h3>
+            <p className="text-gray-700">{item.title}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const TeamSection = () => (
+  <section className="py-24 bg-white">
     <div className="max-w-7xl mx-auto px-6">
-      <div className="text-center mb-16">
-        <h2 className="text-3xl font-light text-gray-800 mb-4">Signature Offerings</h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          A carefully curated selection showcasing regional diversity and seasonal ingredients
-        </p>
-      </div>
-      <div className="grid md:grid-cols-3 gap-8">
-        {MENU_ITEMS.map((item, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-          >
-            <div className="aspect-square overflow-hidden">
-              <img
-                src={`${item.img}?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80`}
-                alt={item.name}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-3">
-                <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
-                <span className="text-amber-600 font-medium">{item.price}</span>
-              </div>
-              <p className="text-gray-600 text-sm">{item.desc}</p>
-            </div>
+      <SectionHeader title="Meet Our Team" />
+      <div className="grid md:grid-cols-4 gap-8">
+        {[
+          { name: 'Arjun Patel', role: 'Executive Chef', img: 'chef1.jpg' },
+          { name: 'Priya Sharma', role: 'Sous Chef', img: 'chef2.jpg' },
+          { name: 'Rahul Verma', role: 'Pastry Chef', img: 'chef3.jpg' },
+          { name: 'Anika Singh', role: 'Mixologist', img: 'chef4.jpg' },
+        ].map((member, index) => (
+          <div key={index} className="text-center">
+            <img 
+              src={member.img} 
+              alt={member.name}
+              className="rounded-full w-48 h-48 object-cover mx-auto mb-4"
+            />
+            <h3 className="text-xl font-medium text-gray-800">{member.name}</h3>
+            <p className="text-gray-600">{member.role}</p>
           </div>
         ))}
       </div>
@@ -151,34 +118,80 @@ const MenuSection = () => (
   </section>
 );
 
-// Main Component
-export default function IndianKitchen() {
-  return (
-    <div className="min-h-screen bg-white font-sans">
-      <Navigation />
-      <HeroSection />
-      <MenuSection />
-      
-      {/* Add other sections (About, Gallery, Contact, Footer) using similar component patterns */}
-      
-      <footer className="bg-gray-800 text-white py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
-            <div className="text-center md:text-left">
-              <div className="flex items-center space-x-2 mb-4">
-                <span className="text-2xl font-bold text-amber-600">रुचि</span>
-                <span className="text-sm text-gray-400">INDIAN KITCHEN</span>
-              </div>
-              <p className="text-sm text-gray-400">© 2023 Ruchi. All rights reserved.</p>
-            </div>
-            <div className="flex space-x-6">
-              {SOCIAL_LINKS.map((link) => (
-                <SocialIcon key={link.name} {...link} />
-              ))}
-            </div>
+const BlogPage = () => (
+  <div className="py-24">
+    <SectionHeader 
+      title="Culinary Insights" 
+      subtitle="Discover the art behind Indian cuisine"
+    />
+    <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
+      {[
+        { 
+          title: 'Modern Twist on Classic Spices', 
+          excerpt: 'Exploring contemporary uses of traditional Indian spices...',
+          date: 'March 15, 2023'
+        },
+        // More blog posts
+      ].map((post, index) => (
+        <article key={index} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <img src="blog-image.jpg" alt="Blog post" className="w-full h-48 object-cover rounded-t-lg" />
+          <div className="p-6">
+            <time className="text-sm text-gray-500">{post.date}</time>
+            <h3 className="text-xl font-medium text-gray-800 mt-2 mb-2">{post.title}</h3>
+            <p className="text-gray-600">{post.excerpt}</p>
+            <Button variant="text" className="mt-4">
+              Read More →
+            </Button>
           </div>
-        </div>
-      </footer>
+        </article>
+      ))}
     </div>
+  </div>
+);
+
+// Enhanced Navigation
+const Navigation = () => (
+  <nav className="bg-white border-b border-gray-100 fixed w-full z-50">
+    <div className="max-w-7xl mx-auto px-6">
+      <div className="flex justify-between items-center h-20">
+        <Link to="/" className="flex items-center space-x-2">
+          <span className="text-3xl font-bold text-amber-600">रुचि</span>
+          <span className="text-xl font-light text-gray-700 tracking-wide">INDIAN KITCHEN</span>
+        </Link>
+        <div className="hidden md:flex items-center space-x-8">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className="text-gray-600 hover:text-amber-600 transition-colors duration-200"
+            >
+              {link.text}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  </nav>
+);
+
+// Main App Component
+export default function App() {
+  return (
+    <Router>
+      <div className="min-h-screen bg-white font-sans">
+        <Navigation />
+        
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/menu" element={<MenuPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+        </Routes>
+
+        <Footer />
+      </div>
+    </Router>
   );
 }
