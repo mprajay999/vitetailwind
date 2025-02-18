@@ -1,168 +1,208 @@
-import React, { useState, useEffect } from 'react'
+
+import React, { useState } from 'react'
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState('home')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
 
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const navigation = [
+    { name: 'Home', href: '#' },
+    { name: 'Menu', href: '#menu' },
+    { name: 'About', href: '#about' },
+    { name: 'Contact', href: '#contact' },
+  ]
 
   return (
-    <div className="font-sans">
-      {/* Header */}
-      <header className={`fixed w-full z-50 transition-colors ${isScrolled ? 'bg-gray-900' : 'bg-transparent'}`}>
-        <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-white">Ragnova IT</h1>
-          
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-8">
-            {['Home', 'Services', 'About Us', 'Contact'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} 
-                className="text-gray-300 hover:text-white transition-colors duration-300">
-                {item}
-              </a>
-            ))}
+    <div className="min-h-screen bg-gray-50">
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap');
+        `}
+      </style>
+
+      {/* Navigation */}
+      <nav className="fixed w-full bg-white/80 backdrop-blur-sm z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex-shrink-0">
+              <img
+                className="h-12"
+                src="https://cdn-icons-png.flaticon.com/512/1960/1960923.png"
+                alt="Logo"
+              />
+            </div>
+            
+            {/* Desktop Menu */}
+            <div className="hidden md:block">
+              <div className="flex space-x-8">
+                {navigation.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="text-gray-700 hover:text-amber-800 px-3 py-2 text-lg font-roboto font-medium"
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <button
+              className="md:hidden p-2 rounded-md text-gray-700"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
+        </div>
 
-          {/* Mobile Menu */}
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden text-white">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-16 6h16" />
-            </svg>
-          </button>
-        </nav>
-
-        {/* Mobile Dropdown */}
+        {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-gray-900">
-            {['Home', 'Services', 'About Us', 'Contact'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} 
-                className="block px-6 py-2 text-gray-300 hover:bg-gray-800">
-                {item}
-              </a>
-            ))}
+          <div className="md:hidden bg-white/95">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {navigation.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-700 block px-3 py-2 text-base font-medium"
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
           </div>
         )}
-      </header>
+      </nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative h-screen flex items-center justify-center">
+      <div className="relative h-screen flex items-center justify-center">
         <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80" 
-            alt="Tech background" 
+          <img
+            src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80"
+            alt="Hyderabadi Cuisine"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-blue-900/80" />
+          <div className="absolute inset-0 bg-black/50" />
         </div>
-        
-        <div className="relative text-center px-4">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-            Innovative IT Solutions for Tomorrow’s Challenges
-          </h1>
-          <p className="text-xl text-gray-300 mb-8">Strategic Technology Consulting & Development Services</p>
-          <button className="bg-cyan-500 text-white px-8 py-3 rounded-lg hover:bg-cyan-600 transition-colors">
-            Explore Services
-          </button>
-        </div>
-      </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">Our Expertise</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="relative max-w-4xl text-center px-4">
+          <h1 className="text-5xl md:text-7xl font-playfair text-white mb-6">
+            Hyderabadi Nawabi House
+          </h1>
+          <p className="text-xl md:text-2xl text-amber-100 mb-8 font-roboto">
+            Preserving the Legacy of Hyderabadi Cuisine Since 1985
+          </p>
+          <div className="space-x-4">
+            <a
+              href="#menu"
+              className="bg-amber-800 text-white px-8 py-3 rounded-full hover:bg-amber-700 transition-colors font-roboto"
+            >
+              Explore Menu
+            </a>
+            <a
+              href="https://opentable.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white/10 transition-colors font-roboto"
+            >
+              Book a Table
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Highlights Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-12">
             {[
-              {icon: '🌐', title: 'Cloud Solutions', desc: 'Secure and scalable cloud infrastructure implementation'},
-              {icon: '🛡️', title: 'Cybersecurity', desc: 'Comprehensive digital protection strategies'},
-              {icon: '🤖', title: 'AI Integration', desc: 'Smart automation and machine learning solutions'},
-            ].map((service, index) => (
-              <div key={index} className="p-6 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-4xl mb-4">{service.icon}</div>
-                <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
-                <p className="text-gray-600">{service.desc}</p>
+              {
+                title: "Authentic Recipes Since 1985",
+                icon: "🥘",
+                description: "Preserving traditional cooking methods passed down through generations"
+              },
+              {
+                title: "Signature Dum Pukht Biryani",
+                icon: "🍛",
+                description: "Slow-cooked in sealed handis with premium ingredients"
+              },
+              {
+                title: "Royal Dining Experience",
+                icon: "👑",
+                description: "Elegant ambiance reflecting Nizami grandeur"
+              }
+            ].map((item, index) => (
+              <div key={index} className="text-center p-6">
+                <div className="text-6xl mb-4">{item.icon}</div>
+                <h3 className="text-2xl font-playfair text-gray-800 mb-4">{item.title}</h3>
+                <p className="text-gray-600 font-roboto">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about-us" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
-          <div className="md:w-1/2">
-            <h2 className="text-4xl font-bold mb-6">Driving Digital Transformation</h2>
-            <p className="text-gray-600 text-lg leading-relaxed">
-              At Ragnova IT, we combine technical excellence with strategic vision to deliver 
-              transformative solutions that propel businesses forward in the digital age.
-            </p>
-          </div>
-          <div className="md:w-1/2">
-            <img 
-              src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?auto=format&fit=crop&w=800&q=80" 
-              alt="Digital transformation" 
-              className="rounded-xl shadow-lg"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-white">
-        <div className="container mx-auto px-6 max-w-2xl">
-          <h2 className="text-4xl font-bold text-center mb-12">Get In Touch</h2>
-          <form className="space-y-6">
-            <div>
-              <input 
-                type="text" 
-                placeholder="Name"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-              />
-            </div>
-            <div>
-              <input 
-                type="email" 
-                placeholder="Email" 
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500"
-              />
-            </div>
-            <div>
-              <textarea 
-                rows="4"
-                placeholder="Message"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500"
-              ></textarea>
-            </div>
-            <button className="w-full bg-cyan-500 text-white py-3 rounded-lg hover:bg-cyan-600 transition-colors">
-              Send Message
-            </button>
-          </form>
-          
-          <div className="mt-12 text-center space-y-2">
-            <p className="text-gray-600">Email: contact@ragnova-it.com</p>
-            <p className="text-gray-600">Phone: +1 (555) 123-4567</p>
+      {/* Menu Section */}
+      <section id="menu" className="py-20 bg-amber-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-4xl font-playfair text-center mb-12 text-gray-800">Our Signature Dishes</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              { name: "Hyderabadi Dum Biryani", price: "₹599", desc: "Layered basmati rice with tender mutton, saffron, and spices" },
+              { name: "Haleem", price: "₹299", desc: "Slow-cooked wheat and meat porridge, garnished with fried onions" },
+              { name: "Khubani Ka Meetha", price: "₹199", desc: "Apricot dessert with custard and dry fruits" },
+              { name: "Mirchi Ka Salan", price: "₹249", desc: "Spicy chili curry with peanut-coconut gravy" },
+              { name: "Double Ka Meetha", price: "₹179", desc: "Bread pudding in reduced milk and dry fruits" },
+              { name: "Irani Chai", price: "₹99", desc: "Authentic Hyderabadi tea with Osmania biscuits" }
+            ].map((item, index) => (
+              <div key={index} className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <h3 className="text-xl font-playfair text-amber-800 mb-2">{item.name}</h3>
+                <p className="text-gray-600 font-roboto mb-3">{item.desc}</p>
+                <p className="text-2xl font-bold text-gray-800">{item.price}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
-        <div className="container mx-auto px-6">
-          <div className="border-t border-gray-800 pt-12 pb-8 flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-6 md:mb-0">
-              <h3 className="text-2xl font-bold text-white mb-4">Ragnova IT</h3>
-              <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
+      <footer className="bg-gray-800 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-8">
+            <div>
+              <h4 className="font-playfair text-xl mb-4">Contact Us</h4>
+              <p className="font-roboto">Plot No. 45, Basheer Bagh Road<br/>Hyderabad, Telangana 500029</p>
+              <p className="mt-2">📞 +91 40 1234 5678</p>
             </div>
-            <div className="flex space-x-6">
-              {['LinkedIn', 'Twitter', 'GitHub'].map((platform) => (
-                <a key={platform} href="#" className="hover:text-cyan-500 transition-colors">
-                  {platform}
-                </a>
-              ))}
+            
+            <div>
+              <h4 className="font-playfair text-xl mb-4">Opening Hours</h4>
+              <p className="font-roboto">
+                Mon-Sun: 11 AM - 11 PM<br/>
+                Friday Lunch: 12 PM - 3 PM
+              </p>
             </div>
+            
+            <div>
+              <h4 className="font-playfair text-xl mb-4">Follow Us</h4>
+              <div className="flex space-x-4">
+                {['facebook', 'instagram', 'twitter'].map((platform) => (
+                  <a key={platform} href="#" className="hover:text-amber-400 transition-colors">
+                    <img 
+                      src={`https://cdn-icons-png.flaticon.com/512/2111/2111463.png`} 
+                      alt={platform}
+                      className="h-8 w-8"
+                    />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-700 mt-8 pt-8 text-center">
+            <p className="font-roboto">&copy; 2023 Hyderabadi Nawabi House. All rights reserved.</p>
           </div>
         </div>
       </footer>
