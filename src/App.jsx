@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 
 const App = () => {
@@ -54,12 +53,13 @@ const App = () => {
       {/* Hero Section */}
       <section id="home" className="relative h-screen flex items-center justify-center">
         <div className="absolute inset-0">
-          className="w-full h-full object-cover"
-          src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&q=80&w=2836&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Indian spices background"
-        />
-          className="absolute inset-0 bg-black/40"
-        />
+          <img
+            className="w-full h-full object-cover"
+            src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&q=80&w=2836&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Indian spices background"
+          />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
         <div className="relative text-center text-white px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-4 font-serif">Ruchi Indian Kitchen</h1>
           <p className="text-xl md:text-2xl mb-8">Authentic Flavors, Crafted with Tradition</p>
@@ -103,6 +103,7 @@ const App = () => {
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2">
+              <img
                 src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=2874&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Restaurant interior"
                 className="rounded-lg shadow-xl"
