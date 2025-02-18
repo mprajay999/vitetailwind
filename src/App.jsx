@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
