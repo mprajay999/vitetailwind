@@ -1,29 +1,62 @@
 
-import React, { useState } from 'react';
-import { FiInstagram, FiFacebook } from 'react-icons/fi';
+import React, { useState, useEffect } from 'react';
 
-export default function App() {
+const App = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const services = [
+    {
+      title: "Cloud Solutions",
+      desc: "Secure and scalable cloud infrastructure for business growth",
+      icon: "☁️"
+    },
+    {
+      title: "Cybersecurity",
+      desc: "Advanced protection for your digital assets",
+      icon: "🛡️"
+    },
+    {
+      title: "AI Integration",
+      desc: "Smart automation and machine learning solutions",
+      icon: "🤖"
+    },
+    {
+      title: "IT Consulting",
+      desc: "Strategic technology planning and implementation",
+      icon: "💼"
+    }
+  ];
 
   return (
     <div className="font-sans">
       {/* Navigation */}
-      <nav className="fixed w-full top-0 z-50 bg-ivory shadow-sm">
+      <nav className={`fixed w-full z-50 transition-colors duration-300 ${isScrolled ? 'bg-gray-900/95 backdrop-blur' : 'bg-transparent'}`}>
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-serif text-gray-800">Ruchi Indian Kitchen</h1>
+          <div className="text-white font-bold text-xl">
+            Ragnova IT Solutions
+            <span className="block text-sm font-normal text-teal-400">Innovate. Implement. Inspire.</span>
+          </div>
           
-          {/* Desktop Menu */}
           <div className="hidden md:flex space-x-8">
-            <a href="#home" className="text-gray-800 hover:text-saffron transition">Home</a>
-            <a href="#menu" className="text-gray-800 hover:text-saffron transition">Menu</a>
-            <a href="#about" className="text-gray-800 hover:text-saffron transition">About</a>
-            <a href="#contact" className="text-gray-800 hover:text-saffron transition">Contact</a>
+            {['Home', 'Services', 'About', 'Contact'].map((item) => (
+              <a key={item} href={`#${item.toLowerCase()}`} className="text-white hover:text-teal-400 transition-colors">
+                {item}
+              </a>
+            ))}
           </div>
 
-          {/* Mobile Menu Toggle */}
           <button 
+            className="md:hidden text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-gray-800"
           >
             ☰
           </button>
@@ -31,126 +64,194 @@ export default function App() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-ivory px-6 py-4 space-y-4">
-            <a href="#home" className="block text-gray-800">Home</a>
-            <a href="#menu" className="block text-gray-800">Menu</a>
-            <a href="#about" className="block text-gray-800">About</a>
-            <a href="#contact" className="block text-gray-800">Contact</a>
+          <div className="md:hidden bg-gray-900 p-4 space-y-4">
+            {['Home', 'Services', 'About', 'Contact'].map((item) => (
+              <a 
+                key={item} 
+                href={`#${item.toLowerCase()}`} 
+                className="block text-white hover:text-teal-400"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item}
+              </a>
+            ))}
           </div>
         )}
       </nav>
 
       {/* Hero Section */}
       <section 
-        id="home"
-        className="relative h-screen flex items-center justify-center"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
+        id="home" 
+        className="min-h-screen flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&q=80&w=2069&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center relative"
       >
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
-        <div className="relative text-center text-white max-w-2xl px-4">
-          <h1 className="text-5xl md:text-7xl font-serif mb-6">
-            Authentic Flavors, Crafted with Love
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="container mx-auto px-6 relative z-10 text-center">
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
+            Empowering Innovation Through Technology
           </h1>
-          <button className="bg-saffron text-white px-8 py-3 rounded-full hover:bg-opacity-90 transition">
-            View Menu
+          <p className="text-xl md:text-2xl text-gray-200 mb-8">
+            Custom IT Solutions for Modern Businesses
+          </p>
+          <button className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
+            Explore Services
           </button>
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-20 bg-stone-50">
+      {/* Services Section */}
+      <section id="services" className="py-20 bg-white">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-serif text-center mb-12">Our Story</h2>
-          <p className="text-gray-600 max-w-3xl mx-auto text-center mb-16">
-            Founded in 2010 by the Sharma family, Ruchi Indian Kitchen brings generations 
-            of culinary tradition to your plate. Using time-honored recipes and locally 
-            sourced ingredients, we craft dishes that transport you straight to the heart 
-            of India.
-          </p>
-          <div className="flex flex-wrap justify-center gap-8">
-            {[1,2,3].map((item) => (
-              <img 
-                key={item}
-                src={`https://source.unsplash.com/random/400x400/?indian-food,spices,${item}`}
-                alt="Our kitchen"
-                className="w-48 h-48 rounded-full object-cover shadow-lg"
-              />
+          <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Our Expertise</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {services.map((service, index) => (
+              <div 
+                key={index}
+                className="p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100"
+              >
+                <div className="text-4xl mb-4">{service.icon}</div>
+                <h3 className="text-xl font-semibold mb-2 text-gray-800">{service.title}</h3>
+                <p className="text-gray-600">{service.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Menu Preview */}
-      <section id="menu" className="py-20">
+      {/* About Section */}
+      <section id="about" className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-serif text-center mb-12">Signature Dishes</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {['Appetizers', 'Mains', 'Desserts'].map((category) => (
-              <div 
-                key={category}
-                className="group relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition"
-              >
-                <img 
-                  src={`https://source.unsplash.com/random/800x600/?indian-${category}`}
-                  alt={category}
-                  className="w-full h-64 object-cover transform group-hover:scale-105 transition"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-6">
-                  <h3 className="text-xl font-serif">{category}</h3>
-                  <button className="mt-2 text-saffron hover:text-opacity-80">
-                    Explore {category} →
-                  </button>
-                </div>
-              </div>
-            ))}
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="md:w-1/2">
+              <img 
+                src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                alt="Our team" 
+                className="rounded-xl shadow-lg"
+              />
+            </div>
+            <div className="md:w-1/2">
+              <h2 className="text-4xl font-bold mb-6 text-gray-800">Our Mission</h2>
+              <p className="text-lg text-gray-600 mb-6">
+                At Ragnova IT Solutions, we bridge the gap between technology and business needs. 
+                Our mission is to deliver innovative, scalable solutions that drive digital transformation 
+                while maintaining the highest security standards.
+              </p>
+              <ul className="space-y-3">
+                {['Client-Centric Approach', 'Agile Methodologies', '24/7 Support', 'Cutting-Edge Technology'].map((item) => (
+                  <li key={item} className="flex items-center text-gray-600">
+                    <span className="text-teal-500 mr-2">✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-stone-50">
+      <section id="contact" className="py-20 bg-gray-100">
         <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-serif text-center mb-12">Visit Us</h2>
-            
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <h2 className="text-4xl font-bold mb-8 text-center text-gray-800">Get In Touch</h2>
             <div className="grid md:grid-cols-2 gap-12">
-              <div>
-                <p className="mb-4">📍 123 Spice Lane, Culinary City, CC 45678</p>
-                <p className="mb-4">📞 (555) 123-4567</p>
-                <p className="mb-4">📧 hello@ruchiindiankitchen.com</p>
-                
-                <div className="flex space-x-4 mt-6">
-                  <a href="https://instagram.com" target="_blank" rel="noopener">
-                    <FiInstagram className="text-2xl text-gray-600 hover:text-saffron transition" />
-                  </a>
-                  <a href="https://facebook.com" target="_blank" rel="noopener">
-                    <FiFacebook className="text-2xl text-gray-600 hover:text-saffron transition" />
-                  </a>
+              <form className="space-y-6">
+                <div>
+                  <input 
+                    type="text" 
+                    placeholder="Name" 
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  />
                 </div>
-              </div>
+                <div>
+                  <input 
+                    type="email" 
+                    placeholder="Email" 
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <textarea 
+                    placeholder="Message" 
+                    rows="4"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  ></textarea>
+                </div>
+                <button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 rounded-lg transition-colors duration-300">
+                  Send Message
+                </button>
+              </form>
 
-              <div className="h-64 rounded-lg overflow-hidden">
-                <iframe 
-                  title="Location Map"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d317715.7119263355!2d-0.38177626209219574!3d51.52873519656658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon%2C%20UK!5e0!3m2!1sen!2sus!4v1629990000000!5m2!1sen!2sus"
-                  className="w-full h-full"
-                  allowFullScreen
-                ></iframe>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold mb-4 text-gray-800">Contact Info</h3>
+                  <p className="text-gray-600">📍 123 Tech Valley, Silicon City, CA</p>
+                  <p className="text-gray-600 mt-2">📞 +1 (555) 123-4567</p>
+                  <p className="text-gray-600 mt-2">✉️ contact@ragnova.it</p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-4 text-gray-800">Follow Us</h3>
+                  <div className="flex space-x-4">
+                    {['LinkedIn', 'Twitter', 'Facebook', 'GitHub'].map((social) => (
+                      <a 
+                        key={social}
+                        href="#" 
+                        className="text-gray-600 hover:text-teal-500 transition-colors"
+                      >
+                        {social}
+                      </a>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-6 text-center">
-          <p>© 2023 Ruchi Indian Kitchen. All rights reserved.</p>
+      {/* Footer */}
+      <footer className="bg-gray-900 text-gray-300 py-12">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <h3 className="text-xl font-bold mb-4">Ragnova IT Solutions</h3>
+              <p className="text-sm">Innovating tomorrow's solutions today</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+              <div className="space-y-2">
+                {['Home', 'Services', 'About', 'Contact'].map((item) => (
+                  <a 
+                    key={item} 
+                    href={`#${item.toLowerCase()}`} 
+                    className="block hover:text-teal-400 transition-colors"
+                  >
+                    {item}
+                  </a>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-xl font-bold mb-4">Connect</h3>
+              <div className="flex space-x-4">
+                {['LinkedIn', 'Twitter', 'Facebook', 'GitHub'].map((social) => (
+                  <a 
+                    key={social}
+                    href="#" 
+                    className="hover:text-teal-400 transition-colors"
+                  >
+                    {social}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-8 text-center text-sm">
+            © 2024 Ragnova IT Solutions. All rights reserved.
+          </div>
         </div>
       </footer>
     </div>
   );
-}
+};
+
+export default App;
