@@ -1,5 +1,4 @@
-jsx
-import { useState, useEffect } from 'react'
+import react, import { useState, useEffect } from 'react'
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
