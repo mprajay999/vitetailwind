@@ -1,236 +1,194 @@
 
-import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { FiInstagram, FiFacebook, FiClock, FiMapPin, FiPhone, FiMail } from 'react-icons/fi';
+import React, { useState } from 'react';
 
 const App = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const menuItems = [
+    { name: "Butter Chicken", price: "$18.99", desc: "Tender chicken in creamy tomato sauce", diet: "non-veg", image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db" },
+    { name: "Palak Paneer", price: "$15.99", desc: "Spinach and cottage cheese curry", diet: "veg", image: "https://images.unsplash.com/photo-1590301157890-4810ed352733" },
+    { name: "Garlic Naan", price: "$4.99", desc: "Traditional clay oven bread", diet: "veg", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950" }
+  ];
 
   return (
-    <Router>
-      <nav className={`fixed w-full z-50 transition-colors duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
+    <div className="font-sans">
+      {/* Navigation */}
+      <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <Link to="/" className={`text-2xl font-bold ${isScrolled ? 'text-amber-600' : 'text-white'}`}>Ruchi Indian Kitchen</Link>
-          <div className="space-x-8">
-            <Link to="/" className={`hover:text-amber-600 ${isScrolled ? 'text-gray-800' : 'text-white'}`}>Home</Link>
-            <Link to="/menu" className={`hover:text-amber-600 ${isScrolled ? 'text-gray-800' : 'text-white'}`}>Menu</Link>
-            <Link to="/about" className={`hover:text-amber-600 ${isScrolled ? 'text-gray-800' : 'text-white'}`}>About</Link>
-            <Link to="/contact" className={`hover:text-amber-600 ${isScrolled ? 'text-gray-800' : 'text-white'}`}>Contact</Link>
+          <h1 className="text-2xl font-bold text-[#8B5A2B]">Ruchi Indian Kitchen</h1>
+          
+          <div className="hidden md:flex space-x-8">
+            <a href="#home" className="text-gray-700 hover:text-[#8B5A2B]">Home</a>
+            <a href="#menu" className="text-gray-700 hover:text-[#8B5A2B]">Menu</a>
+            <a href="#about" className="text-gray-700 hover:text-[#8B5A2B]">About</a>
+            <a href="#contact" className="text-gray-700 hover:text-[#8B5A2B]">Contact</a>
+            <button className="bg-[#8B5A2B] text-white px-4 py-2 rounded-full hover:bg-[#6B4420]">
+              Order Online
+            </button>
           </div>
-        </div>
-      </nav>
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/menu" element={<Menu />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-
-      <Footer />
-    </Router>
-  );
-};
-
-const Home = () => (
-  <>
-    <section className="relative h-screen flex items-center justify-center">
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920')] bg-cover bg-center">
-        <div className="absolute inset-0 bg-black/50" />
-      </div>
-      <div className="relative text-center text-white">
-        <h1 className="text-6xl font-bold mb-6">Ruchi Indian Kitchen</h1>
-        <p className="text-2xl mb-8">Authentic Flavors, Crafted with Tradition</p>
-        <button className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-full transition-colors">
-          Explore the Menu
-        </button>
-      </div>
-    </section>
-
-    <section className="py-20 bg-cream-50">
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">Our Specialties</h2>
-        <div className="grid grid-cols-3 gap-8">
-          {['Biryani', 'Tandoori', 'Dosa'].map((dish, i) => (
-            <div key={i} className="rounded-lg overflow-hidden shadow-lg">
-              <img 
-                src={`https://source.unsplash.com/random/800x600?indian-${dish}`} 
-                alt={dish}
-                className="w-full h-64 object-cover"
-                loading="lazy"
-              />
-              <div className="p-6 bg-white">
-                <h3 className="text-xl font-semibold mb-2">{dish}</h3>
-                <p className="text-gray-600">Traditional recipe with authentic spices and cooking methods</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  </>
-);
-
-const Menu = () => {
-  const menuItems = {
-    appetizers: [
-      { name: 'Samosa', desc: 'Crispy pastry filled with spiced potatoes', veg: true },
-      { name: 'Paneer Tikka', desc: 'Grilled cottage cheese with mint chutney', veg: true },
-    ],
-    mainCourse: [
-      { name: 'Butter Chicken', desc: 'Tender chicken in creamy tomato gravy', spice: 2 },
-      { name: 'Dal Makhani', desc: 'Slow-cooked black lentils with butter', veg: true },
-    ],
-    desserts: [
-      { name: 'Gulab Jamun', desc: 'Fried milk balls in rose syrup', veg: true },
-      { name: 'Kheer', desc: 'Traditional rice pudding with nuts', veg: true },
-    ]
-  };
-
-  return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-12">Our Menu</h2>
-        {Object.entries(menuItems).map(([category, items]) => (
-          <div key={category} className="mb-16">
-            <h3 className="text-3xl font-semibold mb-8 capitalize text-amber-600">{category}</h3>
-            <div className="grid gap-6">
-              {items.map((item, i) => (
-                <div key={i} className="p-6 bg-cream-50 rounded-lg flex justify-between items-center">
-                  <div>
-                    <h4 className="text-xl font-semibold">{item.name}</h4>
-                    <p className="text-gray-600">{item.desc}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    {item.veg && <span className="text-green-600">🌱 Vegetarian</span>}
-                    {item.spice && Array.from({ length: item.spice }).map((_, i) => (
-                      <span key={i} className="text-red-500">🌶️</span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-};
-
-const About = () => (
-  <section className="py-20 bg-cream-50">
-    <div className="container mx-auto px-6 flex flex-col md:flex-row gap-12">
-      <div className="md:w-1/2">
-        <img 
-          src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800" 
-          alt="Kitchen Team" 
-          className="rounded-lg shadow-lg"
-          loading="lazy"
-        />
-      </div>
-      <div className="md:w-1/2">
-        <h2 className="text-4xl font-bold mb-8">Our Story</h2>
-        <p className="text-lg mb-6">
-          Founded in 2010 by Chef Rajesh Mehta, Ruchi Indian Kitchen brings generations of family recipes
-          to the modern table. What started as a small family eatery in Mumbai has now become a celebrated
-          destination for authentic Indian flavors.
-        </p>
-        <blockquote className="text-2xl italic border-l-4 border-amber-600 pl-4 mb-6">
-          "True taste lies in respecting tradition while embracing quality"
-        </blockquote>
-      </div>
-    </div>
-  </section>
-);
-
-const Contact = () => (
-  <section className="py-20 bg-white">
-    <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12">
-      <div>
-        <h2 className="text-4xl font-bold mb-8">Get in Touch</h2>
-        <div className="space-y-6">
-          <div className="flex items-center gap-4">
-            <FiMapPin className="text-2xl text-amber-600" />
-            <p>123 Spice Street, Culinary City, CC 45678</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <FiPhone className="text-2xl text-amber-600" />
-            <p>(555) 123-4567</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <FiMail className="text-2xl text-amber-600" />
-            <p>contact@ruchiindiankitchen.com</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <FiClock className="text-2xl text-amber-600" />
-            <div>
-              <p>Tuesday - Sunday: 11 AM - 10 PM</p>
-              <p>Closed on Mondays</p>
-            </div>
-          </div>
-          <div className="flex gap-4 mt-6">
-            <a href="#" className="p-2 bg-amber-600 rounded-full text-white hover:bg-amber-700">
-              <FiInstagram size={24} />
-            </a>
-            <a href="#" className="p-2 bg-amber-600 rounded-full text-white hover:bg-amber-700">
-              <FiFacebook size={24} />
-            </a>
-          </div>
-        </div>
-      </div>
-      <div className="rounded-lg overflow-hidden shadow-lg">
-        <iframe 
-          title="Location"
-          className="w-full h-96"
-          src="https://maps.google.com/maps?q=restaurant&z=15&output=embed"
-          loading="lazy"
-        />
-      </div>
-    </div>
-  </section>
-);
-
-const Footer = () => (
-  <footer className="bg-gray-800 text-white py-12">
-    <div className="container mx-auto px-6 grid md:grid-cols-3 gap-8">
-      <div>
-        <h3 className="text-2xl font-bold mb-4">Ruchi Indian Kitchen</h3>
-        <p className="text-gray-400">Experience authentic Indian cuisine crafted with care</p>
-      </div>
-      <div>
-        <h4 className="text-lg font-semibold mb-4">Newsletter</h4>
-        <div className="flex">
-          <input 
-            type="email" 
-            placeholder="Enter your email"
-            className="px-4 py-2 rounded-l-lg flex-grow text-gray-800"
-          />
-          <button className="bg-amber-600 hover:bg-amber-700 px-6 py-2 rounded-r-lg transition-colors">
-            Subscribe
+          <button 
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
           </button>
         </div>
-      </div>
-      <div className="space-y-2">
-        <h4 className="text-lg font-semibold">Quick Links</h4>
-        <div className="flex flex-col space-y-2">
-          <Link to="/menu" className="hover:text-amber-600">Menu</Link>
-          <Link to="/about" className="hover:text-amber-600">About Us</Link>
-          <Link to="/contact" className="hover:text-amber-600">Contact</Link>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white py-4 px-6 space-y-4">
+            <a href="#home" className="block text-gray-700">Home</a>
+            <a href="#menu" className="block text-gray-700">Menu</a>
+            <a href="#about" className="block text-gray-700">About</a>
+            <a href="#contact" className="block text-gray-700">Contact</a>
+            <button className="bg-[#8B5A2B] text-white px-4 py-2 rounded-full w-full">
+              Order Online
+            </button>
+          </div>
+        )}
+      </nav>
+
+      {/* Hero Section */}
+      <section id="home" className="relative h-screen flex items-center justify-center">
+        <div className="absolute inset-0">
+          className="w-full h-full object-cover"
+          src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&q=80&w=2836&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Indian spices background"
+        />
+          className="absolute inset-0 bg-black/40"
+        />
+        <div className="relative text-center text-white px-4">
+          <h1 className="text-5xl md:text-7xl font-bold mb-4 font-serif">Ruchi Indian Kitchen</h1>
+          <p className="text-xl md:text-2xl mb-8">Authentic Flavors, Crafted with Tradition</p>
+          <a href="#menu" className="bg-[#8B5A2B] text-white px-8 py-3 rounded-full text-lg hover:bg-[#6B4420]">
+            Explore Our Menu
+          </a>
         </div>
-      </div>
+      </section>
+
+      {/* Menu Section */}
+      <section id="menu" className="py-20 bg-[#F8F5F2]">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-12 text-[#6B4420]">Our Menu</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {menuItems.map((item, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <img 
+                  src={item.image} 
+                  alt={item.name}
+                  className="w-full h-64 object-cover"
+                />
+                <div className="p-6">
+                  <div className="flex justify-between items-start">
+                    <h3 className="text-xl font-bold mb-2">{item.name}</h3>
+                    <span className="bg-[#8B5A2B] text-white text-sm px-2 py-1 rounded-full">
+                      {item.diet}
+                    </span>
+                  </div>
+                  <p className="text-gray-600 mb-4">{item.desc}</p>
+                  <p className="text-right text-[#8B5A2B] font-bold">{item.price}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="py-20">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="md:w-1/2">
+                src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=2874&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="Restaurant interior"
+                className="rounded-lg shadow-xl"
+              />
+            </div>
+            <div className="md:w-1/2">
+              <h2 className="text-4xl font-bold mb-8 text-[#6B4420]">Our Story</h2>
+              <p className="text-lg text-gray-700 leading-relaxed font-serif">
+                At Ruchi Indian Kitchen, we honor generations of recipes, blending aromatic spices 
+                and fresh ingredients to bring you the true taste of India. Our chefs craft each dish 
+                with passion, preserving traditional cooking methods while adding a modern touch.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 bg-[#F8F5F2]">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-12">
+            <div>
+              <h2 className="text-4xl font-bold mb-8 text-[#6B4420]">Contact Us</h2>
+              <form className="space-y-6">
+                <div>
+                  <input 
+                    type="text" 
+                    placeholder="Name" 
+                    className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#8B5A2B]"
+                  />
+                </div>
+                <div>
+                  <input 
+                    type="email" 
+                    placeholder="Email" 
+                    className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#8B5A2B]"
+                  />
+                </div>
+                <div>
+                  <textarea 
+                    placeholder="Message" 
+                    rows="5"
+                    className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#8B5A2B]"
+                  ></textarea>
+                </div>
+                <button className="bg-[#8B5A2B] text-white px-8 py-3 rounded-full hover:bg-[#6B4420]">
+                  Send Message
+                </button>
+              </form>
+            </div>
+
+            <div>
+              <div className="h-96 bg-gray-200 rounded-lg overflow-hidden">
+                <iframe 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9663095343004!2d-74.0059708235385!3d40.71277503702702!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a23f7683e7d%3A0x3b3ca3df51adf7e2!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1716857130314!5m2!1sen!2sus" 
+                  className="w-full h-full"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                ></iframe>
+              </div>
+              
+              <div className="mt-8 space-y-2">
+                <p className="text-lg">📍 123 Spice Street, New York, NY</p>
+                <p className="text-lg">📞 (555) 123-4567</p>
+                <p className="text-lg">📧 info@ruchikitchen.com</p>
+                
+                <div className="flex space-x-4 mt-4">
+                  <a href="#" className="text-[#6B4420] hover:text-[#8B5A2B]">
+                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                  </a>
+                  <a href="#" className="text-[#6B4420] hover:text-[#8B5A2B]">
+                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="bg-[#6B4420] text-white py-8 text-center">
+        <p>© 2024 Ruchi Indian Kitchen. All rights reserved.</p>
+      </footer>
     </div>
-    <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-      <p>© 2023 Ruchi Indian Kitchen. All rights reserved.</p>
-    </div>
-  </footer>
-);
+  );
+};
 
 export default App;
