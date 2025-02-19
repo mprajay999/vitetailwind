@@ -1,55 +1,38 @@
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { Link } from 'react-scroll';
 
 function App() {
-  const [activeSection, setActiveSection] = useState('home');
+  const controls = useAnimation();
 
-  const smoothScroll = (id) => {
-    const element = document.getElementById(id);
-    setActiveSection(id);
-    element.scrollIntoView({ behavior: 'smooth' });
-  };
+  useEffect(() => {
+    controls.start({ opacity: 1, y: 0 });
+  }, []);
 
-  const fadeIn = {
-    initial: { opacity: 0, y: 20 },
+  const fadeInUp = {
+    initial: { opacity: 0, y: 60 },
     animate: { opacity: 1, y: 0 },
     transition: { duration: 0.6 }
   };
 
-  const menuItems = [
-    {
-      name: "Sake Glazed Black Cod",
-      price: "$28",
-      description: "Marinated for 72 hours in our house-made sake mixture",
-      image: "https://source.unsplash.com/random/800x600/?japanese-food-cod"
-    },
-    {
-      name: "Dragon Roll",
-      price: "$24",
-      description: "Premium eel, avocado, and tempura crunch",
-      image: "https://source.unsplash.com/random/800x600/?sushi-roll"
-    },
-    // Add more menu items as needed
-  ];
-
   return (
-    <div className="bg-black text-white">
-      {/* Navigation */}
-      <nav className="fixed w-full bg-black/90 z-50 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-red-600">築 TSUKI</h1>
-          <div className="space-x-6">
-            {['home', 'about', 'menu', 'gallery', 'contact'].map((item) => (
-              <button
+    <div className="overflow-x-hidden">
+      {/* Navbar */}
+      <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-semibold text-orange-600">Ruchi Indian Kitchen</h1>
+          <div className="hidden md:flex space-x-8">
+            {['home', 'about', 'menu', 'testimonials', 'contact'].map((item) => (
+              <Link
                 key={item}
-                onClick={() => smoothScroll(item)}
-                className={`${
-                  activeSection === item ? 'text-red-600' : 'text-white'
-                } hover:text-red-500 transition-colors`}
+                to={item}
+                smooth={true}
+                duration={500}
+                className="cursor-pointer capitalize hover:text-orange-600 transition-colors"
               >
-                {item.charAt(0).toUpperCase() + item.slice(1)}
-              </button>
+                {item}
+              </Link>
             ))}
           </div>
         </div>
@@ -58,79 +41,129 @@ function App() {
       {/* Hero Section */}
       <motion.section
         id="home"
-        className="h-screen bg-[url('https://source.unsplash.com/random/1920x1080/?japanese-restaurant')] bg-cover bg-center"
+        className="h-screen bg-cover bg-center relative"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&q=80")'
+        }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
       >
-        <div className="h-full bg-black/50 flex items-center justify-center">
-          <div className="text-center">
-            <motion.h1 
-              className="text-6xl font-bold mb-4"
-              {...fadeIn}
-            >
-              TSUKI IZAKAYA
-            </motion.h1>
-            <motion.p 
-              className="text-xl mb-8"
-              {...fadeIn}
-            >
-              Where Samurai Spirit Meets Japanese Cuisine
-            </motion.p>
-            <motion.button
-              className="bg-red-600 px-8 py-3 rounded hover:bg-red-700 transition-colors"
-              onClick={() => smoothScroll('menu')}
-              whileHover={{ scale: 1.05 }}
-            >
-              Explore the Experience
-            </motion.button>
-          </div>
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-white">
+          <motion.h1 
+            className="text-5xl md:text-7xl font-bold text-center"
+            {...fadeInUp}
+          >
+            Ruchi Indian Kitchen
+          </motion.h1>
+          <motion.p 
+            className="text-xl md:text-2xl mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            Authentic Flavors, Timeless Traditions
+          </motion.p>
         </div>
       </motion.section>
 
       {/* About Section */}
       <motion.section
         id="about"
-        className="py-20 px-6 bg-gradient-to-b from-black to-gray-900"
-        {...fadeIn}
+        className="py-20 bg-white"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true }}
+        variants={fadeInUp}
       >
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl mb-8 font-bold">Our Story</h2>
-          <p className="text-lg leading-relaxed">
-            TSUKI IZAKAYA embodies the essence of traditional Japanese dining,
-            where the noble principles of the samurai — honor, discipline, and
-            hospitality — guide our service. Our master chefs craft each dish
-            with precision and artistry, offering an authentic izakaya experience
-            that transports you to the heart of Japan.
-          </p>
+        <div className="container mx-auto px-6">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-8">Our Story</h2>
+            <p className="text-gray-600 leading-relaxed">
+              Founded in 2010, Ruchi Indian Kitchen has been serving authentic Indian cuisine made from traditional family recipes passed down through generations. Our commitment to using premium ingredients and maintaining authentic flavors has made us a beloved destination for Indian food enthusiasts.
+            </p>
+          </div>
         </div>
       </motion.section>
 
       {/* Menu Section */}
       <motion.section
         id="menu"
-        className="py-20 px-6 bg-black"
-        {...fadeIn}
+        className="py-20 bg-gray-50"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true }}
+        variants={fadeInUp}
       >
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl mb-12 text-center font-bold">Our Menu</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {menuItems.map((item, index) => (
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center mb-12">Our Specialties</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Butter Chicken",
+                description: "Tender chicken in rich tomato gravy",
+                price: "$16.99",
+                image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&q=80"
+              },
+              {
+                name: "Biryani",
+                description: "Aromatic rice with spices and meat",
+                price: "$18.99",
+                image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&q=80"
+              },
+              {
+                name: "Palak Paneer",
+                description: "Cottage cheese in spinach gravy",
+                price: "$14.99",
+                image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80"
+              }
+            ].map((dish, index) => (
               <motion.div
                 key={index}
-                className="bg-gray-900 rounded-lg overflow-hidden"
-                whileHover={{ scale: 1.02 }}
+                className="bg-white rounded-lg shadow-md overflow-hidden"
+                whileHover={{ y: -10 }}
               >
-                <img 
-                  src={item.image} 
-                  alt={item.name}
-                  className="w-full h-48 object-cover"
-                />
+                <img src={dish.image} alt={dish.name} className="w-full h-48 object-cover" />
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{item.name}</h3>
-                  <p className="text-gray-400 mb-2">{item.description}</p>
-                  <p className="text-red-600 font-bold">{item.price}</p>
+                  <h3 className="font-bold text-xl mb-2">{dish.name}</h3>
+                  <p className="text-gray-600 mb-4">{dish.description}</p>
+                  <p className="text-orange-600 font-bold">{dish.price}</p>
                 </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Testimonials Section */}
+      <motion.section
+        id="testimonials"
+        className="py-20 bg-white"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true }}
+        variants={fadeInUp}
+      >
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center mb-12">What Our Customers Say</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {[
+              {
+                text: "The best Indian food I've had outside of India. Authentic flavors and great service!",
+                author: "Sarah Johnson"
+              },
+              {
+                text: "Amazing ambiance and delicious food. The Butter Chicken is to die for!",
+                author: "Michael Chen"
+              }
+            ].map((testimonial, index) => (
+              <motion.div
+                key={index}
+                className="bg-gray-50 p-6 rounded-lg"
+                whileHover={{ scale: 1.05 }}
+              >
+                <p className="text-gray-600 italic mb-4">{testimonial.text}</p>
+                <p className="font-bold">- {testimonial.author}</p>
               </motion.div>
             ))}
           </div>
@@ -140,44 +173,65 @@ function App() {
       {/* Contact Section */}
       <motion.section
         id="contact"
-        className="py-20 px-6 bg-gradient-to-b from-gray-900 to-black"
-        {...fadeIn}
+        className="py-20 bg-gray-50"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true }}
+        variants={fadeInUp}
       >
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl mb-8 font-bold">Visit Us</h2>
-          <div className="mb-8">
-            <p className="text-lg">123 Samurai Street, Tokyo District</p>
-            <p className="text-lg">Phone: (555) 123-4567</p>
-            <p className="text-lg">Email: info@tsukiizakaya.com</p>
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center mb-12">Contact Us</h2>
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="font-bold text-xl mb-4">Location</h3>
+                <p className="text-gray-600 mb-4">123 Culinary Street<br/>Foodie City, FC 12345</p>
+                <h3 className="font-bold text-xl mb-4">Hours</h3>
+                <p className="text-gray-600 mb-4">
+                  Monday - Sunday<br/>
+                  11:00 AM - 10:00 PM
+                </p>
+                <h3 className="font-bold text-xl mb-4">Contact</h3>
+                <p className="text-gray-600">
+                  Phone: (555) 123-4567<br/>
+                  Email: info@ruchiindian.com
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <form className="space-y-4">
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    className="w-full p-2 border rounded"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    className="w-full p-2 border rounded"
+                  />
+                  <textarea
+                    placeholder="Message"
+                    className="w-full p-2 border rounded h-32"
+                  ></textarea>
+                  <button className="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700 transition-colors">
+                    Send Message
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
-          <button
-            className="bg-red-600 px-8 py-3 rounded hover:bg-red-700 transition-colors"
-            onClick={() => window.location.href = 'mailto:info@tsukiizakaya.com'}
-          >
-            Book a Table
-          </button>
         </div>
       </motion.section>
 
       {/* Footer */}
-      <footer className="bg-black py-6 px-6 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="flex justify-center space-x-6 mb-4">
-            {['facebook', 'instagram', 'twitter'].map((social) => (
-              <a
-                key={social}
-                href={`https://${social}.com`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-red-600 transition-colors"
-              >
-                {social.charAt(0).toUpperCase() + social.slice(1)}
-              </a>
-            ))}
+      <footer className="bg-gray-900 text-white py-8">
+        <div className="container mx-auto px-6 text-center">
+          <p className="mb-4">© 2024 Ruchi Indian Kitchen. All rights reserved.</p>
+          <div className="flex justify-center space-x-4">
+            <a href="#" className="hover:text-orange-600 transition-colors">Facebook</a>
+            <a href="#" className="hover:text-orange-600 transition-colors">Instagram</a>
+            <a href="#" className="hover:text-orange-600 transition-colors">Twitter</a>
           </div>
-          <p className="text-gray-400">
-            © 2024 TSUKI IZAKAYA. All rights reserved.
-          </p>
         </div>
       </footer>
     </div>
