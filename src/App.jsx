@@ -1,236 +1,330 @@
 
-import React, { useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
-import { Link } from 'react-scroll';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
 function App() {
-  const controls = useAnimation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    controls.start({ opacity: 1, y: 0 });
-  }, []);
-
-  const fadeInUp = {
-    initial: { opacity: 0, y: 60 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6 }
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    element.scrollIntoView({ behavior: 'smooth' });
+    setIsMenuOpen(false);
   };
+
+  const menuItems = [
+    { name: 'Chicken Tikka Masala', description: 'Grilled chicken in rich tomato cream sauce', price: '$16.99' },
+    { name: 'Butter Naan', description: 'Traditional Indian bread', price: '$3.99' },
+    { name: 'Vegetable Biryani', description: 'Aromatic rice with mixed vegetables', price: '$14.99' },
+    { name: 'Palak Paneer', description: 'Cottage cheese in spinach gravy', price: '$15.99' },
+  ];
+
+  const testimonials = [
+    { name: 'Sarah Johnson', text: 'Best Indian restaurant in town! Authentic flavors and great service.' },
+    { name: 'Michael Chen', text: 'The biryani here is absolutely amazing. Highly recommended!' },
+    { name: 'Emma Williams', text: 'Beautiful ambiance and delicious food. A must-visit!' },
+  ];
 
   return (
     <div className="overflow-x-hidden">
-      {/* Navbar */}
-      <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-orange-600">Ruchi Indian Kitchen</h1>
-          <div className="hidden md:flex space-x-8">
-            {['home', 'about', 'menu', 'testimonials', 'contact'].map((item) => (
-              <Link
-                key={item}
-                to={item}
-                smooth={true}
-                duration={500}
-                className="cursor-pointer capitalize hover:text-orange-600 transition-colors"
-              >
-                {item}
-              </Link>
-            ))}
+      {/* Navigation */}
+      <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-md">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center h-16">
+            <motion.h1 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-2xl font-bold text-orange-600"
+            >
+              Raaga Indian Grand
+            </motion.h1>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex space-x-8">
+              {['home', 'about', 'menu', 'gallery', 'reviews', 'contact'].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item)}
+                  className="capitalize text-gray-600 hover:text-orange-600 transition-colors"
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button 
+              className="md:hidden"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="md:hidden bg-white"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {['home', 'about', 'menu', 'gallery', 'reviews', 'contact'].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item)}
+                  className="block w-full text-left px-3 py-2 text-gray-600 hover:text-orange-600 capitalize"
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
       </nav>
 
       {/* Hero Section */}
-      <motion.section
-        id="home"
-        className="h-screen bg-cover bg-center relative"
-        style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&q=80")'
-        }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-white">
-          <motion.h1 
-            className="text-5xl md:text-7xl font-bold text-center"
-            {...fadeInUp}
-          >
-            Ruchi Indian Kitchen
-          </motion.h1>
-          <motion.p 
-            className="text-xl md:text-2xl mt-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            Authentic Flavors, Timeless Traditions
-          </motion.p>
-        </div>
-      </motion.section>
+      <section id="home" className="h-screen flex items-center justify-center relative">
+        <div 
+          className="absolute inset-0 bg-cover bg-center z-0"
+          style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3")', filter: 'brightness(0.4)' }}
+        ></div>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center text-white z-10"
+        >
+          <h1 className="text-5xl md:text-7xl font-bold mb-4">Raaga Indian Grand</h1>
+          <p className="text-xl md:text-2xl">Authentic Indian Delights, Crafted to Perfection</p>
+        </motion.div>
+      </section>
 
       {/* About Section */}
-      <motion.section
-        id="about"
-        className="py-20 bg-white"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true }}
-        variants={fadeInUp}
-      >
-        <div className="container mx-auto px-6">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-8">Our Story</h2>
-            <p className="text-gray-600 leading-relaxed">
-              Founded in 2010, Ruchi Indian Kitchen has been serving authentic Indian cuisine made from traditional family recipes passed down through generations. Our commitment to using premium ingredients and maintaining authentic flavors has made us a beloved destination for Indian food enthusiasts.
-            </p>
+      <section id="about" className="py-20 bg-gray-50">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="max-w-7xl mx-auto px-4"
+        >
+          <h2 className="text-4xl font-bold text-center mb-12">About Us</h2>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-gray-600 leading-relaxed">
+                At Raaga Indian Grand, we bring you the authentic flavors of India through our carefully crafted dishes. 
+                Our expert chefs use traditional recipes and the finest ingredients to create an unforgettable dining experience.
+              </p>
+              <div className="mt-8 space-y-4">
+                <div className="flex items-center">
+                  <span className="text-orange-600 mr-2">✓</span>
+                  <span>Authentic Indian Spices</span>
+                </div>
+                <div className="flex items-center">
+                  <span className="text-orange-600 mr-2">✓</span>
+                  <span>Traditional Recipes</span>
+                </div>
+                <div className="flex items-center">
+                  <span className="text-orange-600 mr-2">✓</span>
+                  <span>Fine Dining Experience</span>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-lg overflow-hidden shadow-xl">
+              <img 
+                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3" 
+                alt="Restaurant Interior" 
+                className="w-full h-[400px] object-cover"
+              />
+            </div>
           </div>
-        </div>
-      </motion.section>
+        </motion.div>
+      </section>
 
       {/* Menu Section */}
-      <motion.section
-        id="menu"
-        className="py-20 bg-gray-50"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true }}
-        variants={fadeInUp}
-      >
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-12">Our Specialties</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Butter Chicken",
-                description: "Tender chicken in rich tomato gravy",
-                price: "$16.99",
-                image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&q=80"
-              },
-              {
-                name: "Biryani",
-                description: "Aromatic rice with spices and meat",
-                price: "$18.99",
-                image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&q=80"
-              },
-              {
-                name: "Palak Paneer",
-                description: "Cottage cheese in spinach gravy",
-                price: "$14.99",
-                image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80"
-              }
-            ].map((dish, index) => (
-              <motion.div
+      <section id="menu" className="py-20">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="max-w-7xl mx-auto px-4"
+        >
+          <h2 className="text-4xl font-bold text-center mb-12">Our Menu</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            {menuItems.map((item, index) => (
+              <motion.div 
                 key={index}
-                className="bg-white rounded-lg shadow-md overflow-hidden"
-                whileHover={{ y: -10 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="p-6 bg-white rounded-lg shadow-md"
               >
-                <img src={dish.image} alt={dish.name} className="w-full h-48 object-cover" />
-                <div className="p-6">
-                  <h3 className="font-bold text-xl mb-2">{dish.name}</h3>
-                  <p className="text-gray-600 mb-4">{dish.description}</p>
-                  <p className="text-orange-600 font-bold">{dish.price}</p>
-                </div>
+                <h3 className="text-xl font-semibold mb-2">{item.name}</h3>
+                <p className="text-gray-600 mb-2">{item.description}</p>
+                <p className="text-orange-600 font-semibold">{item.price}</p>
               </motion.div>
             ))}
           </div>
-        </div>
-      </motion.section>
+        </motion.div>
+      </section>
 
-      {/* Testimonials Section */}
-      <motion.section
-        id="testimonials"
-        className="py-20 bg-white"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true }}
-        variants={fadeInUp}
-      >
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-12">What Our Customers Say</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {[
-              {
-                text: "The best Indian food I've had outside of India. Authentic flavors and great service!",
-                author: "Sarah Johnson"
-              },
-              {
-                text: "Amazing ambiance and delicious food. The Butter Chicken is to die for!",
-                author: "Michael Chen"
-              }
-            ].map((testimonial, index) => (
-              <motion.div
-                key={index}
-                className="bg-gray-50 p-6 rounded-lg"
+      {/* Gallery Section */}
+      <section id="gallery" className="py-20 bg-gray-50">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="max-w-7xl mx-auto px-4"
+        >
+          <h2 className="text-4xl font-bold text-center mb-12">Gallery</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map((item) => (
+              <motion.div 
+                key={item}
                 whileHover={{ scale: 1.05 }}
+                className="rounded-lg overflow-hidden shadow-md"
               >
-                <p className="text-gray-600 italic mb-4">{testimonial.text}</p>
-                <p className="font-bold">- {testimonial.author}</p>
+                <img 
+                  src={`https://source.unsplash.com/random/400x300?indian-food&sig=${item}`}
+                  alt={`Gallery Image ${item}`}
+                  className="w-full h-[200px] md:h-[300px] object-cover"
+                />
               </motion.div>
             ))}
           </div>
-        </div>
-      </motion.section>
+        </motion.div>
+      </section>
+
+      {/* Reviews Section */}
+      <section id="reviews" className="py-20">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="max-w-7xl mx-auto px-4"
+        >
+          <h2 className="text-4xl font-bold text-center mb-12">Customer Reviews</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="p-6 bg-white rounded-lg shadow-md"
+              >
+                <p className="text-gray-600 mb-4">{testimonial.text}</p>
+                <p className="font-semibold">{testimonial.name}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
 
       {/* Contact Section */}
-      <motion.section
-        id="contact"
-        className="py-20 bg-gray-50"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true }}
-        variants={fadeInUp}
-      >
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-12">Contact Us</h2>
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="font-bold text-xl mb-4">Location</h3>
-                <p className="text-gray-600 mb-4">123 Culinary Street<br/>Foodie City, FC 12345</p>
-                <h3 className="font-bold text-xl mb-4">Hours</h3>
-                <p className="text-gray-600 mb-4">
-                  Monday - Sunday<br/>
-                  11:00 AM - 10:00 PM
-                </p>
-                <h3 className="font-bold text-xl mb-4">Contact</h3>
-                <p className="text-gray-600">
-                  Phone: (555) 123-4567<br/>
-                  Email: info@ruchiindian.com
-                </p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <form className="space-y-4">
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    className="w-full p-2 border rounded"
+      <section id="contact" className="py-20 bg-gray-50">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="max-w-7xl mx-auto px-4"
+        >
+          <h2 className="text-4xl font-bold text-center mb-12">Contact Us</h2>
+          <div className="grid md:grid-cols-2 gap-12">
+            <div>
+              <h3 className="text-2xl font-semibold mb-4">Get in Touch</h3>
+              <form className="space-y-4">
+                <div>
+                  <input 
+                    type="text" 
+                    placeholder="Name" 
+                    className="w-full p-3 border rounded-lg"
                   />
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="w-full p-2 border rounded"
+                </div>
+                <div>
+                  <input 
+                    type="email" 
+                    placeholder="Email" 
+                    className="w-full p-3 border rounded-lg"
                   />
-                  <textarea
-                    placeholder="Message"
-                    className="w-full p-2 border rounded h-32"
+                </div>
+                <div>
+                  <textarea 
+                    placeholder="Message" 
+                    rows="4" 
+                    className="w-full p-3 border rounded-lg"
                   ></textarea>
-                  <button className="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700 transition-colors">
-                    Send Message
-                  </button>
-                </form>
+                </div>
+                <button 
+                  type="submit" 
+                  className="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors"
+                >
+                  Send Message
+                </button>
+              </form>
+            </div>
+            <div>
+              <h3 className="text-2xl font-semibold mb-4">Visit Us</h3>
+              <div className="space-y-4 text-gray-600">
+                <p>123 Restaurant Street</p>
+                <p>New York, NY 10001</p>
+                <p>Phone: (555) 123-4567</p>
+                <p>Email: info@raagaindiangrand.com</p>
+                <div className="mt-6">
+                  <h4 className="font-semibold mb-2">Hours</h4>
+                  <p>Monday - Sunday: 11:30 AM - 10:00 PM</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </motion.section>
+        </motion.div>
+      </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="container mx-auto px-6 text-center">
-          <p className="mb-4">© 2024 Ruchi Indian Kitchen. All rights reserved.</p>
-          <div className="flex justify-center space-x-4">
-            <a href="#" className="hover:text-orange-600 transition-colors">Facebook</a>
-            <a href="#" className="hover:text-orange-600 transition-colors">Instagram</a>
-            <a href="#" className="hover:text-orange-600 transition-colors">Twitter</a>
+      <footer className="bg-gray-800 text-white py-8">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-8">
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Raaga Indian Grand</h3>
+              <p className="text-gray-400">Authentic Indian cuisine in the heart of New York.</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
+              <div className="space-y-2">
+                {['home', 'about', 'menu', 'gallery', 'reviews', 'contact'].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => scrollToSection(item)}
+                    className="block text-gray-400 hover:text-white capitalize"
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Follow Us</h3>
+              <div className="flex space-x-4">
+                <a href="#" className="text-gray-400 hover:text-white">
+                  <span className="sr-only">Facebook</span>
+                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.77,7.46H14.5v-1.9c0-.9.6-1.1,1-1.1h3V.5L14.84.5C10.4.5,9.5,3,9.5,5.32V7.46H6.23v4H9.5V22h5V11.46h3.95l.53-4Z"/>
+                  </svg>
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white">
+                  <span className="sr-only">Instagram</span>
+                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12,2.2c3.2,0,3.6,0,4.9.1,3.3.1,4.8,1.7,4.9,4.9.1,1.3.1,1.6.1,4.8,0,3.2,0,3.6-.1,4.8-.1,3.2-1.7,4.8-4.9,4.9-1.3.1-1.6.1-4.9.1-3.2,0-3.6,0-4.8-.1-3.3-.1-4.8-1.7-4.9-4.9-.1-1.3-.1-1.6-.1-4.8,0-3.2,0-3.6.1-4.8C2.4,4,4,2.4,7.2,2.3,8.5,2.2,8.8,2.2,12,2.2ZM12,0C8.7,0,8.3,0,7,0.1,2.7.3.3,2.7.1,7,0,8.3,0,8.7,0,12s0,3.7.1,5c.2,4.3,2.6,6.7,7,6.9,1.3.1,1.7.1,5,.1s3.7,0,5-.1c4.3-.2,6.7-2.6,6.9-7,.1-1.3.1-1.7.1-5s0-3.7-.1-5c-.2-4.3-2.6-6.7-7-6.9C15.7,0,15.3,0,12,0Zm0,5.8A6.2,6.2,0,1,0,18.2,12,6.2,6.2,0,0,0,12,5.8Zm0,10.2A4,4,0,1,1,16,12,4,4,0,0,1,12,16Zm7.8-10.4a1.4,1.4,0,1,1-1.4-1.4A1.4,1.4,0,0,1,19.8,5.6Z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+            <p>© 2024 Raaga Indian Grand. All Rights Reserved.</p>
           </div>
         </div>
       </footer>
