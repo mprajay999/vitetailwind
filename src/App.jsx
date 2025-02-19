@@ -1,192 +1,202 @@
 
 import React, { useState, useEffect } from 'react';
 
-function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+const App = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % 3);
-    }, 5000);
-    return () => clearInterval(timer);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const testimonials = [
-    { name: "Sarah Johnson", text: "The best Indian cuisine I've ever had! The butter chicken is outstanding." },
-    { name: "Michael Chen", text: "Authentic flavors and excellent service. A must-visit restaurant!" },
-    { name: "Emma Williams", text: "Their biryani is absolutely incredible. Great atmosphere too!" }
-  ];
 
   return (
     <div className="font-sans">
-      {/* Header */}
-      <header className="fixed w-full bg-white/90 shadow-md z-50">
-        <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-[#8B0000] text-2xl font-serif">Ruchi Indian Kitchen</h1>
-          
-          <div className="hidden md:flex space-x-6">
-            <a href="#home" className="hover:text-[#8B0000]">Home</a>
-            <a href="#menu" className="hover:text-[#8B0000]">Menu</a>
-            <a href="#about" className="hover:text-[#8B0000]">About</a>
-            <a href="#reservations" className="hover:text-[#8B0000]">Reservations</a>
-            <a href="#contact" className="hover:text-[#8B0000]">Contact</a>
-          </div>
-
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden">
-            <span className="block w-6 h-0.5 bg-[#8B0000] mb-1"></span>
-            <span className="block w-6 h-0.5 bg-[#8B0000] mb-1"></span>
-            <span className="block w-6 h-0.5 bg-[#8B0000]"></span>
-          </button>
-        </nav>
-      </header>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="fixed top-16 left-0 w-full bg-white shadow-md md:hidden z-40">
-          <div className="flex flex-col p-4 space-y-3">
-            <a href="#home" className="hover:text-[#8B0000]">Home</a>
-            <a href="#menu" className="hover:text-[#8B0000]">Menu</a>
-            <a href="#about" className="hover:text-[#8B0000]">About</a>
-            <a href="#reservations" className="hover:text-[#8B0000]">Reservations</a>
-            <a href="#contact" className="hover:text-[#8B0000]">Contact</a>
+      {/* Navigation */}
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'}`}>
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-blue-900">Cruize IT Solutions</h1>
+            <div className="hidden md:flex space-x-8">
+              <a href="#home" className="text-gray-700 hover:text-blue-600">Home</a>
+              <a href="#services" className="text-gray-700 hover:text-blue-600">Services</a>
+              <a href="#about" className="text-gray-700 hover:text-blue-600">About</a>
+              <a href="#projects" className="text-gray-700 hover:text-blue-600">Projects</a>
+              <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
+                Get Started
+              </button>
+            </div>
           </div>
         </div>
-      )}
+      </nav>
 
       {/* Hero Section */}
-      <section id="home" className="h-screen bg-cover bg-center relative" style={{backgroundImage: 'url("https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-4.0.3")'}}> 
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-white">
-          <h1 className="text-5xl md:text-7xl font-serif mb-4">Ruchi Indian Kitchen</h1>
-          <p className="text-xl md:text-2xl mb-8">Experience Authentic Indian Flavors</p>
-          <a href="#reservations" className="bg-[#8B0000] hover:bg-[#DAA520] px-8 py-3 rounded">Reserve Table</a>
+      <section id="home" className="min-h-screen bg-gradient-to-r from-blue-900 to-blue-700 flex items-center">
+        <div className="container mx-auto px-6 text-center text-white">
+          <h1 className="text-5xl md:text-6xl font-bold mb-8 animate-fade-in">
+            Innovative IT Solutions for Your Business
+          </h1>
+          <p className="text-xl mb-12 max-w-2xl mx-auto">
+            Empowering businesses with cutting-edge technology solutions that drive growth and innovation.
+          </p>
+          <div className="space-x-4">
+            <button className="bg-white text-blue-900 px-8 py-3 rounded-full hover:bg-gray-100 transition">
+              Our Services
+            </button>
+            <button className="border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white hover:text-blue-900 transition">
+              Contact Us
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-16 text-blue-900">Our Services</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {[
+              {
+                title: "Web Development",
+                description: "Custom websites and web applications built with modern technologies.",
+                icon: "🌐"
+              },
+              {
+                title: "Cloud Solutions",
+                description: "Scalable cloud infrastructure and migration services.",
+                icon: "☁️"
+              },
+              {
+                title: "Cybersecurity",
+                description: "Comprehensive security solutions to protect your business.",
+                icon: "🔒"
+              },
+              {
+                title: "Mobile Development",
+                description: "Native and cross-platform mobile applications.",
+                icon: "📱"
+              },
+              {
+                title: "AI & Machine Learning",
+                description: "Intelligent solutions for business automation.",
+                icon: "🤖"
+              },
+              {
+                title: "IT Consulting",
+                description: "Strategic technology consulting and planning.",
+                icon: "💡"
+              }
+            ].map((service, index) => (
+              <div key={index} className="bg-white p-8 rounded-lg shadow-lg hover:transform hover:scale-105 transition duration-300">
+                <div className="text-4xl mb-4">{service.icon}</div>
+                <h3 className="text-xl font-bold mb-4 text-blue-900">{service.title}</h3>
+                <p className="text-gray-600">{service.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* About Section */}
       <section id="about" className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-serif text-center mb-12">Our Story</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4" alt="Restaurant Interior" className="rounded-lg shadow-lg"/>
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="md:w-1/2">
+              <h2 className="text-4xl font-bold mb-8 text-blue-900">About Us</h2>
+              <p className="text-gray-600 mb-6">
+                Since 2010, Cruize IT Solutions has been at the forefront of digital transformation, 
+                helping businesses leverage technology to achieve their goals. Our team of experts 
+                brings together decades of experience in delivering innovative IT solutions.
+              </p>
+              <p className="text-gray-600 mb-6">
+                We believe in building long-term partnerships with our clients, understanding their 
+                unique challenges, and delivering solutions that drive real business value.
+              </p>
             </div>
-            <div className="flex flex-col justify-center">
-              <p className="text-lg mb-6">
-                Founded in 2010, Ruchi Indian Kitchen has been serving authentic Indian cuisine to food lovers in the heart of the city. Our expert chefs bring decades of experience and traditional recipes passed down through generations.
-              </p>
-              <p className="text-lg">
-                We take pride in using the finest ingredients and traditional spices to create an unforgettable dining experience for our guests.
-              </p>
+            <div className="md:w-1/2">
+              <img 
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c" 
+                alt="Team" 
+                className="rounded-lg shadow-xl"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Menu Highlights */}
-      <section id="menu" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-serif text-center mb-12">Signature Dishes</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+      {/* Projects Section */}
+      <section id="projects" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-16 text-blue-900">Our Projects</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              {name: "Butter Chicken", img: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398", price: "$18.99"},
-              {name: "Biryani", img: "https://images.unsplash.com/photo-1589302168068-964664d93dc0", price: "$16.99"},
-              {name: "Palak Paneer", img: "https://images.unsplash.com/photo-1601050690597-df0568f70950", price: "$15.99"}
-            ].map((dish, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <img src={dish.img} alt={dish.name} className="w-full h-48 object-cover"/>
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold">{dish.name}</h3>
-                  <p className="text-[#8B0000]">{dish.price}</p>
+              {
+                title: "E-Commerce Platform",
+                description: "Built a scalable e-commerce solution for a retail giant",
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f"
+              },
+              {
+                title: "Healthcare App",
+                description: "Developed a telemedicine platform for healthcare providers",
+                image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d"
+              },
+              {
+                title: "FinTech Solution",
+                description: "Created a secure banking application with AI integration",
+                image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44"
+              }
+            ].map((project, index) => (
+              <div key={index} className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
+                <img src={project.image} alt={project.title} className="w-full h-48 object-cover" />
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2 text-blue-900">{project.title}</h3>
+                  <p className="text-gray-600">{project.description}</p>
                 </div>
               </div>
             ))}
           </div>
-          <div className="text-center mt-12">
-            <button className="bg-[#8B0000] text-white px-8 py-3 rounded hover:bg-[#DAA520]">
-              View Full Menu
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-serif text-center mb-12">What Our Guests Say</h2>
-          <div className="max-w-2xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className={`transition-opacity duration-500 ${index === activeTestimonial ? 'opacity-100' : 'opacity-0 hidden'}`}>
-                <p className="text-lg text-center italic mb-4">"{testimonial.text}"</p>
-                <p className="text-center font-semibold">- {testimonial.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Reservations */}
-      <section id="reservations" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-serif text-center mb-12">Make a Reservation</h2>
-          <form className="max-w-md mx-auto">
-            <div className="mb-4">
-              <input type="text" placeholder="Name" className="w-full p-2 border rounded"/>
-            </div>
-            <div className="mb-4">
-              <input type="email" placeholder="Email" className="w-full p-2 border rounded"/>
-            </div>
-            <div className="mb-4">
-              <input type="date" className="w-full p-2 border rounded"/>
-            </div>
-            <div className="mb-4">
-              <select className="w-full p-2 border rounded">
-                <option>6:00 PM</option>
-                <option>7:00 PM</option>
-                <option>8:00 PM</option>
-                <option>9:00 PM</option>
-              </select>
-            </div>
-            <button className="w-full bg-[#8B0000] text-white py-3 rounded hover:bg-[#DAA520]">
-              Reserve Now
-            </button>
-          </form>
         </div>
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+      <footer className="bg-blue-900 text-white py-12">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div>
-              <h3 className="text-xl mb-4">Contact Us</h3>
-              <p>123 Restaurant Street</p>
-              <p>City, State 12345</p>
-              <p>Phone: (555) 123-4567</p>
-              <p>Email: info@ruchiindian.com</p>
-            </div>
-            <div>
-              <h3 className="text-xl mb-4">Hours</h3>
-              <p>Monday - Friday: 11:00 AM - 10:00 PM</p>
-              <p>Saturday - Sunday: 12:00 PM - 11:00 PM</p>
-            </div>
-            <div>
-              <h3 className="text-xl mb-4">Follow Us</h3>
-              <div className="flex space-x-4">
-                <a href="#" className="hover:text-[#DAA520]">Facebook</a>
-                <a href="#" className="hover:text-[#DAA520]">Instagram</a>
-                <a href="#" className="hover:text-[#DAA520]">Twitter</a>
+              <h3 className="text-2xl font-bold mb-4">Cruize IT Solutions</h3>
+              <p className="mb-4">Transforming businesses through technology</p>
+              <div className="space-x-4">
+                <a href="#" className="hover:text-blue-300">Twitter</a>
+                <a href="#" className="hover:text-blue-300">LinkedIn</a>
+                <a href="#" className="hover:text-blue-300">Facebook</a>
               </div>
             </div>
+            <div>
+              <h4 className="text-xl font-bold mb-4">Contact</h4>
+              <p>123 Business Street</p>
+              <p>New York, NY 10001</p>
+              <p>contact@cruizeit.com</p>
+              <p>+1 (555) 123-4567</p>
+            </div>
+            <div>
+              <h4 className="text-xl font-bold mb-4">Quick Links</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="hover:text-blue-300">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-blue-300">Terms of Service</a></li>
+                <li><a href="#" className="hover:text-blue-300">Careers</a></li>
+                <li><a href="#" className="hover:text-blue-300">Blog</a></li>
+              </ul>
+            </div>
           </div>
-          <div className="text-center mt-8 pt-8 border-t border-gray-800">
-            <p>&copy; 2024 Ruchi Indian Kitchen. All rights reserved.</p>
+          <div className="mt-12 text-center border-t border-blue-800 pt-8">
+            <p>© 2024 Cruize IT Solutions. All rights reserved.</p>
           </div>
         </div>
       </footer>
     </div>
   );
-}
+};
 
 export default App;
