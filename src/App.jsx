@@ -5,197 +5,192 @@ import { motion } from 'framer-motion';
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const menuItems = {
-    appetizers: [
-      { name: 'Samosa', price: '$8', description: 'Crispy pastry filled with spiced potatoes and peas' },
-      { name: 'Paneer Tikka', price: '$12', description: 'Grilled cottage cheese with aromatic spices' },
-    ],
-    mainCourse: [
-      { name: 'Butter Chicken', price: '$24', description: 'Tender chicken in rich tomato cream sauce' },
-      { name: 'Dal Makhani', price: '$18', description: 'Black lentils slow-cooked with cream and spices' },
-    ],
-    desserts: [
-      { name: 'Gulab Jamun', price: '$8', description: 'Sweet milk dumplings in rose syrup' },
-      { name: 'Kheer', price: '$7', description: 'Traditional rice pudding with cardamom' },
-    ],
+  const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 }
   };
 
   return (
-    <div className="bg-black text-white min-h-screen">
+    <div className="relative">
+      {/* Background Image */}
+      <div className="fixed inset-0 z-[-1]">
+        <img 
+          src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4" 
+          alt="background" 
+          className="w-full h-full object-cover opacity-20"
+        />
+      </div>
+
       {/* Navigation */}
-      <nav className="fixed w-full bg-black/90 backdrop-blur-sm z-50">
+      <nav className="fixed w-full bg-black/80 text-white z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <motion.h1 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-2xl font-serif"
-          >
-            Ruchi Indian Kitchen
-          </motion.h1>
-          <div className="hidden md:flex space-x-8">
-            {['Home', 'Menu', 'Reservations', 'Contact'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-gold transition-colors">
-                {item}
-              </a>
-            ))}
+          <h1 className="text-2xl font-serif">Ruchi Indian Kitchen</h1>
+          <div className="hidden md:flex space-x-6">
+            <a href="#home" className="hover:text-yellow-500 transition">Home</a>
+            <a href="#about" className="hover:text-yellow-500 transition">About</a>
+            <a href="#menu" className="hover:text-yellow-500 transition">Menu</a>
+            <a href="#gallery" className="hover:text-yellow-500 transition">Gallery</a>
+            <a href="#reservations" className="hover:text-yellow-500 transition">Reservations</a>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
       <motion.section 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="h-screen relative"
         id="home"
+        className="h-screen flex items-center justify-center text-center text-white"
+        initial="initial"
+        animate="animate"
+        variants={fadeIn}
       >
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-4.0.3")' }}
-        >
-          <div className="absolute inset-0 bg-black/50" />
+        <div className="bg-black/50 p-12 rounded-lg">
+          <h1 className="text-6xl font-serif mb-4">Ruchi Indian Kitchen</h1>
+          <p className="text-2xl mb-8">Experience the Art of Indian Dining</p>
+          <a 
+            href="#reservations"
+            className="bg-yellow-500 text-black px-8 py-3 rounded hover:bg-yellow-600 transition"
+          >
+            Reserve a Table
+          </a>
         </div>
-        <div className="relative h-full flex items-center justify-center text-center">
-          <div className="max-w-3xl px-4">
-            <motion.h2 
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-5xl md:text-7xl font-serif mb-6"
-            >
-              Authentic Indian Cuisine
-            </motion.h2>
-            <motion.p 
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="text-xl mb-8"
-            >
-              Elevated Dining Experience
-            </motion.p>
-            <motion.button 
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="bg-gold text-black px-8 py-3 rounded-full hover:bg-gold/80 transition-colors"
-              onClick={() => document.getElementById('reservations').scrollIntoView()}
-            >
-              Reserve a Table
-            </motion.button>
+      </motion.section>
+
+      {/* About Section */}
+      <motion.section 
+        id="about"
+        className="py-20 bg-white/95"
+        initial="initial"
+        whileInView="animate"
+        variants={fadeIn}
+        viewport={{ once: true }}
+      >
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-serif mb-8 text-center">Our Story</h2>
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <p className="text-lg leading-relaxed">
+              At Ruchi Indian Kitchen, we blend centuries-old traditions with modern culinary innovation. 
+              Our master chefs craft each dish with carefully selected spices and premium ingredients, 
+              ensuring an authentic yet elevated dining experience. We take pride in offering a luxurious 
+              atmosphere where every meal becomes a memorable celebration of Indian gastronomy.
+            </p>
+            <img 
+              src="https://images.unsplash.com/photo-1585937421612-70a008356fbe" 
+              alt="restaurant interior" 
+              className="rounded-lg shadow-xl"
+            />
           </div>
         </div>
       </motion.section>
 
       {/* Menu Section */}
-      <section id="menu" className="py-20 bg-black/95">
+      <motion.section 
+        id="menu"
+        className="py-20 bg-black/95 text-white"
+        initial="initial"
+        whileInView="animate"
+        variants={fadeIn}
+        viewport={{ once: true }}
+      >
         <div className="container mx-auto px-4">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl font-serif text-center mb-16"
-          >
-            Our Menu
-          </motion.h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {Object.entries(menuItems).map(([category, items]) => (
-              <motion.div 
-                key={category}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-gray-900 p-6 rounded-lg"
-              >
-                <h3 className="text-2xl font-serif mb-4 capitalize">{category}</h3>
-                {items.map((item) => (
-                  <div key={item.name} className="mb-4">
-                    <div className="flex justify-between">
-                      <h4 className="font-medium">{item.name}</h4>
-                      <span className="text-gold">{item.price}</span>
-                    </div>
-                    <p className="text-gray-400 text-sm">{item.description}</p>
-                  </div>
-                ))}
-              </motion.div>
-            ))}
+          <h2 className="text-4xl font-serif mb-12 text-center">Our Menu</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Menu categories */}
+            <div className="bg-white/10 p-6 rounded-lg">
+              <h3 className="text-2xl mb-4 font-serif">Appetizers</h3>
+              <ul className="space-y-4">
+                <li>
+                  <h4 className="font-semibold">Samosa Royal</h4>
+                  <p className="text-sm text-gray-300">Crispy pastry filled with spiced potatoes and peas</p>
+                  <p className="text-yellow-500">$8</p>
+                </li>
+                {/* Add more menu items */}
+              </ul>
+            </div>
+            {/* Add more categories */}
           </div>
         </div>
-      </section>
+      </motion.section>
+
+      {/* Gallery Section */}
+      <motion.section 
+        id="gallery"
+        className="py-20 bg-white/95"
+        initial="initial"
+        whileInView="animate"
+        variants={fadeIn}
+        viewport={{ once: true }}
+      >
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-serif mb-12 text-center">A Glimpse Inside</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <img src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0" alt="gallery" className="rounded-lg hover:scale-105 transition"/>
+            <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe" alt="gallery" className="rounded-lg hover:scale-105 transition"/>
+            <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d" alt="gallery" className="rounded-lg hover:scale-105 transition"/>
+          </div>
+        </div>
+      </motion.section>
 
       {/* Reservations Section */}
-      <section id="reservations" className="py-20 bg-[url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3')] bg-cover bg-center relative">
-        <div className="absolute inset-0 bg-black/70" />
-        <div className="container mx-auto px-4 relative">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl font-serif text-center mb-16"
-          >
-            Make a Reservation
-          </motion.h2>
-          <motion.form 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-md mx-auto space-y-4"
-          >
-            <input 
-              type="text" 
-              placeholder="Your Name" 
-              className="w-full p-3 bg-black/50 border border-gold rounded focus:outline-none"
-            />
-            <input 
-              type="email" 
-              placeholder="Email" 
-              className="w-full p-3 bg-black/50 border border-gold rounded focus:outline-none"
-            />
-            <input 
-              type="datetime-local" 
-              className="w-full p-3 bg-black/50 border border-gold rounded focus:outline-none"
-            />
-            <button 
-              type="submit" 
-              className="w-full bg-gold text-black p-3 rounded hover:bg-gold/80 transition-colors"
-            >
-              Reserve Now
-            </button>
-          </motion.form>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-black">
+      <motion.section 
+        id="reservations"
+        className="py-20 bg-black/95 text-white"
+        initial="initial"
+        whileInView="animate"
+        variants={fadeIn}
+        viewport={{ once: true }}
+      >
         <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <h2 className="text-4xl font-serif mb-8">Contact Us</h2>
-            <p className="mb-4">123 Culinary Street, Foodie City, FC 12345</p>
-            <p className="mb-4">Phone: (555) 123-4567</p>
-            <p className="mb-8">Email: info@ruchiindian.com</p>
-            <div className="flex justify-center space-x-6">
-              {['Facebook', 'Instagram', 'Twitter'].map((platform) => (
-                <a 
-                  key={platform}
-                  href="#" 
-                  className="text-gold hover:text-gold/80 transition-colors"
-                >
-                  {platform}
-                </a>
-              ))}
-            </div>
-          </motion.div>
+          <h2 className="text-4xl font-serif mb-12 text-center">Reserve Your Table</h2>
+          <div className="max-w-md mx-auto">
+            <form className="space-y-4">
+              <input 
+                type="text" 
+                placeholder="Name"
+                className="w-full p-2 rounded bg-white/10 border border-white/20"
+              />
+              <input 
+                type="email" 
+                placeholder="Email"
+                className="w-full p-2 rounded bg-white/10 border border-white/20"
+              />
+              <input 
+                type="datetime-local" 
+                className="w-full p-2 rounded bg-white/10 border border-white/20"
+              />
+              <button 
+                type="submit"
+                className="w-full bg-yellow-500 text-black py-2 rounded hover:bg-yellow-600 transition"
+              >
+                Book Now
+              </button>
+            </form>
+          </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Footer */}
-      <footer className="py-6 bg-black border-t border-gray-800">
-        <div className="container mx-auto px-4 text-center text-sm text-gray-400">
-          © 2024 Ruchi Indian Kitchen. All rights reserved.
+      <footer className="bg-black text-white py-8">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-8">
+            <div>
+              <h3 className="text-xl mb-4 font-serif">Location</h3>
+              <p>123 Culinary Street</p>
+              <p>New York, NY 10001</p>
+            </div>
+            <div>
+              <h3 className="text-xl mb-4 font-serif">Contact</h3>
+              <p>Phone: (555) 123-4567</p>
+              <p>Email: info@ruchiindian.com</p>
+            </div>
+            <div>
+              <h3 className="text-xl mb-4 font-serif">Hours</h3>
+              <p>Mon-Sun: 11:00 AM - 10:00 PM</p>
+            </div>
+          </div>
+          <div className="text-center mt-8 pt-8 border-t border-white/20">
+            <p>&copy; 2024 Ruchi Indian Kitchen. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>
