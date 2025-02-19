@@ -1,257 +1,192 @@
 
 import React, { useState, useEffect } from 'react';
 
-const App = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const timer = setInterval(() => {
+      setActiveTestimonial((prev) => (prev + 1) % 3);
+    }, 5000);
+    return () => clearInterval(timer);
   }, []);
 
-  const services = [
-    {
-      title: "Cloud Solutions",
-      desc: "Secure and scalable cloud infrastructure for business growth",
-      icon: "☁️"
-    },
-    {
-      title: "Cybersecurity",
-      desc: "Advanced protection for your digital assets",
-      icon: "🛡️"
-    },
-    {
-      title: "AI Integration",
-      desc: "Smart automation and machine learning solutions",
-      icon: "🤖"
-    },
-    {
-      title: "IT Consulting",
-      desc: "Strategic technology planning and implementation",
-      icon: "💼"
-    }
+  const testimonials = [
+    { name: "Sarah Johnson", text: "The best Indian cuisine I've ever had! The butter chicken is outstanding." },
+    { name: "Michael Chen", text: "Authentic flavors and excellent service. A must-visit restaurant!" },
+    { name: "Emma Williams", text: "Their biryani is absolutely incredible. Great atmosphere too!" }
   ];
 
   return (
     <div className="font-sans">
-      {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-colors duration-300 ${isScrolled ? 'bg-gray-900/95 backdrop-blur' : 'bg-transparent'}`}>
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-white font-bold text-xl">
-            Ragnova IT Solutions
-            <span className="block text-sm font-normal text-teal-400">Innovate. Implement. Inspire.</span>
-          </div>
+      {/* Header */}
+      <header className="fixed w-full bg-white/90 shadow-md z-50">
+        <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <h1 className="text-[#8B0000] text-2xl font-serif">Ruchi Indian Kitchen</h1>
           
-          <div className="hidden md:flex space-x-8">
-            {['Home', 'Services', 'About', 'Contact'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="text-white hover:text-teal-400 transition-colors">
-                {item}
-              </a>
-            ))}
+          <div className="hidden md:flex space-x-6">
+            <a href="#home" className="hover:text-[#8B0000]">Home</a>
+            <a href="#menu" className="hover:text-[#8B0000]">Menu</a>
+            <a href="#about" className="hover:text-[#8B0000]">About</a>
+            <a href="#reservations" className="hover:text-[#8B0000]">Reservations</a>
+            <a href="#contact" className="hover:text-[#8B0000]">Contact</a>
           </div>
 
-          <button 
-            className="md:hidden text-white"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            ☰
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden">
+            <span className="block w-6 h-0.5 bg-[#8B0000] mb-1"></span>
+            <span className="block w-6 h-0.5 bg-[#8B0000] mb-1"></span>
+            <span className="block w-6 h-0.5 bg-[#8B0000]"></span>
           </button>
-        </div>
+        </nav>
+      </header>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-gray-900 p-4 space-y-4">
-            {['Home', 'Services', 'About', 'Contact'].map((item) => (
-              <a 
-                key={item} 
-                href={`#${item.toLowerCase()}`} 
-                className="block text-white hover:text-teal-400"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item}
-              </a>
-            ))}
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="fixed top-16 left-0 w-full bg-white shadow-md md:hidden z-40">
+          <div className="flex flex-col p-4 space-y-3">
+            <a href="#home" className="hover:text-[#8B0000]">Home</a>
+            <a href="#menu" className="hover:text-[#8B0000]">Menu</a>
+            <a href="#about" className="hover:text-[#8B0000]">About</a>
+            <a href="#reservations" className="hover:text-[#8B0000]">Reservations</a>
+            <a href="#contact" className="hover:text-[#8B0000]">Contact</a>
           </div>
-        )}
-      </nav>
+        </div>
+      )}
 
       {/* Hero Section */}
-      <section 
-        id="home" 
-        className="min-h-screen flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&q=80&w=2069&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center relative"
-      >
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="container mx-auto px-6 relative z-10 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
-            Empowering Innovation Through Technology
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-200 mb-8">
-            Custom IT Solutions for Modern Businesses
-          </p>
-          <button className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
-            Explore Services
-          </button>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section id="services" className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Our Expertise</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, index) => (
-              <div 
-                key={index}
-                className="p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100"
-              >
-                <div className="text-4xl mb-4">{service.icon}</div>
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">{service.title}</h3>
-                <p className="text-gray-600">{service.desc}</p>
-              </div>
-            ))}
-          </div>
+      <section id="home" className="h-screen bg-cover bg-center relative" style={{backgroundImage: 'url("https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-4.0.3")'}}> 
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-white">
+          <h1 className="text-5xl md:text-7xl font-serif mb-4">Ruchi Indian Kitchen</h1>
+          <p className="text-xl md:text-2xl mb-8">Experience Authentic Indian Flavors</p>
+          <a href="#reservations" className="bg-[#8B0000] hover:bg-[#DAA520] px-8 py-3 rounded">Reserve Table</a>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="md:w-1/2">
-              <img 
-                src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                alt="Our team" 
-                className="rounded-xl shadow-lg"
-              />
+      <section id="about" className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-serif text-center mb-12">Our Story</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4" alt="Restaurant Interior" className="rounded-lg shadow-lg"/>
             </div>
-            <div className="md:w-1/2">
-              <h2 className="text-4xl font-bold mb-6 text-gray-800">Our Mission</h2>
-              <p className="text-lg text-gray-600 mb-6">
-                At Ragnova IT Solutions, we bridge the gap between technology and business needs. 
-                Our mission is to deliver innovative, scalable solutions that drive digital transformation 
-                while maintaining the highest security standards.
+            <div className="flex flex-col justify-center">
+              <p className="text-lg mb-6">
+                Founded in 2010, Ruchi Indian Kitchen has been serving authentic Indian cuisine to food lovers in the heart of the city. Our expert chefs bring decades of experience and traditional recipes passed down through generations.
               </p>
-              <ul className="space-y-3">
-                {['Client-Centric Approach', 'Agile Methodologies', '24/7 Support', 'Cutting-Edge Technology'].map((item) => (
-                  <li key={item} className="flex items-center text-gray-600">
-                    <span className="text-teal-500 mr-2">✓</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <p className="text-lg">
+                We take pride in using the finest ingredients and traditional spices to create an unforgettable dining experience for our guests.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-100">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-4xl font-bold mb-8 text-center text-gray-800">Get In Touch</h2>
-            <div className="grid md:grid-cols-2 gap-12">
-              <form className="space-y-6">
-                <div>
-                  <input 
-                    type="text" 
-                    placeholder="Name" 
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <input 
-                    type="email" 
-                    placeholder="Email" 
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <textarea 
-                    placeholder="Message" 
-                    rows="4"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                  ></textarea>
-                </div>
-                <button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 rounded-lg transition-colors duration-300">
-                  Send Message
-                </button>
-              </form>
-
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-xl font-semibold mb-4 text-gray-800">Contact Info</h3>
-                  <p className="text-gray-600">📍 123 Tech Valley, Silicon City, CA</p>
-                  <p className="text-gray-600 mt-2">📞 +1 (555) 123-4567</p>
-                  <p className="text-gray-600 mt-2">✉️ contact@ragnova.it</p>
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-4 text-gray-800">Follow Us</h3>
-                  <div className="flex space-x-4">
-                    {['LinkedIn', 'Twitter', 'Facebook', 'GitHub'].map((social) => (
-                      <a 
-                        key={social}
-                        href="#" 
-                        className="text-gray-600 hover:text-teal-500 transition-colors"
-                      >
-                        {social}
-                      </a>
-                    ))}
-                  </div>
+      {/* Menu Highlights */}
+      <section id="menu" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-serif text-center mb-12">Signature Dishes</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {name: "Butter Chicken", img: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398", price: "$18.99"},
+              {name: "Biryani", img: "https://images.unsplash.com/photo-1589302168068-964664d93dc0", price: "$16.99"},
+              {name: "Palak Paneer", img: "https://images.unsplash.com/photo-1601050690597-df0568f70950", price: "$15.99"}
+            ].map((dish, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden">
+                <img src={dish.img} alt={dish.name} className="w-full h-48 object-cover"/>
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold">{dish.name}</h3>
+                  <p className="text-[#8B0000]">{dish.price}</p>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
+          <div className="text-center mt-12">
+            <button className="bg-[#8B0000] text-white px-8 py-3 rounded hover:bg-[#DAA520]">
+              View Full Menu
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-serif text-center mb-12">What Our Guests Say</h2>
+          <div className="max-w-2xl mx-auto">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className={`transition-opacity duration-500 ${index === activeTestimonial ? 'opacity-100' : 'opacity-0 hidden'}`}>
+                <p className="text-lg text-center italic mb-4">"{testimonial.text}"</p>
+                <p className="text-center font-semibold">- {testimonial.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Reservations */}
+      <section id="reservations" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-serif text-center mb-12">Make a Reservation</h2>
+          <form className="max-w-md mx-auto">
+            <div className="mb-4">
+              <input type="text" placeholder="Name" className="w-full p-2 border rounded"/>
+            </div>
+            <div className="mb-4">
+              <input type="email" placeholder="Email" className="w-full p-2 border rounded"/>
+            </div>
+            <div className="mb-4">
+              <input type="date" className="w-full p-2 border rounded"/>
+            </div>
+            <div className="mb-4">
+              <select className="w-full p-2 border rounded">
+                <option>6:00 PM</option>
+                <option>7:00 PM</option>
+                <option>8:00 PM</option>
+                <option>9:00 PM</option>
+              </select>
+            </div>
+            <button className="w-full bg-[#8B0000] text-white py-3 rounded hover:bg-[#DAA520]">
+              Reserve Now
+            </button>
+          </form>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
+      <footer id="contact" className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-xl font-bold mb-4">Ragnova IT Solutions</h3>
-              <p className="text-sm">Innovating tomorrow's solutions today</p>
+              <h3 className="text-xl mb-4">Contact Us</h3>
+              <p>123 Restaurant Street</p>
+              <p>City, State 12345</p>
+              <p>Phone: (555) 123-4567</p>
+              <p>Email: info@ruchiindian.com</p>
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-4">Quick Links</h3>
-              <div className="space-y-2">
-                {['Home', 'Services', 'About', 'Contact'].map((item) => (
-                  <a 
-                    key={item} 
-                    href={`#${item.toLowerCase()}`} 
-                    className="block hover:text-teal-400 transition-colors"
-                  >
-                    {item}
-                  </a>
-                ))}
-              </div>
+              <h3 className="text-xl mb-4">Hours</h3>
+              <p>Monday - Friday: 11:00 AM - 10:00 PM</p>
+              <p>Saturday - Sunday: 12:00 PM - 11:00 PM</p>
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-4">Connect</h3>
+              <h3 className="text-xl mb-4">Follow Us</h3>
               <div className="flex space-x-4">
-                {['LinkedIn', 'Twitter', 'Facebook', 'GitHub'].map((social) => (
-                  <a 
-                    key={social}
-                    href="#" 
-                    className="hover:text-teal-400 transition-colors"
-                  >
-                    {social}
-                  </a>
-                ))}
+                <a href="#" className="hover:text-[#DAA520]">Facebook</a>
+                <a href="#" className="hover:text-[#DAA520]">Instagram</a>
+                <a href="#" className="hover:text-[#DAA520]">Twitter</a>
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm">
-            © 2024 Ragnova IT Solutions. All rights reserved.
+          <div className="text-center mt-8 pt-8 border-t border-gray-800">
+            <p>&copy; 2024 Ruchi Indian Kitchen. All rights reserved.</p>
           </div>
         </div>
       </footer>
     </div>
   );
-};
+}
 
 export default App;
