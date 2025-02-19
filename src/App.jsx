@@ -2,200 +2,379 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-function App() {
+const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const sections = document.querySelectorAll('section');
+      sections.forEach(section => {
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+        if (window.scrollY >= top - 100 && window.scrollY < top + height) {
+          setActiveSection(section.id);
+        }
+      });
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const newsItems = [
-    { title: "USF Researchers Make Breakthrough in Clean Energy", date: "March 15, 2024" },
-    { title: "Bulls Football Team Advances to National Championships", date: "March 12, 2024" },
-    { title: "New Medical Research Center Opening This Fall", date: "March 10, 2024" }
-  ];
-
-  const programs = [
-    { name: "Computer Science", description: "Leading-edge computing education" },
-    { name: "Business Administration", description: "World-class business programs" },
-    { name: "Medical Sciences", description: "Innovative healthcare education" },
-    { name: "Environmental Studies", description: "Sustainable future research" }
-  ];
+  const scrollToSection = (sectionId) => {
+    document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+    setIsMenuOpen(false);
+  };
 
   return (
-    <div className="font-sans">
-      {/* Header */}
-      <header className={`fixed w-full z-50 transition-all ${isScrolled ? 'bg-[#006747] shadow-lg' : 'bg-transparent'}`}>
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center h-20">
-            <h1 className="text-2xl font-bold text-white">University of South Florida</h1>
-            
-            <nav className="hidden md:flex space-x-6 text-white">
-              <a href="#" className="hover:text-[#CFC493]">Academics</a>
-              <a href="#" className="hover:text-[#CFC493]">Admissions</a>
-              <a href="#" className="hover:text-[#CFC493]">Campus Life</a>
-              <a href="#" className="hover:text-[#CFC493]">Research</a>
-              <a href="#" className="hover:text-[#CFC493]">Athletics</a>
-              <a href="#" className="hover:text-[#CFC493]">About</a>
-            </nav>
+    <div className="font-['Poppins'] overflow-x-hidden">
+      {/* Navigation */}
+      <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <motion.h1 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-2xl font-bold text-[#1a237e]"
+            >
+              RAGNOVA
+            </motion.h1>
 
+            {/* Desktop Menu */}
+            <div className="hidden md:flex space-x-8">
+              {['home', 'services', 'about', 'projects', 'contact'].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item)}
+                  className={`${
+                    activeSection === item ? 'text-[#009688]' : 'text-gray-600'
+                  } hover:text-[#009688] transition-colors`}
+                >
+                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                </button>
+              ))}
+              <button className="bg-[#1a237e] text-white px-4 py-2 rounded-md hover:bg-[#009688] transition-colors">
+                Get Started
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
             <button
-              className="md:hidden text-white"
+              className="md:hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-16 6h16"/>
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
           </div>
         </div>
-      </header>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#006747] md:hidden">
-          <div className="flex flex-col items-center pt-20 space-y-4 text-white">
-            <a href="#" className="text-xl">Academics</a>
-            <a href="#" className="text-xl">Admissions</a>
-            <a href="#" className="text-xl">Campus Life</a>
-            <a href="#" className="text-xl">Research</a>
-            <a href="#" className="text-xl">Athletics</a>
-            <a href="#" className="text-xl">About</a>
-          </div>
-        </div>
-      )}
-
-      {/* Hero Section */}
-      <section className="relative h-screen">
-        <div className="absolute inset-0">
-          <img
-            src="https://www.usf.edu/images/about-usf/points-of-pride/campus-beauty.jpg"
-            alt="USF Campus"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-        </div>
-        <div className="relative container mx-auto px-4 h-full flex items-center">
+        {/* Mobile Menu */}
+        {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            className="text-white max-w-2xl"
+            className="md:hidden bg-white"
           >
-            <h1 className="text-5xl font-bold mb-6">Welcome to the University of South Florida</h1>
-            <p className="text-xl mb-8">Empowering students to reach their full potential through excellence in education, research, and innovation.</p>
-            <div className="space-x-4">
-              <button className="bg-[#006747] hover:bg-[#005238] text-white px-8 py-3 rounded-full">Apply Now</button>
-              <button className="border-2 border-white hover:bg-white hover:text-[#006747] text-white px-8 py-3 rounded-full">Schedule a Tour</button>
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {['home', 'services', 'about', 'projects', 'contact'].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item)}
+                  className="block w-full text-left px-3 py-2 text-gray-600 hover:text-[#009688]"
+                >
+                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                </button>
+              ))}
             </div>
           </motion.div>
-        </div>
+        )}
+      </nav>
+
+      {/* Hero Section */}
+      <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#1a237e] to-[#009688] text-white">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center px-4"
+        >
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            Transforming Ideas into Digital Reality
+          </h1>
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
+            We craft innovative digital solutions that empower businesses to thrive in the modern world.
+          </p>
+          <button className="bg-white text-[#1a237e] px-8 py-3 rounded-md hover:bg-[#f5f5f5] transition-colors">
+            Start Your Journey
+          </button>
+        </motion.div>
       </section>
 
-      {/* Featured Programs */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Featured Programs</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {programs.map((program, index) => (
+      {/* Services Section */}
+      <section id="services" className="py-20 bg-[#f5f5f5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl font-bold text-[#1a237e] mb-4">Our Services</h2>
+            <p className="text-gray-600">Comprehensive digital solutions for your business needs</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: 'Web Development',
+                description: 'Custom websites and web applications built with cutting-edge technologies.',
+                icon: '🌐'
+              },
+              {
+                title: 'Mobile Development',
+                description: 'Native and cross-platform mobile applications for iOS and Android.',
+                icon: '📱'
+              },
+              {
+                title: 'Cloud Solutions',
+                description: 'Scalable cloud infrastructure and DevOps services.',
+                icon: '☁️'
+              }
+            ].map((service, index) => (
               <motion.div
                 key={index}
-                whileHover={{ scale: 1.05 }}
-                className="bg-gray-50 p-6 rounded-lg shadow-lg"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
               >
-                <h3 className="text-xl font-bold mb-2">{program.name}</h3>
-                <p>{program.description}</p>
+                <div className="text-4xl mb-4">{service.icon}</div>
+                <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
+                <p className="text-gray-600">{service.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* News Carousel */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Latest News</h2>
-          <div className="relative">
+      {/* About Section */}
+      <section id="about" className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
-              animate={{ x: `-${currentSlide * 100}%` }}
-              transition={{ duration: 0.5 }}
-              className="flex"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
             >
-              {newsItems.map((item, index) => (
-                <div key={index} className="min-w-full px-4">
-                  <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                    <p className="text-gray-600">{item.date}</p>
+              <h2 className="text-3xl font-bold text-[#1a237e] mb-6">About Ragnova</h2>
+              <p className="text-gray-600 mb-6">
+                Founded in 2020, Ragnova has been at the forefront of digital innovation,
+                helping businesses transform their digital presence and operations.
+                Our team of experts brings together years of experience in technology
+                and business solutions.
+              </p>
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { number: '100+', label: 'Projects' },
+                  { number: '50+', label: 'Clients' },
+                  { number: '15+', label: 'Experts' }
+                ].map((stat, index) => (
+                  <div key={index} className="text-center">
+                    <div className="text-2xl font-bold text-[#009688]">{stat.number}</div>
+                    <div className="text-gray-600">{stat.label}</div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </motion.div>
-            <div className="flex justify-center mt-6 space-x-2">
-              {newsItems.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full ${
-                    currentSlide === index ? 'bg-[#006747]' : 'bg-gray-300'
-                  }`}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative h-[400px]"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c"
+                alt="Team at work"
+                className="rounded-lg object-cover w-full h-full"
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section id="projects" className="py-20 bg-[#f5f5f5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl font-bold text-[#1a237e] mb-4">Our Projects</h2>
+            <p className="text-gray-600">Showcasing our best work</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: 'E-commerce Platform',
+                description: 'A full-scale e-commerce solution with integrated payment systems.',
+                image: 'https://images.unsplash.com/photo-1661956602116-aa6865609028'
+              },
+              {
+                title: 'Healthcare App',
+                description: 'Mobile application for remote patient monitoring.',
+                image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d'
+              },
+              {
+                title: 'Financial Dashboard',
+                description: 'Real-time analytics platform for financial institutions.',
+                image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71'
+              }
+            ].map((project, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                className="group relative overflow-hidden rounded-lg shadow-lg"
+              >
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-64 object-cover transition-transform group-hover:scale-105"
                 />
-              ))}
-            </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 flex flex-col justify-end">
+                  <h3 className="text-white text-xl font-semibold mb-2">{project.title}</h3>
+                  <p className="text-white/90 text-sm">{project.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl font-bold text-[#1a237e] mb-4">Contact Us</h2>
+            <p className="text-gray-600">Get in touch with our team</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-12">
+            <motion.form
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <div>
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#009688]"
+                />
+              </div>
+              <div>
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#009688]"
+                />
+              </div>
+              <div>
+                <textarea
+                  placeholder="Your Message"
+                  rows="4"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#009688]"
+                ></textarea>
+              </div>
+              <button className="bg-[#1a237e] text-white px-6 py-3 rounded-md hover:bg-[#009688] transition-colors">
+                Send Message
+              </button>
+            </motion.form>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <div>
+                <h3 className="text-xl font-semibold mb-2">Our Office</h3>
+                <p className="text-gray-600">123 Tech Street, Innovation City, 12345</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-2">Contact Info</h3>
+                <p className="text-gray-600">Email: contact@ragnova.com</p>
+                <p className="text-gray-600">Phone: +1 (123) 456-7890</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-2">Business Hours</h3>
+                <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM</p>
+                <p className="text-gray-600">Saturday - Sunday: Closed</p>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#006747] text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
+      <footer className="bg-[#1a237e] text-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-xl font-bold mb-4">Contact Us</h3>
-              <p>4202 E Fowler Ave</p>
-              <p>Tampa, FL 33620</p>
-              <p>Phone: (813) 974-2011</p>
+              <h2 className="text-2xl font-bold mb-4">RAGNOVA</h2>
+              <p className="text-white/80">
+                Transforming businesses through innovative digital solutions.
+              </p>
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+              <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="hover:text-[#CFC493]">Directory</a></li>
-                <li><a href="#" className="hover:text-[#CFC493]">Libraries</a></li>
-                <li><a href="#" className="hover:text-[#CFC493]">Maps</a></li>
-                <li><a href="#" className="hover:text-[#CFC493]">Parking</a></li>
+                {['Home', 'Services', 'About Us', 'Projects', 'Contact'].map((item) => (
+                  <li key={item}>
+                    <button className="text-white/80 hover:text-white">
+                      {item}
+                    </button>
+                  </li>
+                ))}
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-4">Resources</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-[#CFC493]">Canvas</a></li>
-                <li><a href="#" className="hover:text-[#CFC493]">OASIS</a></li>
-                <li><a href="#" className="hover:text-[#CFC493]">IT Help Desk</a></li>
-                <li><a href="#" className="hover:text-[#CFC493]">Email</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">Connect With Us</h3>
+              <h3 className="text-xl font-semibold mb-4">Follow Us</h3>
               <div className="flex space-x-4">
-                <a href="#" className="hover:text-[#CFC493]">Facebook</a>
-                <a href="#" className="hover:text-[#CFC493]">Twitter</a>
-                <a href="#" className="hover:text-[#CFC493]">Instagram</a>
-                <a href="#" className="hover:text-[#CFC493]">LinkedIn</a>
+                {['Twitter', 'LinkedIn', 'Facebook', 'Instagram'].map((social) => (
+                  <button
+                    key={social}
+                    className="text-white/80 hover:text-white"
+                  >
+                    {social}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-[#CFC493] text-center">
-            <p>&copy; 2024 University of South Florida. All rights reserved.</p>
+          <div className="mt-8 pt-8 border-t border-white/20 text-center">
+            <p className="text-white/80">
+              © 2024 Ragnova IT Solutions. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>
     </div>
   );
-}
+};
 
 export default App;
