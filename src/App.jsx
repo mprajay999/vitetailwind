@@ -1,178 +1,211 @@
 
-import React, { useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import React, { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 
-function App() {
-  const controls = useAnimation();
-  const [ref, inView] = useInView();
+const App = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+  const aboutRef = useRef(null);
+  const galleryRef = useRef(null);
+  const reviewsRef = useRef(null);
+  const contactRef = useRef(null);
 
-  useEffect(() => {
-    if (inView) {
-      controls.start('visible');
-    }
-  }, [controls, inView]);
-
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+  const scrollToSection = (ref) => {
+    ref.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const scrollToSection = (id) => {
-    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 }
   };
 
   return (
     <div className="overflow-x-hidden">
-      {/* Navigation */}
-      <nav className="fixed w-full bg-green-800 text-white z-50 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">University of South Florida</h1>
-          <div className="hidden md:flex space-x-6">
-            {['about', 'academics', 'student-life', 'admissions', 'research', 'contact'].map((item) => (
-              <button
-                key={item}
-                onClick={() => scrollToSection(item)}
-                className="hover:text-yellow-400 transition-colors"
-              >
-                {item.charAt(0).toUpperCase() + item.slice(1).replace('-', ' ')}
-              </button>
-            ))}
+      {/* Sticky Header */}
+      <header className="fixed w-full bg-white/90 backdrop-blur-sm shadow-md z-50 px-6 py-4">
+        <nav className="max-w-7xl mx-auto flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-orange-600">Ruchi Indian Kitchen</h1>
+          <div className="hidden md:flex gap-6">
+            <button onClick={() => scrollToSection(aboutRef)} className="hover:text-orange-600">About</button>
+            <button onClick={() => scrollToSection(menuRef)} className="hover:text-orange-600">Menu</button>
+            <button onClick={() => scrollToSection(galleryRef)} className="hover:text-orange-600">Gallery</button>
+            <button onClick={() => scrollToSection(reviewsRef)} className="hover:text-orange-600">Reviews</button>
+            <button onClick={() => scrollToSection(contactRef)} className="hover:text-orange-600">Contact</button>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
       {/* Hero Section */}
-      <section className="h-screen bg-cover bg-center relative" style={{ backgroundImage: "url('https://www.usf.edu/news/2022/images/about-usf-home-page.jpg')" }}>
-        <div className="absolute inset-0 bg-black bg-opacity-50">
+      <motion.section 
+        className="h-screen bg-cover bg-center relative"
+        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-4.0.3')" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="absolute inset-0 bg-black/50">
           <div className="h-full flex flex-col justify-center items-center text-white">
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-5xl md:text-7xl font-bold mb-6"
+            <motion.h1 
+              className="text-5xl md:text-7xl font-bold mb-4"
+              {...fadeIn}
             >
-              Shaping Future Leaders
+              Ruchi Indian Kitchen
             </motion.h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
+            <motion.p 
               className="text-xl md:text-2xl mb-8"
+              {...fadeIn}
             >
-              Welcome to the University of South Florida
+              Authentic Indian flavors cooked to perfection
             </motion.p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-green-800 text-white px-8 py-3 rounded-full hover:bg-green-700"
-              onClick={() => scrollToSection('about')}
+            <motion.button 
+              onClick={() => scrollToSection(menuRef)}
+              className="bg-orange-600 px-8 py-3 rounded-full hover:bg-orange-700 transition-colors"
+              {...fadeIn}
             >
-              Learn More
+              Explore Our Menu
             </motion.button>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white">
-        <motion.div
-          ref={ref}
-          initial="hidden"
-          animate={controls}
-          variants={fadeIn}
-          className="max-w-7xl mx-auto px-6"
-        >
-          <h2 className="text-4xl font-bold mb-12 text-center">About USF</h2>
+      <motion.section 
+        ref={aboutRef}
+        className="py-20 px-6 bg-orange-50"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 className="text-4xl font-bold mb-6">Our Story</h2>
+            <p className="text-lg leading-relaxed">
+              Founded in 2010, Ruchi Indian Kitchen has been serving authentic Indian cuisine to food lovers in the heart of the city. Our chefs bring decades of experience in traditional Indian cooking methods, ensuring every dish is prepared with authentic spices and techniques.
+            </p>
+          </div>
+          <div className="rounded-lg overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1516714435131-44d6b64dc6a4?ixlib=rb-4.0.3" 
+              alt="Chef cooking"
+              className="w-full h-[400px] object-cover"
+            />
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Menu Section */}
+      <motion.section 
+        ref={menuRef}
+        className="py-20 px-6"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-center mb-12">Our Menu</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Menu items here - example of one item */}
+            {[1, 2, 3, 4, 5, 6].map((item) => (
+              <motion.div 
+                key={item}
+                className="bg-white rounded-lg shadow-lg overflow-hidden"
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img 
+                  src={`https://images.unsplash.com/photo-${1550547660 + item}-d8d8c9a8e694`} 
+                  alt="Dish"
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">Signature Dish {item}</h3>
+                  <p className="text-gray-600">Delicious Indian curry made with authentic spices and fresh ingredients.</p>
+                  <p className="text-orange-600 font-bold mt-4">$14.99</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Reviews Section */}
+      <motion.section 
+        ref={reviewsRef}
+        className="py-20 px-6 bg-orange-50"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-center mb-12">Customer Reviews</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((review) => (
+              <motion.div 
+                key={review}
+                className="bg-white p-6 rounded-lg shadow-lg"
+                whileHover={{ y: -5 }}
+              >
+                <div className="flex items-center mb-4">
+                  ⭐⭐⭐⭐⭐
+                </div>
+                <p className="mb-4">"Amazing authentic Indian food! The flavors are incredible and the service is excellent."</p>
+                <p className="font-bold">- Happy Customer {review}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Contact Section */}
+      <motion.section 
+        ref={contactRef}
+        className="py-20 px-6"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-center mb-12">Visit Us</h2>
           <div className="grid md:grid-cols-2 gap-12">
             <div>
-              <p className="text-lg leading-relaxed">
-                The University of South Florida is a premier research university dedicated to empowering students to reach their highest potential. Founded in 1956, USF has grown to become one of the largest public universities in the nation, serving more than 50,000 students across three campuses.
+              <h3 className="text-2xl font-bold mb-4">Location</h3>
+              <p className="mb-4">123 Food Street, Culinary District<br />New York, NY 10001</p>
+              <h3 className="text-2xl font-bold mb-4">Hours</h3>
+              <p className="mb-4">
+                Monday - Friday: 11:00 AM - 10:00 PM<br />
+                Saturday - Sunday: 12:00 PM - 11:00 PM
               </p>
-              <div className="mt-8 grid grid-cols-3 gap-4">
-                <div className="text-center">
-                  <h3 className="text-3xl font-bold text-green-800">50,000+</h3>
-                  <p>Students</p>
-                </div>
-                <div className="text-center">
-                  <h3 className="text-3xl font-bold text-green-800">#1</h3>
-                  <p>In Florida</p>
-                </div>
-                <div className="text-center">
-                  <h3 className="text-3xl font-bold text-green-800">200+</h3>
-                  <p>Programs</p>
-                </div>
-              </div>
+              <h3 className="text-2xl font-bold mb-4">Contact</h3>
+              <p className="mb-4">
+                Phone: (555) 123-4567<br />
+                Email: info@ruchiindian.com
+              </p>
             </div>
-            <div className="rounded-lg overflow-hidden">
-              <img
-                src="https://www.usf.edu/news/2019/images/usf-tampa-aerial-2019-1.jpg"
-                alt="USF Campus"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* More sections following similar pattern... */}
-      {/* Academic Programs Section */}
-      <section id="academics" className="py-20 bg-gray-50">
-        {/* Similar structure with academic content */}
-      </section>
-
-      {/* Student Life Section */}
-      <section id="student-life" className="py-20 bg-white">
-        {/* Similar structure with student life content */}
-      </section>
-
-      {/* Admissions Section */}
-      <section id="admissions" className="py-20 bg-gray-50">
-        {/* Similar structure with admissions content */}
-      </section>
-
-      {/* Research Section */}
-      <section id="research" className="py-20 bg-white">
-        {/* Similar structure with research content */}
-      </section>
-
-      {/* Contact & Footer */}
-      <footer id="contact" className="bg-green-800 text-white py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">Contact Us</h3>
-              <p>4202 E Fowler Ave</p>
-              <p>Tampa, FL 33620</p>
-              <p>Phone: (813) 974-2011</p>
-              <p>Email: admissions@usf.edu</p>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-yellow-400">Virtual Tour</a></li>
-                <li><a href="#" className="hover:text-yellow-400">Campus Map</a></li>
-                <li><a href="#" className="hover:text-yellow-400">Directory</a></li>
-                <li><a href="#" className="hover:text-yellow-400">Events</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">Follow Us</h3>
-              <div className="flex space-x-4">
-                {/* Social Media Icons */}
-                <a href="#" className="hover:text-yellow-400">Twitter</a>
-                <a href="#" className="hover:text-yellow-400">Facebook</a>
-                <a href="#" className="hover:text-yellow-400">Instagram</a>
-                <a href="#" className="hover:text-yellow-400">LinkedIn</a>
+            <div className="bg-gray-200 rounded-lg h-[400px]">
+              {/* Replace with actual Google Maps embed */}
+              <div className="w-full h-full flex items-center justify-center">
+                Map Placeholder
               </div>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-green-700 text-center">
-            <p>&copy; 2024 University of South Florida. All rights reserved.</p>
+        </div>
+      </motion.section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-8 px-6">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="mb-4">Follow us on social media</p>
+          <div className="flex justify-center gap-4 mb-4">
+            <a href="#" className="hover:text-orange-600">Facebook</a>
+            <a href="#" className="hover:text-orange-600">Instagram</a>
+            <a href="#" className="hover:text-orange-600">Twitter</a>
           </div>
+          <p>© 2024 Ruchi Indian Kitchen. All rights reserved.</p>
         </div>
       </footer>
     </div>
   );
-}
+};
 
 export default App;
