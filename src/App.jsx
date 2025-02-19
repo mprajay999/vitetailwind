@@ -1,60 +1,54 @@
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
-const App = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+function App() {
   const [activeSection, setActiveSection] = useState('home');
 
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
+  const smoothScroll = (id) => {
+    const element = document.getElementById(id);
+    setActiveSection(id);
     element.scrollIntoView({ behavior: 'smooth' });
-    setActiveSection(sectionId);
   };
 
-  // Navbar items
-  const navItems = ['home', 'about', 'menu', 'story', 'reservations', 'gallery', 'reviews', 'contact'];
+  const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 }
+  };
 
-  // Menu data
-  const menuCategories = [
+  const menuItems = [
     {
-      title: 'Appetizers',
-      items: [
-        { name: 'Edamame', price: '6', description: 'Steamed soybeans with sea salt' },
-        { name: 'Gyoza', price: '8', description: 'Pan-fried dumplings with pork and vegetables' },
-      ]
+      name: "Sake Glazed Black Cod",
+      price: "$28",
+      description: "Marinated for 72 hours in our house-made sake mixture",
+      image: "https://source.unsplash.com/random/800x600/?japanese-food-cod"
     },
     {
-      title: 'Sushi Rolls',
-      items: [
-        { name: 'Dragon Roll', price: '18', description: 'Eel, cucumber, avocado' },
-        { name: 'Rainbow Roll', price: '16', description: 'California roll topped with assorted sashimi' },
-      ]
+      name: "Dragon Roll",
+      price: "$24",
+      description: "Premium eel, avocado, and tempura crunch",
+      image: "https://source.unsplash.com/random/800x600/?sushi-roll"
     },
+    // Add more menu items as needed
   ];
 
   return (
-    <div className="bg-black text-white min-h-screen">
+    <div className="bg-black text-white">
       {/* Navigation */}
-      <nav className="fixed w-full bg-black/90 z-50 px-4 py-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <motion.h1 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-2xl font-semibold"
-          >
-            TSUKI IZAKAYA
-          </motion.h1>
-          <div className="hidden md:flex space-x-6">
-            {navItems.map((item) => (
+      <nav className="fixed w-full bg-black/90 z-50 px-6 py-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-red-600">築 TSUKI</h1>
+          <div className="space-x-6">
+            {['home', 'about', 'menu', 'gallery', 'contact'].map((item) => (
               <button
                 key={item}
-                onClick={() => scrollToSection(item)}
-                className={`capitalize ${
-                  activeSection === item ? 'text-red-500' : 'text-white'
-                } hover:text-red-400 transition-colors`}
+                onClick={() => smoothScroll(item)}
+                className={`${
+                  activeSection === item ? 'text-red-600' : 'text-white'
+                } hover:text-red-500 transition-colors`}
               >
-                {item}
+                {item.charAt(0).toUpperCase() + item.slice(1)}
               </button>
             ))}
           </div>
@@ -62,124 +56,132 @@ const App = () => {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="h-screen relative">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1580835239846-5bb9ce0642f7')] bg-cover bg-center"
-        >
-          <div className="absolute inset-0 bg-black/50">
-            <div className="h-full flex flex-col justify-center items-center">
-              <motion.h1
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className="text-5xl md:text-7xl font-bold mb-4"
-              >
-                TSUKI IZAKAYA
-              </motion.h1>
-              <motion.p
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="text-xl md:text-2xl"
-              >
-                Traditional Flavors, Modern Elegance
-              </motion.p>
-            </div>
+      <motion.section
+        id="home"
+        className="h-screen bg-[url('https://source.unsplash.com/random/1920x1080/?japanese-restaurant')] bg-cover bg-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="h-full bg-black/50 flex items-center justify-center">
+          <div className="text-center">
+            <motion.h1 
+              className="text-6xl font-bold mb-4"
+              {...fadeIn}
+            >
+              TSUKI IZAKAYA
+            </motion.h1>
+            <motion.p 
+              className="text-xl mb-8"
+              {...fadeIn}
+            >
+              Where Samurai Spirit Meets Japanese Cuisine
+            </motion.p>
+            <motion.button
+              className="bg-red-600 px-8 py-3 rounded hover:bg-red-700 transition-colors"
+              onClick={() => smoothScroll('menu')}
+              whileHover={{ scale: 1.05 }}
+            >
+              Explore the Experience
+            </motion.button>
           </div>
-        </motion.div>
-      </section>
+        </div>
+      </motion.section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-neutral-900">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto text-center"
-          >
-            <h2 className="text-3xl mb-8">About Us</h2>
-            <p className="text-lg mb-8">
-              Welcome to Tsuki Izakaya, where traditional Japanese dining meets contemporary elegance.
-              Our restaurant offers an authentic izakaya experience, serving carefully crafted dishes
-              that honor centuries-old recipes while embracing modern culinary innovations.
-            </p>
-          </motion.div>
+      <motion.section
+        id="about"
+        className="py-20 px-6 bg-gradient-to-b from-black to-gray-900"
+        {...fadeIn}
+      >
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl mb-8 font-bold">Our Story</h2>
+          <p className="text-lg leading-relaxed">
+            TSUKI IZAKAYA embodies the essence of traditional Japanese dining,
+            where the noble principles of the samurai — honor, discipline, and
+            hospitality — guide our service. Our master chefs craft each dish
+            with precision and artistry, offering an authentic izakaya experience
+            that transports you to the heart of Japan.
+          </p>
         </div>
-      </section>
+      </motion.section>
 
       {/* Menu Section */}
-      <section id="menu" className="py-20 bg-black">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl text-center mb-12">Our Menu</h2>
-          {menuCategories.map((category) => (
-            <motion.div
-              key={category.title}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="mb-12"
-            >
-              <h3 className="text-2xl mb-6">{category.title}</h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                {category.items.map((item) => (
-                  <div key={item.name} className="border border-gray-800 p-4 rounded">
-                    <h4 className="text-xl mb-2">{item.name}</h4>
-                    <p className="text-gray-400">{item.description}</p>
-                    <p className="text-red-500 mt-2">${item.price}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Reservations Section */}
-      <section id="reservations" className="py-20 bg-neutral-900">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            className="max-w-md mx-auto"
-          >
-            <h2 className="text-3xl text-center mb-8">Make a Reservation</h2>
-            <form className="space-y-4">
-              <input
-                type="text"
-                placeholder="Name"
-                className="w-full p-2 bg-black border border-gray-800 rounded"
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full p-2 bg-black border border-gray-800 rounded"
-              />
-              <input
-                type="date"
-                className="w-full p-2 bg-black border border-gray-800 rounded"
-              />
-              <button
-                type="submit"
-                className="w-full bg-red-600 py-2 rounded hover:bg-red-700 transition-colors"
+      <motion.section
+        id="menu"
+        className="py-20 px-6 bg-black"
+        {...fadeIn}
+      >
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl mb-12 text-center font-bold">Our Menu</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {menuItems.map((item, index) => (
+              <motion.div
+                key={index}
+                className="bg-gray-900 rounded-lg overflow-hidden"
+                whileHover={{ scale: 1.02 }}
               >
-                Reserve Now
-              </button>
-            </form>
-          </motion.div>
+                <img 
+                  src={item.image} 
+                  alt={item.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">{item.name}</h3>
+                  <p className="text-gray-400 mb-2">{item.description}</p>
+                  <p className="text-red-600 font-bold">{item.price}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </section>
+      </motion.section>
+
+      {/* Contact Section */}
+      <motion.section
+        id="contact"
+        className="py-20 px-6 bg-gradient-to-b from-gray-900 to-black"
+        {...fadeIn}
+      >
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl mb-8 font-bold">Visit Us</h2>
+          <div className="mb-8">
+            <p className="text-lg">123 Samurai Street, Tokyo District</p>
+            <p className="text-lg">Phone: (555) 123-4567</p>
+            <p className="text-lg">Email: info@tsukiizakaya.com</p>
+          </div>
+          <button
+            className="bg-red-600 px-8 py-3 rounded hover:bg-red-700 transition-colors"
+            onClick={() => window.location.href = 'mailto:info@tsukiizakaya.com'}
+          >
+            Book a Table
+          </button>
+        </div>
+      </motion.section>
 
       {/* Footer */}
-      <footer className="bg-black py-8 border-t border-gray-800">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-400">© 2024 Tsuki Izakaya. All rights reserved.</p>
+      <footer className="bg-black py-6 px-6 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="flex justify-center space-x-6 mb-4">
+            {['facebook', 'instagram', 'twitter'].map((social) => (
+              <a
+                key={social}
+                href={`https://${social}.com`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-red-600 transition-colors"
+              >
+                {social.charAt(0).toUpperCase() + social.slice(1)}
+              </a>
+            ))}
+          </div>
+          <p className="text-gray-400">
+            © 2024 TSUKI IZAKAYA. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
   );
-};
+}
 
 export default App;
