@@ -1,27 +1,58 @@
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     element.scrollIntoView({ behavior: 'smooth' });
+    setActiveSection(sectionId);
   };
 
+  // Navbar items
+  const navItems = ['home', 'about', 'menu', 'story', 'reservations', 'gallery', 'reviews', 'contact'];
+
+  // Menu data
+  const menuCategories = [
+    {
+      title: 'Appetizers',
+      items: [
+        { name: 'Edamame', price: '6', description: 'Steamed soybeans with sea salt' },
+        { name: 'Gyoza', price: '8', description: 'Pan-fried dumplings with pork and vegetables' },
+      ]
+    },
+    {
+      title: 'Sushi Rolls',
+      items: [
+        { name: 'Dragon Roll', price: '18', description: 'Eel, cucumber, avocado' },
+        { name: 'Rainbow Roll', price: '16', description: 'California roll topped with assorted sashimi' },
+      ]
+    },
+  ];
+
   return (
-    <div className="bg-black text-white">
-      {/* Navbar */}
-      <nav className="fixed w-full bg-black/90 backdrop-blur-sm z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-serif">TSUKI IZAKAYA</h1>
-          <div className="hidden md:flex space-x-8">
-            {['home', 'about', 'menu', 'gallery', 'reservations', 'contact'].map((item) => (
+    <div className="bg-black text-white min-h-screen">
+      {/* Navigation */}
+      <nav className="fixed w-full bg-black/90 z-50 px-4 py-4">
+        <div className="container mx-auto flex justify-between items-center">
+          <motion.h1 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-2xl font-semibold"
+          >
+            TSUKI IZAKAYA
+          </motion.h1>
+          <div className="hidden md:flex space-x-6">
+            {navItems.map((item) => (
               <button
                 key={item}
                 onClick={() => scrollToSection(item)}
-                className="capitalize hover:text-red-500 transition-colors"
+                className={`capitalize ${
+                  activeSection === item ? 'text-red-500' : 'text-white'
+                } hover:text-red-400 transition-colors`}
               >
                 {item}
               </button>
@@ -31,184 +62,120 @@ const App = () => {
       </nav>
 
       {/* Hero Section */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        id="home"
-        className="h-screen bg-[url('https://images.unsplash.com/photo-1601023764067-8d8b7768466c')] bg-cover bg-center"
-      >
-        <div className="h-full bg-black/50 flex flex-col items-center justify-center">
-          <motion.h1
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-6xl md:text-8xl font-serif mb-4"
-          >
-            TSUKI IZAKAYA
-          </motion.h1>
-          <motion.p
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="text-xl md:text-2xl mb-8"
-          >
-            Authentic Izakaya Experience, Crafted with Passion
-          </motion.p>
-          <motion.button
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            onClick={() => scrollToSection('reservations')}
-            className="bg-red-700 px-8 py-3 rounded hover:bg-red-800 transition-colors"
-          >
-            Reserve Now
-          </motion.button>
-        </div>
-      </motion.section>
+      <section id="home" className="h-screen relative">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1580835239846-5bb9ce0642f7')] bg-cover bg-center"
+        >
+          <div className="absolute inset-0 bg-black/50">
+            <div className="h-full flex flex-col justify-center items-center">
+              <motion.h1
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                className="text-5xl md:text-7xl font-bold mb-4"
+              >
+                TSUKI IZAKAYA
+              </motion.h1>
+              <motion.p
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="text-xl md:text-2xl"
+              >
+                Traditional Flavors, Modern Elegance
+              </motion.p>
+            </div>
+          </div>
+        </motion.div>
+      </section>
 
       {/* About Section */}
       <section id="about" className="py-20 bg-neutral-900">
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto px-4">
           <motion.div
-            initial={{ x: -50, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
+            className="max-w-3xl mx-auto text-center"
           >
-            <h2 className="text-4xl font-serif mb-6">Our Story</h2>
-            <p className="text-gray-300 leading-relaxed">
-              Established in 2015, TSUKI IZAKAYA brings the authentic taste and atmosphere
-              of traditional Japanese pub dining to your neighborhood. Our expert chefs
-              combine time-honored recipes with modern techniques to create an
-              unforgettable dining experience.
+            <h2 className="text-3xl mb-8">About Us</h2>
+            <p className="text-lg mb-8">
+              Welcome to Tsuki Izakaya, where traditional Japanese dining meets contemporary elegance.
+              Our restaurant offers an authentic izakaya experience, serving carefully crafted dishes
+              that honor centuries-old recipes while embracing modern culinary innovations.
             </p>
           </motion.div>
-          <motion.img
-            initial={{ x: 50, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            src="https://images.unsplash.com/photo-1580442151529-343f2f6e0e27"
-            alt="Restaurant interior"
-            className="rounded-lg shadow-2xl"
-          />
         </div>
       </section>
 
       {/* Menu Section */}
-      <section id="menu" className="py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-serif text-center mb-12">Our Menu</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {['Small Bites', 'Yakitori & Kushiyaki', 'Ramen & Rice', 'Sake & Cocktails'].map((category) => (
-              <motion.div
-                key={category}
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                className="bg-neutral-900 p-6 rounded-lg"
-              >
-                <h3 className="text-2xl font-serif mb-4">{category}</h3>
-                <div className="space-y-4">
-                  {[1, 2, 3].map((item) => (
-                    <div key={item} className="flex justify-between">
-                      <span>Signature Dish {item}</span>
-                      <span>$12.99</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery Section */}
-      <section id="gallery" className="py-20 bg-neutral-900">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-serif text-center mb-12">Gallery</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[1, 2, 3, 4, 5, 6].map((item) => (
-              <motion.img
-                key={item}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                src={`https://source.unsplash.com/random/800x600?japanese-food=${item}`}
-                alt={`Gallery image ${item}`}
-                className="rounded-lg hover:scale-105 transition-transform duration-300"
-              />
-            ))}
-          </div>
+      <section id="menu" className="py-20 bg-black">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl text-center mb-12">Our Menu</h2>
+          {menuCategories.map((category) => (
+            <motion.div
+              key={category.title}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="mb-12"
+            >
+              <h3 className="text-2xl mb-6">{category.title}</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                {category.items.map((item) => (
+                  <div key={item.name} className="border border-gray-800 p-4 rounded">
+                    <h4 className="text-xl mb-2">{item.name}</h4>
+                    <p className="text-gray-400">{item.description}</p>
+                    <p className="text-red-500 mt-2">${item.price}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
       {/* Reservations Section */}
-      <section id="reservations" className="py-20">
-        <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-4xl font-serif text-center mb-12">Make a Reservation</h2>
-          <motion.form
-            initial={{ y: 50, opacity: 0 }}
+      <section id="reservations" className="py-20 bg-neutral-900">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
-            className="space-y-6"
-            onSubmit={(e) => e.preventDefault()}
+            className="max-w-md mx-auto"
           >
-            <input
-              type="text"
-              placeholder="Full Name"
-              className="w-full p-3 bg-neutral-900 rounded"
-            />
-            <div className="grid grid-cols-2 gap-4">
+            <h2 className="text-3xl text-center mb-8">Make a Reservation</h2>
+            <form className="space-y-4">
+              <input
+                type="text"
+                placeholder="Name"
+                className="w-full p-2 bg-black border border-gray-800 rounded"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                className="w-full p-2 bg-black border border-gray-800 rounded"
+              />
               <input
                 type="date"
-                className="w-full p-3 bg-neutral-900 rounded"
+                className="w-full p-2 bg-black border border-gray-800 rounded"
               />
-              <input
-                type="time"
-                className="w-full p-3 bg-neutral-900 rounded"
-              />
-            </div>
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full p-3 bg-neutral-900 rounded"
-            />
-            <button
-              type="submit"
-              className="w-full bg-red-700 py-3 rounded hover:bg-red-800 transition-colors"
-            >
-              Reserve Now
-            </button>
-          </motion.form>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-neutral-900">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-serif text-center mb-12">Contact Us</h2>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-serif mb-4">Location</h3>
-              <p className="text-gray-300 mb-4">123 Izakaya Street</p>
-              <p className="text-gray-300 mb-4">Tokyo, Japan 100-0001</p>
-              <p className="text-gray-300 mb-4">Phone: (123) 456-7890</p>
-              <div className="space-x-4">
-                <a href="#" className="text-red-500 hover:text-red-400">Instagram</a>
-                <a href="#" className="text-red-500 hover:text-red-400">Facebook</a>
-                <a href="#" className="text-red-500 hover:text-red-400">Twitter</a>
-              </div>
-            </div>
-            <div className="h-64 bg-neutral-800 rounded-lg"></div>
-          </div>
+              <button
+                type="submit"
+                className="w-full bg-red-600 py-2 rounded hover:bg-red-700 transition-colors"
+              >
+                Reserve Now
+              </button>
+            </form>
+          </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 border-t border-neutral-800">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-gray-400">
-            © 2024 TSUKI IZAKAYA. All rights reserved.
-          </p>
+      <footer className="bg-black py-8 border-t border-gray-800">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-gray-400">© 2024 Tsuki Izakaya. All rights reserved.</p>
         </div>
       </footer>
     </div>
