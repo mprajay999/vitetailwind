@@ -11,7 +11,8 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "framer-motion": "^10.0.0",
-    "react-intersection-observer": "^9.0.0"
+    "react-intersection-observer": "^9.0.0",
+    "react-scroll": "^1.8.4"
   },
   "devDependencies": {
     "vite": "^4.0.0",
