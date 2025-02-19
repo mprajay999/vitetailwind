@@ -1,7 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
-const App = () => {
+function App() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -12,191 +15,187 @@ const App = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const newsItems = [
+    { title: "USF Researchers Make Breakthrough in Clean Energy", date: "March 15, 2024" },
+    { title: "Bulls Football Team Advances to National Championships", date: "March 12, 2024" },
+    { title: "New Medical Research Center Opening This Fall", date: "March 10, 2024" }
+  ];
+
+  const programs = [
+    { name: "Computer Science", description: "Leading-edge computing education" },
+    { name: "Business Administration", description: "World-class business programs" },
+    { name: "Medical Sciences", description: "Innovative healthcare education" },
+    { name: "Environmental Studies", description: "Sustainable future research" }
+  ];
+
   return (
     <div className="font-sans">
-      {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'}`}>
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-blue-900">Cruize IT Solutions</h1>
-            <div className="hidden md:flex space-x-8">
-              <a href="#home" className="text-gray-700 hover:text-blue-600">Home</a>
-              <a href="#services" className="text-gray-700 hover:text-blue-600">Services</a>
-              <a href="#about" className="text-gray-700 hover:text-blue-600">About</a>
-              <a href="#projects" className="text-gray-700 hover:text-blue-600">Projects</a>
-              <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
-                Get Started
-              </button>
-            </div>
+      {/* Header */}
+      <header className={`fixed w-full z-50 transition-all ${isScrolled ? 'bg-[#006747] shadow-lg' : 'bg-transparent'}`}>
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center h-20">
+            <h1 className="text-2xl font-bold text-white">University of South Florida</h1>
+            
+            <nav className="hidden md:flex space-x-6 text-white">
+              <a href="#" className="hover:text-[#CFC493]">Academics</a>
+              <a href="#" className="hover:text-[#CFC493]">Admissions</a>
+              <a href="#" className="hover:text-[#CFC493]">Campus Life</a>
+              <a href="#" className="hover:text-[#CFC493]">Research</a>
+              <a href="#" className="hover:text-[#CFC493]">Athletics</a>
+              <a href="#" className="hover:text-[#CFC493]">About</a>
+            </nav>
+
+            <button
+              className="md:hidden text-white"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-16 6h16"/>
+              </svg>
+            </button>
           </div>
         </div>
-      </nav>
+      </header>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-[#006747] md:hidden">
+          <div className="flex flex-col items-center pt-20 space-y-4 text-white">
+            <a href="#" className="text-xl">Academics</a>
+            <a href="#" className="text-xl">Admissions</a>
+            <a href="#" className="text-xl">Campus Life</a>
+            <a href="#" className="text-xl">Research</a>
+            <a href="#" className="text-xl">Athletics</a>
+            <a href="#" className="text-xl">About</a>
+          </div>
+        </div>
+      )}
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen bg-gradient-to-r from-blue-900 to-blue-700 flex items-center">
-        <div className="container mx-auto px-6 text-center text-white">
-          <h1 className="text-5xl md:text-6xl font-bold mb-8 animate-fade-in">
-            Innovative IT Solutions for Your Business
-          </h1>
-          <p className="text-xl mb-12 max-w-2xl mx-auto">
-            Empowering businesses with cutting-edge technology solutions that drive growth and innovation.
-          </p>
-          <div className="space-x-4">
-            <button className="bg-white text-blue-900 px-8 py-3 rounded-full hover:bg-gray-100 transition">
-              Our Services
-            </button>
-            <button className="border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white hover:text-blue-900 transition">
-              Contact Us
-            </button>
-          </div>
+      <section className="relative h-screen">
+        <div className="absolute inset-0">
+          <img
+            src="https://www.usf.edu/images/about-usf/points-of-pride/campus-beauty.jpg"
+            alt="USF Campus"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        </div>
+        <div className="relative container mx-auto px-4 h-full flex items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="text-white max-w-2xl"
+          >
+            <h1 className="text-5xl font-bold mb-6">Welcome to the University of South Florida</h1>
+            <p className="text-xl mb-8">Empowering students to reach their full potential through excellence in education, research, and innovation.</p>
+            <div className="space-x-4">
+              <button className="bg-[#006747] hover:bg-[#005238] text-white px-8 py-3 rounded-full">Apply Now</button>
+              <button className="border-2 border-white hover:bg-white hover:text-[#006747] text-white px-8 py-3 rounded-full">Schedule a Tour</button>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-16 text-blue-900">Our Services</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {[
-              {
-                title: "Web Development",
-                description: "Custom websites and web applications built with modern technologies.",
-                icon: "🌐"
-              },
-              {
-                title: "Cloud Solutions",
-                description: "Scalable cloud infrastructure and migration services.",
-                icon: "☁️"
-              },
-              {
-                title: "Cybersecurity",
-                description: "Comprehensive security solutions to protect your business.",
-                icon: "🔒"
-              },
-              {
-                title: "Mobile Development",
-                description: "Native and cross-platform mobile applications.",
-                icon: "📱"
-              },
-              {
-                title: "AI & Machine Learning",
-                description: "Intelligent solutions for business automation.",
-                icon: "🤖"
-              },
-              {
-                title: "IT Consulting",
-                description: "Strategic technology consulting and planning.",
-                icon: "💡"
-              }
-            ].map((service, index) => (
-              <div key={index} className="bg-white p-8 rounded-lg shadow-lg hover:transform hover:scale-105 transition duration-300">
-                <div className="text-4xl mb-4">{service.icon}</div>
-                <h3 className="text-xl font-bold mb-4 text-blue-900">{service.title}</h3>
-                <p className="text-gray-600">{service.description}</p>
-              </div>
+      {/* Featured Programs */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12">Featured Programs</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {programs.map((program, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.05 }}
+                className="bg-gray-50 p-6 rounded-lg shadow-lg"
+              >
+                <h3 className="text-xl font-bold mb-2">{program.name}</h3>
+                <p>{program.description}</p>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="md:w-1/2">
-              <h2 className="text-4xl font-bold mb-8 text-blue-900">About Us</h2>
-              <p className="text-gray-600 mb-6">
-                Since 2010, Cruize IT Solutions has been at the forefront of digital transformation, 
-                helping businesses leverage technology to achieve their goals. Our team of experts 
-                brings together decades of experience in delivering innovative IT solutions.
-              </p>
-              <p className="text-gray-600 mb-6">
-                We believe in building long-term partnerships with our clients, understanding their 
-                unique challenges, and delivering solutions that drive real business value.
-              </p>
-            </div>
-            <div className="md:w-1/2">
-              <img 
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c" 
-                alt="Team" 
-                className="rounded-lg shadow-xl"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section id="projects" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-16 text-blue-900">Our Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "E-Commerce Platform",
-                description: "Built a scalable e-commerce solution for a retail giant",
-                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f"
-              },
-              {
-                title: "Healthcare App",
-                description: "Developed a telemedicine platform for healthcare providers",
-                image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d"
-              },
-              {
-                title: "FinTech Solution",
-                description: "Created a secure banking application with AI integration",
-                image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44"
-              }
-            ].map((project, index) => (
-              <div key={index} className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
-                <img src={project.image} alt={project.title} className="w-full h-48 object-cover" />
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2 text-blue-900">{project.title}</h3>
-                  <p className="text-gray-600">{project.description}</p>
+      {/* News Carousel */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12">Latest News</h2>
+          <div className="relative">
+            <motion.div
+              animate={{ x: `-${currentSlide * 100}%` }}
+              transition={{ duration: 0.5 }}
+              className="flex"
+            >
+              {newsItems.map((item, index) => (
+                <div key={index} className="min-w-full px-4">
+                  <div className="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                    <p className="text-gray-600">{item.date}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </motion.div>
+            <div className="flex justify-center mt-6 space-x-2">
+              {newsItems.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-3 h-3 rounded-full ${
+                    currentSlide === index ? 'bg-[#006747]' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-blue-900 text-white py-12">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <footer className="bg-[#006747] text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Cruize IT Solutions</h3>
-              <p className="mb-4">Transforming businesses through technology</p>
-              <div className="space-x-4">
-                <a href="#" className="hover:text-blue-300">Twitter</a>
-                <a href="#" className="hover:text-blue-300">LinkedIn</a>
-                <a href="#" className="hover:text-blue-300">Facebook</a>
-              </div>
+              <h3 className="text-xl font-bold mb-4">Contact Us</h3>
+              <p>4202 E Fowler Ave</p>
+              <p>Tampa, FL 33620</p>
+              <p>Phone: (813) 974-2011</p>
             </div>
             <div>
-              <h4 className="text-xl font-bold mb-4">Contact</h4>
-              <p>123 Business Street</p>
-              <p>New York, NY 10001</p>
-              <p>contact@cruizeit.com</p>
-              <p>+1 (555) 123-4567</p>
-            </div>
-            <div>
-              <h4 className="text-xl font-bold mb-4">Quick Links</h4>
+              <h3 className="text-xl font-bold mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="hover:text-blue-300">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-blue-300">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-blue-300">Careers</a></li>
-                <li><a href="#" className="hover:text-blue-300">Blog</a></li>
+                <li><a href="#" className="hover:text-[#CFC493]">Directory</a></li>
+                <li><a href="#" className="hover:text-[#CFC493]">Libraries</a></li>
+                <li><a href="#" className="hover:text-[#CFC493]">Maps</a></li>
+                <li><a href="#" className="hover:text-[#CFC493]">Parking</a></li>
               </ul>
             </div>
+            <div>
+              <h3 className="text-xl font-bold mb-4">Resources</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="hover:text-[#CFC493]">Canvas</a></li>
+                <li><a href="#" className="hover:text-[#CFC493]">OASIS</a></li>
+                <li><a href="#" className="hover:text-[#CFC493]">IT Help Desk</a></li>
+                <li><a href="#" className="hover:text-[#CFC493]">Email</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xl font-bold mb-4">Connect With Us</h3>
+              <div className="flex space-x-4">
+                <a href="#" className="hover:text-[#CFC493]">Facebook</a>
+                <a href="#" className="hover:text-[#CFC493]">Twitter</a>
+                <a href="#" className="hover:text-[#CFC493]">Instagram</a>
+                <a href="#" className="hover:text-[#CFC493]">LinkedIn</a>
+              </div>
+            </div>
           </div>
-          <div className="mt-12 text-center border-t border-blue-800 pt-8">
-            <p>© 2024 Cruize IT Solutions. All rights reserved.</p>
+          <div className="mt-8 pt-8 border-t border-[#CFC493] text-center">
+            <p>&copy; 2024 University of South Florida. All rights reserved.</p>
           </div>
         </div>
       </footer>
     </div>
   );
-};
+}
 
 export default App;
