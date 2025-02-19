@@ -1,237 +1,182 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [reservationData, setReservationData] = useState({
-    name: '',
-    email: '',
-    date: '',
-    time: '',
-    guests: ''
-  });
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
 
-  const fadeIn = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6 }
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
-  const handleReservation = (e) => {
-    e.preventDefault();
-    alert('Reservation submitted successfully!');
-    setReservationData({
-      name: '',
-      email: '',
-      date: '',
-      time: '',
-      guests: ''
-    });
+  const testimonials = [
+    { name: "Sarah M.", text: "The best Indian cuisine I've ever experienced. The ambiance is absolutely stunning!", rating: 5 },
+    { name: "James P.", text: "Exceptional service and authentic flavors. A true fine dining experience.", rating: 5 },
+    { name: "Linda K.", text: "The attention to detail in both food and decoration is remarkable.", rating: 5 },
+  ];
+
+  const menuItems = {
+    starters: [
+      { name: "Tandoori Prawns", price: "₹595", description: "Marinated tiger prawns cooked in clay oven" },
+      { name: "Gilafi Seekh Kebab", price: "₹495", description: "Minced lamb with bell peppers and spices" },
+    ],
+    mains: [
+      { name: "Butter Chicken", price: "₹695", description: "Classic creamy tomato curry with tender chicken" },
+      { name: "Dal Makhani", price: "₹445", description: "Black lentils slow cooked with cream" },
+    ],
+    desserts: [
+      { name: "Gulab Jamun", price: "₹245", description: "Sweet milk dumplings in rose syrup" },
+      { name: "Rasmalai", price: "₹295", description: "Cottage cheese dumplings in saffron milk" },
+    ],
   };
 
   return (
-    <div className="font-serif">
+    <div className="bg-[#FDF5E6] text-[#242424]">
       {/* Navigation */}
-      <nav className="fixed w-full bg-opacity-90 bg-black text-white z-50 px-4 py-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Hyderabadi Nawabi House</h1>
-          <div className="hidden md:flex space-x-6">
-            <a href="#home" className="hover:text-gold">Home</a>
-            <a href="#menu" className="hover:text-gold">Menu</a>
-            <a href="#about" className="hover:text-gold">About</a>
-            <a href="#contact" className="hover:text-gold">Contact</a>
+      <nav className="fixed w-full z-50 bg-black/20 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center h-16">
+            <motion.h1 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-[#C6A664] text-2xl font-bold"
+            >
+              Ruchi Indian Kitchen
+            </motion.h1>
+            <div className="hidden md:flex space-x-8">
+              {["Home", "About", "Menu", "Reservations", "Gallery", "Contact"].map((item) => (
+                <a key={item} href={`#${item.toLowerCase()}`} className="text-white hover:text-[#C6A664] transition-colors">
+                  {item}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
       <motion.section 
-        id="home"
-        className="h-screen bg-[url('https://images.unsplash.com/photo-1633945274405-b6c8069047b0')] bg-cover bg-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
+        className="h-screen relative"
+        id="home"
       >
-        <div className="h-full bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="text-center text-white">
-            <motion.h1 
-              className="text-5xl md:text-7xl font-bold mb-4"
-              {...fadeIn}
-            >
-              Experience Royal Hyderabadi Cuisine
-            </motion.h1>
-            <motion.p 
-              className="text-xl md:text-2xl mb-8"
-              {...fadeIn}
-            >
-              Where tradition meets taste in every bite
-            </motion.p>
-            <motion.button 
-              className="bg-gold text-white px-8 py-3 rounded-full text-lg hover:bg-opacity-90"
-              whileHover={{ scale: 1.05 }}
-            >
-              Reserve a Table
-            </motion.button>
-          </div>
-        </div>
-      </motion.section>
-
-      {/* Menu Section */}
-      <motion.section 
-        id="menu"
-        className="py-20 bg-cream"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl text-center mb-12">Our Royal Menu</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Menu Items */}
-            {menuItems.map((item, index) => (
-              <motion.div 
-                key={index}
-                className="bg-white p-6 rounded-lg shadow-lg"
-                whileHover={{ scale: 1.02 }}
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3')" }}
+        >
+          <div className="absolute inset-0 bg-black/50">
+            <div className="h-full flex flex-col justify-center items-center text-white">
+              <motion.h2 
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                className="text-5xl md:text-7xl font-bold text-[#C6A664] mb-6"
               >
-                <img src={item.image} alt={item.name} className="w-full h-48 object-cover rounded-lg mb-4" />
-                <h3 className="text-xl font-bold mb-2">{item.name}</h3>
-                <p className="text-gray-600 mb-4">{item.description}</p>
-                <p className="text-gold font-bold">₹{item.price}</p>
-              </motion.div>
-            ))}
+                Experience Royal Indian Cuisine
+              </motion.h2>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                className="bg-[#800020] text-white px-8 py-3 rounded-full hover:bg-[#C6A664] transition-colors"
+              >
+                Reserve Table
+              </motion.button>
+            </div>
           </div>
         </div>
       </motion.section>
 
       {/* About Section */}
       <motion.section 
-        id="about"
-        className="py-20 bg-burgundy text-white"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
+        className="py-20 px-4"
+        id="about"
       >
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl text-center mb-12">Our Heritage</h2>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-lg leading-relaxed mb-6">
-                Founded in 1992, Hyderabadi Nawabi House has been serving authentic royal cuisine passed down through generations. Our recipes are crafted with carefully selected spices and premium ingredients, maintaining the traditional flavors of Hyderabad.
-              </p>
-              <p className="text-lg leading-relaxed">
-                Each dish tells a story of royal kitchens and ancient cooking techniques, bringing you the true taste of Nawabi cuisine.
-              </p>
-            </div>
-            <motion.img 
-              src="https://images.unsplash.com/photo-1625398407796-82650a8c9308"
-              alt="Restaurant Interior"
-              className="rounded-lg shadow-xl"
-              whileHover={{ scale: 1.05 }}
-            />
-          </div>
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold text-[#800020] mb-8">Welcome to Ruchi</h2>
+          <p className="text-lg leading-relaxed">
+            Established in 2010, Ruchi Indian Kitchen brings the authentic flavors of India with a modern twist.
+            Our master chefs create culinary masterpieces using traditional recipes and premium ingredients.
+          </p>
         </div>
       </motion.section>
 
-      {/* Contact Section */}
-      <motion.section 
-        id="contact"
-        className="py-20 bg-cream"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl text-center mb-12">Make a Reservation</h2>
-          <div className="max-w-md mx-auto">
-            <form onSubmit={handleReservation} className="space-y-6">
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="w-full p-3 rounded-lg"
-                required
-                value={reservationData.name}
-                onChange={(e) => setReservationData({...reservationData, name: e.target.value})}
-              />
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="w-full p-3 rounded-lg"
-                required
-                value={reservationData.email}
-                onChange={(e) => setReservationData({...reservationData, email: e.target.value})}
-              />
-              <input
-                type="date"
-                className="w-full p-3 rounded-lg"
-                required
-                value={reservationData.date}
-                onChange={(e) => setReservationData({...reservationData, date: e.target.value})}
-              />
-              <input
-                type="time"
-                className="w-full p-3 rounded-lg"
-                required
-                value={reservationData.time}
-                onChange={(e) => setReservationData({...reservationData, time: e.target.value})}
-              />
-              <input
-                type="number"
-                placeholder="Number of Guests"
-                className="w-full p-3 rounded-lg"
-                required
-                value={reservationData.guests}
-                onChange={(e) => setReservationData({...reservationData, guests: e.target.value})}
-              />
-              <motion.button 
-                type="submit"
-                className="w-full bg-burgundy text-white py-3 rounded-lg hover:bg-opacity-90"
-                whileHover={{ scale: 1.02 }}
+      {/* Menu Section */}
+      <section className="py-20 bg-white" id="menu">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center text-[#800020] mb-12">Our Menu</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {Object.entries(menuItems).map(([category, items]) => (
+              <motion.div 
+                key={category}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="bg-[#FDF5E6] p-6 rounded-lg"
               >
-                Book Now
-              </motion.button>
-            </form>
+                <h3 className="text-2xl font-bold text-[#800020] capitalize mb-4">{category}</h3>
+                {items.map((item) => (
+                  <div key={item.name} className="mb-4">
+                    <div className="flex justify-between">
+                      <h4 className="font-bold">{item.name}</h4>
+                      <span className="text-[#C6A664]">{item.price}</span>
+                    </div>
+                    <p className="text-sm text-gray-600">{item.description}</p>
+                  </div>
+                ))}
+              </motion.div>
+            ))}
           </div>
         </div>
-      </motion.section>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-20 bg-[#242424]">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center text-[#C6A664] mb-12">What Our Guests Say</h2>
+          <motion.div 
+            key={activeTestimonial}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center text-white"
+          >
+            <p className="text-lg mb-4">"{testimonials[activeTestimonial].text}"</p>
+            <p className="text-[#C6A664]">- {testimonials[activeTestimonial].name}</p>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Footer */}
-      <footer className="bg-black text-white py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p className="mb-4">© 2024 Hyderabadi Nawabi House. All rights reserved.</p>
-          <div className="flex justify-center space-x-4">
-            <a href="#" className="hover:text-gold">Facebook</a>
-            <a href="#" className="hover:text-gold">Instagram</a>
-            <a href="#" className="hover:text-gold">Twitter</a>
+      <footer className="bg-[#242424] text-white py-12">
+        <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8">
+          <div>
+            <h3 className="text-[#C6A664] font-bold mb-4">Hours</h3>
+            <p>Monday - Sunday</p>
+            <p>12:00 PM - 11:00 PM</p>
+          </div>
+          <div>
+            <h3 className="text-[#C6A664] font-bold mb-4">Contact</h3>
+            <p>123 Cuisine Street</p>
+            <p>New Delhi, India</p>
+            <p>+91 98765 43210</p>
+          </div>
+          <div>
+            <h3 className="text-[#C6A664] font-bold mb-4">Follow Us</h3>
+            <div className="flex space-x-4">
+              <a href="#" className="hover:text-[#C6A664]">Instagram</a>
+              <a href="#" className="hover:text-[#C6A664]">Facebook</a>
+              <a href="#" className="hover:text-[#C6A664]">Twitter</a>
+            </div>
           </div>
         </div>
       </footer>
     </div>
   );
 }
-
-// Menu Items Data
-const menuItems = [
-  {
-    name: "Hyderabadi Biryani",
-    description: "Aromatic basmati rice cooked with tender meat and authentic spices",
-    price: "450",
-    image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0"
-  },
-  {
-    name: "Haleem",
-    description: "Slow-cooked wheat and meat dish with special spices",
-    price: "300",
-    image: "https://images.unsplash.com/photo-1532634922-8fe0b757fb13"
-  },
-  {
-    name: "Kebab Platter",
-    description: "Assortment of grilled kebabs served with mint chutney",
-    price: "550",
-    image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0"
-  },
-  // Add more menu items as needed
-];
 
 export default App;
