@@ -1,408 +1,448 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link, animateScroll as scroll } from 'react-scroll';
 
-function App() {
-  const [isScrolled, setIsScrolled] = useState(false);
-
+const App = () => {
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Chatbot Integration (Tawk.to)
+    const Tawk_API = Tawk_API || {};
+    const Tawk_LoadStart = new Date();
+    const script = document.createElement("script");
+    script.src = 'https://embed.tawk.to/your_tawkto_property_id/default';
+    script.async = true;
+    document.body.appendChild(script);
   }, []);
 
   return (
-    <div className="font-sans scroll-smooth">
-      {/* Navigation */}
-      <nav
-        className={`fixed w-full z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'
-        }`}
-      >
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-2xl font-serif text-amber-800"
-            >
-              Hyderabadi Nawabi House
-            </motion.div>
-            <div className="hidden md:flex space-x-8">
-              {['Home', 'About', 'Gallery', 'Menu', 'Testimonials', 'Contact'].map((item) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="text-amber-900 hover:text-amber-600 transition"
-                >
-                  {item}
-                </a>
-              ))}
-            </div>
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="fixed w-full bg-blue-900 text-white z-50">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="flex items-center">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Great_Seal_of_the_United_States_%28obverse%29.svg/1200px-Great_Seal_of_the_United_States_%28obverse%29.svg.png"
+              alt="US Embassy Logo"
+              className="h-12 w-auto"
+            />
           </div>
+
+          <nav className="hidden md:flex space-x-6">
+            <Link
+              to="home"
+              smooth={true}
+              duration={500}
+              className="cursor-pointer hover:text-blue-200 transition"
+            >
+              Home
+            </Link>
+            <Link
+              to="about"
+              smooth={true}
+              duration={500}
+              className="cursor-pointer hover:text-blue-200 transition"
+            >
+              About
+            </Link>
+            <Link
+              to="services"
+              smooth={true}
+              duration={500}
+              className="cursor-pointer hover:text-blue-200 transition"
+            >
+              Services
+            </Link>
+            <Link
+              to="news"
+              smooth={true}
+              duration={500}
+              className="cursor-pointer hover:text-blue-200 transition"
+            >
+              News
+            </Link>
+            <Link
+              to="contact"
+              smooth={true}
+              duration={500}
+              className="cursor-pointer hover:text-blue-200 transition"
+            >
+              Contact
+            </Link>
+            <button className="bg-red-700 px-4 py-1 rounded hover:bg-red-800">
+              English
+            </button>
+          </nav>
+
+          {/* Mobile Menu (Optional) */}
+          {/* Implement mobile menu here if needed */}
         </div>
-      </nav>
+      </header>
 
       {/* Hero Section */}
       <motion.section
+        id="home"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="h-screen relative"
-        id="home"
+        className="pt-20 relative h-screen flex items-center"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1588416936097-41850ab3d86d?q=80')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
       >
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1567337710282-00832b415979?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')",
-          }}
-        >
-          <div className="absolute inset-0 bg-black bg-opacity-50">
-            <div className="container mx-auto h-full flex items-center px-6">
-              <div className="text-white max-w-3xl">
-                <h1 className="text-5xl md:text-6xl font-serif mb-6">
-                  Experience Authentic Hyderabadi Cuisine
-                </h1>
-                <p className="text-xl mb-8">Discover the royal taste of Nawabi culture</p>
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  href="#menu"
-                  className="inline-block bg-amber-600 text-white px-8 py-3 rounded-full hover:bg-amber-700 transition"
-                >
-                  Explore Our Menu
-                </motion.a>
-              </div>
-            </div>
-          </div>
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="container mx-auto px-4 relative z-10 text-white">
+          <motion.h1
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-5xl font-bold mb-4"
+          >
+            Welcome to the U.S. Embassy Hyderabad
+          </motion.h1>
+          <motion.p
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="text-xl mb-8"
+          >
+            Strengthening ties between the United States and India
+          </motion.p>
+          <motion.button
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="bg-blue-700 text-white px-8 py-3 rounded-lg hover:bg-blue-800 transition"
+          >
+            Learn More
+          </motion.button>
         </div>
       </motion.section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-amber-50">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+      <section id="about" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-3xl font-bold text-center mb-12"
+          >
+            About Us
+          </motion.h2>
+          <div className="grid md:grid-cols-3 gap-8">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              className="bg-white p-6 rounded-lg shadow-lg"
             >
-              <h2 className="text-4xl font-serif text-amber-900 mb-6">Our Story</h2>
-              <p className="text-gray-700 mb-4">
-                Since 1992, Hyderabadi Nawabi House has been serving authentic Hyderabadi cuisine,
-                carrying forward the legacy of the Nizams. Our recipes have been passed down through
-                generations, preserving the authentic flavors of royal kitchens.
-              </p>
-              <p className="text-gray-700">
-                Every dish we serve is a testament to our commitment to quality and tradition,
-                prepared with carefully selected ingredients and age-old cooking techniques.
+              <h3 className="text-xl font-semibold mb-4">Our Mission</h3>
+              <p>
+                To advance the interests of the United States and strengthen the
+                relationship between the American and Indian people.
               </p>
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              className="bg-white p-6 rounded-lg shadow-lg"
             >
-              <img
-                src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                alt="Restaurant Interior"
-                className="rounded-lg shadow-xl w-full h-auto"
-              />
+              <h3 className="text-xl font-semibold mb-4">Our Vision</h3>
+              <p>
+                To foster diplomatic relations, promote cultural exchange, and
+                support American citizens abroad.
+              </p>
+            </motion.div>
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              className="bg-white p-6 rounded-lg shadow-lg"
+            >
+              <h3 className="text-xl font-semibold mb-4">Our Values</h3>
+              <p>
+                Upholding integrity, transparency, and commitment to excellent
+                service in all our endeavors.
+              </p>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Gallery Section */}
-      <section id="gallery" className="py-20">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-serif text-center text-amber-900 mb-12">Gallery</h2>
+      {/* Services Section */}
+      <section id="services" className="py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Our Services</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                image:
-                  'https://images.unsplash.com/photo-1600891964599-f61ba0e24092?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                alt: 'Dish 1',
-              },
-              {
-                image:
-                  'https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                alt: 'Dish 2',
-              },
-              {
-                image:
-                  'https://images.unsplash.com/photo-1601758123927-8ae3568c2527?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                alt: 'Dish 3',
-              },
-              {
-                image:
-                  'https://images.unsplash.com/photo-1600891964451-02229b04f1c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                alt: 'Dish 4',
-              },
-              {
-                image:
-                  'https://images.unsplash.com/photo-1594007653661-ff681396ca5c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                alt: 'Dish 5',
-              },
-              {
-                image:
-                  'https://images.unsplash.com/photo-1601758064477-7aa6bc02fb4a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                alt: 'Dish 6',
-              },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="overflow-hidden rounded-lg shadow-lg"
-              >
-                <img src={item.image} alt={item.alt} className="w-full h-64 object-cover transform hover:scale-105 transition-transform duration-300" />
-              </motion.div>
-            ))}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="bg-white p-6 rounded-lg shadow-lg"
+            >
+              <h3 className="text-xl font-semibold mb-4">Visa Services</h3>
+              <p>
+                Information about visa applications, requirements, and processing
+                times.
+              </p>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="bg-white p-6 rounded-lg shadow-lg"
+            >
+              <h3 className="text-xl font-semibold mb-4">Passport Services</h3>
+              <p>
+                Assistance with passport renewals, applications, and emergency
+                travel documents.
+              </p>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="bg-white p-6 rounded-lg shadow-lg"
+            >
+              <h3 className="text-xl font-semibold mb-4">Consular Assistance</h3>
+              <p>
+                Support for American citizens abroad, including legal and
+                emergency services.
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Menu Section */}
-      <section id="menu" className="py-20 bg-amber-50">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-serif text-center text-amber-900 mb-12">Our Signature Dishes</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: 'Hyderabadi Biryani',
-                image:
-                  'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                description: 'Aromatic basmati rice cooked with tender meat and authentic spices',
-              },
-              {
-                name: 'Haleem',
-                image:
-                  'https://images.unsplash.com/photo-1606491956689-2ea866880c84?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                description: 'A rich blend of wheat, lentils, and meat, slow-cooked to perfection',
-              },
-              {
-                name: 'Qubani ka Meetha',
-                image:
-                  'https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-                description: 'Traditional dessert made with dried apricots and cream',
-              },
-            ].map((dish, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-white rounded-lg shadow-lg overflow-hidden"
-              >
-                <img src={dish.image} alt={dish.name} className="w-full h-48 object-cover" />
-                <div className="p-6">
-                  <h3 className="text-xl font-serif text-amber-900 mb-2">{dish.name}</h3>
-                  <p className="text-gray-600">{dish.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-serif text-center text-amber-900 mb-12">Testimonials</h2>
-          <div className="space-y-8">
-            {[
-              {
-                name: 'Aisha Khan',
-                feedback:
-                  'The biryani here is simply unmatched. A true taste of Hyderabad!',
-                avatar:
-                  'https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-              },
-              {
-                name: 'Ravi Sharma',
-                feedback:
-                  'An exceptional dining experience with royal flavors and impeccable service.',
-                avatar:
-                  'https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-              },
-              {
-                name: 'Sunita Verma',
-                feedback:
-                  'The ambiance and the food transport you straight to the heart of Hyderabad.',
-                avatar:
-                  'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-              },
-            ].map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="flex items-start space-x-4"
-              >
-                <img
-                  src={testimonial.avatar}
-                  alt={testimonial.name}
-                  className="w-16 h-16 rounded-full object-cover"
-                />
-                <div>
-                  <h3 className="text-xl font-serif text-amber-900">{testimonial.name}</h3>
-                  <p className="text-gray-700 mt-2">"{testimonial.feedback}"</p>
-                </div>
-              </motion.div>
-            ))}
+      {/* News Section */}
+      <section id="news" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Latest News</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              className="bg-white p-6 rounded-lg shadow-lg"
+            >
+              <h3 className="text-xl font-semibold mb-4">
+                Embassy Reopens for Public Services
+              </h3>
+              <p>
+                The U.S. Embassy in Hyderabad has resumed full operations, offering
+                a range of consular services to the public. Extended hours and
+                online appointment systems are now available.
+              </p>
+              <p className="text-sm text-gray-500 mt-2">April 20, 2024</p>
+            </motion.div>
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              className="bg-white p-6 rounded-lg shadow-lg"
+            >
+              <h3 className="text-xl font-semibold mb-4">
+                New Visa Categories Announced
+              </h3>
+              <p>
+                The Department of State has introduced new visa categories to
+                facilitate specialized travel and foster greater collaboration in
+                specific sectors.
+              </p>
+              <p className="text-sm text-gray-500 mt-2">March 15, 2024</p>
+            </motion.div>
+            {/* Add more news cards as needed */}
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-amber-50">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12">
+      <section id="contact" className="py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Contact Us</h2>
+          <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h2 className="text-4xl font-serif mb-6">Contact Us</h2>
-              <p className="mb-4">123 Charminar Road</p>
-              <p className="mb-4">Hyderabad, India 500001</p>
-              <p className="mb-4">Phone: +91 123 456 7890</p>
-              <p className="mb-4">Email: info@hyderabadinawabi.com</p>
+              <h3 className="text-xl font-semibold mb-4">Embassy Address</h3>
+              <p>
+                1-8-323, Chiran Fort Lane, Begumpet, Secunderabad 500003
+              </p>
+              <div className="mt-4">
+                <h3 className="text-xl font-semibold mb-4">
+                  Contact Information
+                </h3>
+                <p>Phone: +91-40-4033-8300</p>
+                <p>Email: HyderabadUSC@state.gov</p>
+              </div>
             </div>
-            <motion.form
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="space-y-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                // Handle form submission logic here
-                alert('Message sent!');
-              }}
-            >
+            <form className="space-y-4">
               <input
                 type="text"
                 placeholder="Name"
-                className="w-full p-2 rounded text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600"
+                className="w-full p-2 border rounded"
                 required
               />
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full p-2 rounded text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600"
+                className="w-full p-2 border rounded"
                 required
               />
               <textarea
                 placeholder="Message"
                 rows="4"
-                className="w-full p-2 rounded text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600"
+                className="w-full p-2 border rounded"
                 required
               ></textarea>
-              <button
-                type="submit"
-                className="bg-amber-600 text-white px-6 py-2 rounded hover:bg-amber-700 transition"
-              >
+              <button className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800">
                 Send Message
               </button>
-            </motion.form>
+            </form>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-amber-950 text-white py-8">
-        <div className="container mx-auto px-6 text-center">
-          <p>© 2024 Hyderabadi Nawabi House. All rights reserved.</p>
+      <footer className="bg-blue-900 text-white py-10">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <h4 className="font-semibold mb-4">Quick Links</h4>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    to="home"
+                    smooth={true}
+                    duration={500}
+                    className="cursor-pointer hover:text-blue-200"
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="about"
+                    smooth={true}
+                    duration={500}
+                    className="cursor-pointer hover:text-blue-200"
+                  >
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="services"
+                    smooth={true}
+                    duration={500}
+                    className="cursor-pointer hover:text-blue-200"
+                  >
+                    Services
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="news"
+                    smooth={true}
+                    duration={500}
+                    className="cursor-pointer hover:text-blue-200"
+                  >
+                    News
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="contact"
+                    smooth={true}
+                    duration={500}
+                    className="cursor-pointer hover:text-blue-200"
+                  >
+                    Contact
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Resources</h4>
+              <ul className="space-y-2">
+                <li>
+                  <a
+                    href="https://www.state.gov/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-blue-200"
+                  >
+                    U.S. Department of State
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://travel.state.gov/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-blue-200"
+                  >
+                    Travel.State.gov
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.usembassy.gov/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-blue-200"
+                  >
+                    U.S. Embassies Worldwide
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Connect with Us</h4>
+              <ul className="space-y-2">
+                <li>
+                  <a
+                    href="https://facebook.com/USEmbassyHyderabad"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-blue-200"
+                  >
+                    Facebook
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://twitter.com/USEmbassyHyderabad"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-blue-200"
+                  >
+                    Twitter
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.linkedin.com/company/us-embassy-hyderabad"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-blue-200"
+                  >
+                    LinkedIn
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Subscribe to Newsletter</h4>
+              <form className="flex flex-col">
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  className="p-2 mb-4 rounded text-black"
+                  required
+                />
+                <button className="bg-red-700 px-4 py-2 rounded hover:bg-red-800">
+                  Subscribe
+                </button>
+              </form>
+            </div>
+          </div>
+          <div className="border-t border-blue-800 mt-8 pt-8 text-center">
+            <p>&copy; 2024 U.S. Embassy Hyderabad. All rights reserved.</p>
+          </div>
         </div>
       </footer>
-
-      {/* Chatbot */}
-      <Chatbot />
     </div>
   );
-}
-
-function Chatbot() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { sender: 'bot', text: 'Hello! How can I assist you today?' },
-  ]);
-  const [input, setInput] = useState('');
-
-  const toggleChat = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleSend = (e) => {
-    e.preventDefault();
-    if (input.trim() === '') return;
-
-    setMessages([...messages, { sender: 'user', text: input }]);
-    setInput('');
-
-    // Simple bot response
-    setTimeout(() => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: 'bot', text: "Thank you for reaching out! We'll get back to you shortly." },
-      ]);
-    }, 1000);
-  };
-
-  return (
-    <div className="fixed bottom-6 right-6">
-      {isOpen ? (
-        <div className="w-72 bg-white shadow-lg rounded-lg overflow-hidden">
-          <div className="flex justify-between items-center bg-amber-600 text-white px-4 py-2">
-            <span>Chatbot</span>
-            <button onClick={toggleChat} className="text-lg">
-              &times;
-            </button>
-          </div>
-          <div className="p-4 h-60 overflow-y-auto bg-gray-100">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`mb-2 flex ${
-                  msg.sender === 'bot' ? 'justify-start' : 'justify-end'
-                }`}
-              >
-                <div
-                  className={`px-3 py-2 rounded-lg ${
-                    msg.sender === 'bot' ? 'bg-gray-300' : 'bg-amber-600 text-white'
-                  }`}
-                >
-                  {msg.text}
-                </div>
-              </div>
-            ))}
-          </div>
-          <form onSubmit={handleSend} className="flex p-2 bg-gray-200">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="flex-1 p-2 rounded-l focus:outline-none"
-              placeholder="Type your message..."
-            />
-            <button
-              type="submit"
-              className="bg-amber-600 text-white p-2 rounded-r hover:bg-amber-700"
-            >
-              Send
-            </button>
-          </form>
-        </div>
-      ) : (
-        <button
-          onClick={toggleChat}
-          className="bg-amber-600 text-white p-4 rounded-full shadow-lg hover:bg-amber-700 transition"
-        >
-          💬
-        </button>
-      )}
-    </div>
-  );
-}
+};
 
 export default App;
