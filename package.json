@@ -10,15 +10,29 @@
   "dependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "framer-motion": "^10.0.0",
-    "react-intersection-observer": "^9.0.0",
-    "react-scroll": "^1.8.4",
-    "react-icons": "^4.10.1"
+    "react-router-dom": "^6.0.0",               // For routing
+    "react-icons": "^4.10.1",                    // For icons
+    "framer-motion": "^10.0.0",                  // For animations
+    "react-intersection-observer": "^9.0.0",     // For lazy loading and scroll detection
+    "react-scroll": "^1.8.4",                    // For smooth scrolling
+    "axios": "^1.0.0",                           // For HTTP requests
+    "react-query": "^3.0.0",                     // For data fetching and caching
+    "react-toastify": "^8.0.0",                  // For notifications
+    "clsx": "^1.1.1",                            // For conditional className handling
+    "lodash": "^4.17.21",                        // Utility library
+    "dayjs": "^1.10.7",                          // For date manipulation
+    "tailwindcss-animate": "^1.0.0"              // TailwindCSS animations plugin
   },
   "devDependencies": {
     "vite": "^4.0.0",
     "tailwindcss": "^3.0.0",
     "postcss": "^8.0.0",
-    "autoprefixer": "^10.0.0"
+    "autoprefixer": "^10.0.0",
+    "vite-plugin-eslint": "^1.3.0",              // For ESLint integration with Vite
+    "vite-plugin-svg-icons": "^1.0.0",           // For SVG icon support
+    "prettier": "^2.0.0",                        // For code formatting
+    "eslint": "^8.0.0",                          // For linting
+    "eslint-config-prettier": "^8.0.0",           // To integrate ESLint with Prettier
+    "eslint-plugin-react": "^7.0.0"              // For React-specific linting rules
   }
 }
