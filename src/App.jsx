@@ -1,160 +1,116 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
-function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // Smooth scroll functionality for navbar links
-  useEffect(() => {
-    const handleSmoothScroll = (event) => {
-      event.preventDefault();
-      const targetId = event.currentTarget.getAttribute('href').substring(1);
-      const targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
-
-    const links = document.querySelectorAll('a[href^="#"]');
-    links.forEach((link) => link.addEventListener('click', handleSmoothScroll));
-
-    return () => {
-      links.forEach((link) => link.removeEventListener('click', handleSmoothScroll));
-    };
-  }, []);
-
+const App = () => {
   return (
-    <div className="relative">
+    <div className="relative scroll-smooth"> {/* Added scroll-smooth for smooth scrolling */}
       {/* Navigation Bar */}
-      <nav className="fixed w-full bg-black/90 text-white z-50">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Fitness Pro Gym</h1>
-          <div className="hidden md:flex space-x-8">
-            <a href="#home" className="hover:text-red-500 transition">Home</a>
-            <a href="#about" className="hover:text-red-500 transition">About</a>
-            <a href="#programs" className="hover:text-red-500 transition">Programs</a>
-            <a href="#trainers" className="hover:text-red-500 transition">Trainers</a>
-            <a href="#gallery" className="hover:text-red-500 transition">Gallery</a>
-            <a href="#contact" className="hover:text-red-500 transition">Contact</a>
+      <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-md">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <motion.h1
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-2xl font-bold text-orange-600"
+            >
+              Ruchi Indian Kitchen
+            </motion.h1>
+            <div className="hidden md:flex space-x-8">
+              {['Home', 'About', 'Menu', 'Gallery', 'Reservation', 'Contact'].map((item) => ( {/* Added 'Gallery' and 'Reservation' to navbar links */}
+                <a key={item} href={`#${item.toLowerCase()}`} className="text-gray-600 hover:text-orange-600 transition-colors">
+                  {item}
+                </a>
+              ))}
+            </div>
           </div>
-          <button
-            className="md:hidden text-white focus:outline-none"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-            </svg>
-          </button>
         </div>
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-black/90 p-4">
-            <a href="#home" className="block py-2 hover:text-red-500 transition">Home</a>
-            <a href="#about" className="block py-2 hover:text-red-500 transition">About</a>
-            <a href="#programs" className="block py-2 hover:text-red-500 transition">Programs</a>
-            <a href="#trainers" className="block py-2 hover:text-red-500 transition">Trainers</a>
-            <a href="#gallery" className="block py-2 hover:text-red-500 transition">Gallery</a>
-            <a href="#contact" className="block py-2 hover:text-red-500 transition">Contact</a>
-          </div>
-        )}
       </nav>
 
       {/* Hero Section */}
-      <motion.section 
-        id="home"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="h-screen bg-[url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48')] bg-cover bg-center"
-      >
-        <div className="h-full bg-black/50 flex items-center justify-center">
-          <div className="text-center text-white">
-            <motion.h1 
-              initial={{ y: -50 }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-6xl font-bold mb-4"
-            >
-              Transform Your Body
-            </motion.h1>
-            <p className="text-xl mb-8">Join the elite fitness community today</p>
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-red-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-red-700 transition"
-            >
-              Start Your Journey
-            </motion.button>
-          </div>
+      <section id="home" className="h-screen relative">
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&q=80"
+            alt="Indian Food"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/50" />
         </div>
-      </motion.section>
-
-      {/* About Section */}
-      <section id="about" className="py-20 bg-gray-900 text-white">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 text-center">About Us</h2>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-lg leading-relaxed">
-                At Fitness Pro Gym, we believe in transforming lives through fitness. 
-                Our state-of-the-art facility and expert trainers are dedicated to 
-                helping you achieve your fitness goals, whether you're just starting 
-                or are an experienced athlete.
-              </p>
-            </div>
-            <motion.div 
-              initial={{ x: 100, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              className="rounded-lg overflow-hidden"
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77" 
-                alt="Gym Interior"
-                className="w-full h-[400px] object-cover"
-              />
-            </motion.div>
-          </div>
+        <div className="relative h-full flex items-center justify-center text-center">
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="text-white"
+          >
+            <h1 className="text-5xl md:text-7xl font-bold mb-6">Experience Authentic Indian Cuisine</h1>
+            <p className="text-xl mb-8">Traditional flavors with a modern twist</p>
+            <a href="#reservation" className="bg-orange-600 text-white px-8 py-3 rounded-full hover:bg-orange-700 transition-colors">
+              Reserve a Table
+            </a>
+          </motion.div>
         </div>
       </section>
 
-      {/* Programs Section */}
-      <section id="programs" className="py-20 bg-gray-800 text-white">
+      {/* About Section */}
+      <section id="about" className="py-20 bg-white">
         <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 text-center">Our Programs</h2>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            className="grid md:grid-cols-2 gap-12 items-center"
+          >
+            <div>
+              <h2 className="text-4xl font-bold mb-6 text-gray-800">Our Story</h2>
+              <p className="text-gray-600 mb-4">
+                Founded in 2010, Ruchi Indian Kitchen has been serving authentic Indian cuisine to food enthusiasts in the heart of the city. Our master chefs bring decades of experience in crafting traditional dishes with premium ingredients and time-honored recipes.
+              </p>
+              <p className="text-gray-600">
+                Every dish tells a story of our rich culinary heritage, prepared with passion and served with love.
+              </p>
+            </div>
+            <div className="rounded-lg overflow-hidden shadow-xl">
+              <img
+                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80"
+                alt="Restaurant Interior"
+                className="w-full h-[400px] object-cover"
+              />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Menu Section */}
+      <section id="menu" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">Our Menu</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Personal Training",
-                description: "One-on-one sessions tailored to your goals",
-                image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b"
-              },
-              {
-                title: "Group Classes",
-                description: "High-energy workouts with like-minded individuals",
-                image: "https://images.unsplash.com/photo-1571388208497-dc68a47449d6"
-              },
-              {
-                title: "Strength Training",
-                description: "Build muscle and increase your strength",
-                image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61"
-              }
-            ].map((program, index) => (
-              <motion.div 
-                key={index}
-                whileHover={{ y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="bg-gray-700 rounded-lg overflow-hidden"
+            {['Starters', 'Main Course', 'Desserts'].map((category) => (
+              <motion.div
+                key={category}
+                initial={{ y: 50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }} {/* Reduced duration for snappier animation */}
+                className="bg-white rounded-lg shadow-lg overflow-hidden"
               >
-                <img 
-                  src={program.image} 
-                  alt={program.title}
+                <img
+                  src={`https://images.unsplash.com/photo-${category === 'Starters' ? '1601050690597-df0568f70950' :
+                    category === 'Main Course' ? '1585937421612-70a008356fbe' :
+                      '1551334787-21e551cc3f73'}?auto=format&fit=crop&q=80`}
+                  alt={category}
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{program.title}</h3>
-                  <p>{program.description}</p>
+                  <h3 className="text-xl font-bold mb-4">{category}</h3>
+                  <ul className="space-y-2">
+                    {[1, 2, 3].map((item) => (
+                      <li key={item} className="text-gray-600">
+                        Signature Dish {item} - $14.99
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </motion.div>
             ))}
@@ -162,105 +118,131 @@ function App() {
         </div>
       </section>
 
-      {/* Trainers Section */}
-      <section id="trainers" className="py-20 bg-gray-900 text-white">
+      {/* Gallery Section */}
+      <section id="gallery" className="py-20 bg-white"> {/* Added Gallery Section */}
         <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 text-center">Our Trainers</h2>
+          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">Our Gallery</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "John Doe",
-                specialty: "Strength & Conditioning",
-                image: "https://images.unsplash.com/photo-1567013127542-490d757e51fc"
-              },
-              {
-                name: "Jane Smith",
-                specialty: "Yoga & Flexibility",
-                image: "https://images.unsplash.com/photo-1611672585731-fa10603fb9e0"
-              },
-              {
-                name: "Mike Johnson",
-                specialty: "CrossFit Expert",
-                image: "https://images.unsplash.com/photo-1534367507873-d2d7e24c797f"
-              }
-            ].map((trainer, index) => (
-              <motion.div 
-                key={index}
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-                className="text-center"
+            {/* Placeholder images - replace with actual gallery images */}
+            {[1, 2, 3, 4, 5, 6].map((item) => (
+              <motion.div
+                key={item}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ delay: item * 0.1, duration: 0.5 }}
+                className="rounded-lg overflow-hidden shadow-md"
               >
-                <img 
-                  src={trainer.image} 
-                  alt={trainer.name}
-                  className="w-full h-64 object-cover rounded-lg mb-4"
+                <img
+                  src={`https://source.unsplash.com/random/400x300?indianfood&${item}`}
+                  alt={`Gallery Image ${item}`}
+                  className="w-full h-full object-cover"
                 />
-                <h3 className="text-xl font-bold">{trainer.name}</h3>
-                <p className="text-gray-400">{trainer.specialty}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Reservation Section */}
+      <section id="reservation" className="py-20 bg-gray-50"> {/* Added Reservation Section */}
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">Reservations</h2>
+          <div className="bg-white rounded-lg shadow-xl p-8 md:p-12">
+            {/* Placeholder Reservation Form - Replace with actual form */}
+            <h3 className="text-2xl font-bold mb-6 text-gray-800 text-center">Book Your Table</h3>
+            <form className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Name</label>
+                <input type="text" id="name" placeholder="Your Name" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                <input type="email" id="email" placeholder="Your Email" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+              </div>
+              <div>
+                <label htmlFor="date" className="block text-gray-700 text-sm font-bold mb-2">Date</label>
+                <input type="date" id="date" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+              </div>
+              <div>
+                <label htmlFor="time" className="block text-gray-700 text-sm font-bold mb-2">Time</label>
+                <input type="time" id="time" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+              </div>
+              <div>
+                <button type="submit" className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                  Reserve Now
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-800 text-white">
+      <section id="contact" className="py-20 bg-white">
         <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 text-center">Contact Us</h2>
           <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <form className="space-y-6">
-                <div>
-                  <input 
-                    type="text" 
-                    placeholder="Your Name"
-                    className="w-full p-3 rounded bg-gray-700"
-                  />
-                </div>
-                <div>
-                  <input 
-                    type="email" 
-                    placeholder="Your Email"
-                    className="w-full p-3 rounded bg-gray-700"
-                  />
-                </div>
-                <div>
-                  <textarea 
-                    placeholder="Your Message"
-                    rows="5"
-                    className="w-full p-3 rounded bg-gray-700"
-                  ></textarea>
-                </div>
-                <button className="bg-red-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-red-700 transition">
-                  Send Message
-                </button>
-              </form>
-            </div>
-            <div>
-              <div className="space-y-4">
-                <p>📍 123 Fitness Street, Gym City, GC 12345</p>
-                <p>📞 (555) 123-4567</p>
-                <p>✉️ info@fitnessprogym.com</p>
+            <motion.div
+              initial={{ x: -50, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.7 }} {/* Adjusted duration for smoother animation */}
+              className="space-y-6"
+            >
+              <h2 className="text-4xl font-bold text-gray-800">Contact Us</h2>
+              <div>
+                <p className="text-gray-600">123 Restaurant Street</p>
+                <p className="text-gray-600">City, State 12345</p>
+                <p className="text-gray-600">Phone: (123) 456-7890</p>
+                <p className="text-gray-600">Email: info@ruchiindian.com</p>
               </div>
-              {/* Add Map here */}
+              <div className="space-y-2">
+                <h3 className="font-bold text-gray-800">Hours</h3>
+                <p className="text-gray-600">Mon-Fri: 11:00 AM - 10:00 PM</p>
+                <p className="text-gray-600">Sat-Sun: 12:00 PM - 11:00 PM</p>
+              </div>
+            </motion.div>
+            <div className="bg-gray-200 rounded-lg h-[400px]" id="map">
+              {/* Map Integration would go here */}
+              <p className="p-4 text-center">Map Placeholder</p> {/* Added placeholder text for map */}
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-black text-white py-8">
-        <div className="container mx-auto px-6 text-center">
-          <p>© 2024 Fitness Pro Gym. All rights reserved.</p>
-          <div className="mt-4 space-x-4">
-            <a href="#" className="hover:text-red-500 transition">Facebook</a>
-            <a href="#" className="hover:text-red-500 transition">Instagram</a>
-            <a href="#" className="hover:text-red-500 transition">Twitter</a>
+      <footer className="bg-gray-800 text-white py-8">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-8 text-center md:text-left">
+            <div>
+              <h3 className="text-xl font-bold mb-4">Ruchi Indian Kitchen</h3>
+              <p className="text-gray-400">Authentic Indian Cuisine</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+              <div className="space-y-2">
+                <a href="#menu" className="text-gray-400 hover:text-white block">Menu</a>
+                <a href="#reservation" className="text-gray-400 hover:text-white block">Reservations</a>
+                <a href="#contact" className="text-gray-400 hover:text-white block">Contact</a>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-xl font-bold mb-4">Follow Us</h3>
+              <div className="space-x-4">
+                {['Facebook', 'Instagram', 'Twitter'].map((social) => (
+                  <a key={social} href="#" className="text-gray-400 hover:text-white">
+                    {social}
+                    {/* Add social media icons or links here in a real project */}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 text-center text-gray-400">
+            <p>© 2024 Ruchi Indian Kitchen. All rights reserved.</p>
           </div>
         </div>
       </footer>
     </div>
   );
-}
+};
 
 export default App;
