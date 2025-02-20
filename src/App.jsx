@@ -5,170 +5,164 @@ import { motion } from 'framer-motion';
 const App = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const services = [
-    { title: 'Emergency Care', icon: '🏥' },
-    { title: 'Pediatrics', icon: '👶' },
-    { title: 'Surgery', icon: '⚕️' },
-    { title: 'Cardiology', icon: '❤️' },
-    { title: 'Diagnostics', icon: '🔬' },
-    { title: 'Mental Health', icon: '🧠' },
-  ];
-
-  const departments = [
-    { title: 'Orthopedics', icon: '🦴' },
-    { title: 'Neurology', icon: '🧠' },
-    { title: 'Oncology', icon: '🎗️' },
-    { title: 'Gynecology', icon: '🩺' },
-    { title: 'Radiology', icon: '📡' },
-    { title: 'Gastroenterology', icon: '🍽️' },
-  ];
-
-  const toggleMobileMenu = () => {
+  const handleToggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
+  const navItems = ['Home', 'About', 'Services', 'Testimonials', 'Contact'];
 
   return (
-    <div className="font-sans scroll-smooth">
-      {/* Navbar */}
-      <nav className="fixed w-full bg-white shadow-md z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="text-2xl font-bold text-blue-600">Columbus Healthcare</div>
-            {/* Desktop Menu */}
-            <div className="hidden md:flex space-x-8">
-              <a href="#home" className="hover:text-blue-600 transition">Home</a>
-              <a href="#about" className="hover:text-blue-600 transition">About</a>
-              <a href="#services" className="hover:text-blue-600 transition">Services</a>
-              <a href="#departments" className="hover:text-blue-600 transition">Departments</a>
-              <a href="#contact" className="hover:text-blue-600 transition">Contact</a>
-            </div>
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <button 
-                onClick={toggleMobileMenu} 
-                className="text-2xl text-blue-600 focus:outline-none" 
-                aria-label="Toggle Menu"
+    <div className="bg-gray-900 min-h-screen scroll-smooth">
+      {/* Navigation */}
+      <nav className="fixed w-full bg-gray-900/95 backdrop-blur-sm z-50 px-6 py-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-2xl font-bold text-white"
+          >
+            Columbus Healthcare
+          </motion.div>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-8">
+            {navItems.map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                className="text-gray-300 hover:text-white transition-colors"
               >
-                {isMobileMenuOpen ? '✖️' : '☰'}
-              </button>
+                {item}
+              </a>
+            ))}
+          </div>
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-gray-300 hover:text-white focus:outline-none"
+            onClick={handleToggleMobileMenu}
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+        {/* Mobile Navigation Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-gray-800/90 backdrop-blur-sm">
+            <div className="flex flex-col space-y-4 py-4 px-6">
+              {navItems.map((item) => (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  className="text-gray-300 hover:text-white transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item}
+                </a>
+              ))}
             </div>
           </div>
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden mt-4 space-y-2">
-              <a href="#home" className="block hover:text-blue-600 transition" onClick={closeMobileMenu}>Home</a>
-              <a href="#about" className="block hover:text-blue-600 transition" onClick={closeMobileMenu}>About</a>
-              <a href="#services" className="block hover:text-blue-600 transition" onClick={closeMobileMenu}>Services</a>
-              <a href="#departments" className="block hover:text-blue-600 transition" onClick={closeMobileMenu}>Departments</a>
-              <a href="#contact" className="block hover:text-blue-600 transition" onClick={closeMobileMenu}>Contact</a>
-            </div>
-          )}
-        </div>
+        )}
       </nav>
 
       {/* Hero Section */}
       <section
         id="home"
-        className="h-screen relative bg-cover bg-center"
+        className="relative h-screen flex items-center justify-center"
         style={{
           backgroundImage:
-            'url("https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80")',
+            'url("https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&w=1950&q=80")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       >
-        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="absolute inset-0 bg-gray-900/70"></div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="relative h-full flex items-center justify-center text-center text-white px-4"
+          transition={{ duration: 0.8 }}
+          className="relative text-center px-6"
         >
-          <div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-4">Committed to Your Health</h1>
-            <p className="text-xl mb-8">Providing exceptional healthcare with compassion and expertise</p>
-            <a href="#contact">
-              <button className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition">
-                Book an Appointment
-              </button>
-            </a>
-          </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">Excellence in Healthcare</h1>
+          <p className="text-xl text-gray-200 mb-8">
+            Providing compassionate care with cutting-edge technology
+          </p>
+          <a href="#about">
+            <button className="bg-teal-500 text-white px-8 py-3 rounded-full hover:bg-teal-600 transition-colors">
+              Learn More
+            </button>
+          </a>
         </motion.div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6">
+      <section id="about" className="py-20 px-6 bg-gray-800">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 1 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-center mb-12">About Us</h2>
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <img
-                  src="https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-                  alt="Medical Team"
-                  className="rounded-lg shadow-lg w-full"
-                />
-              </div>
-              <div>
-                <p className="text-lg mb-6">
-                  Columbus Healthcare Hospital has been serving our community for over 50 years. We are committed to providing the highest quality healthcare services with compassion and expertise.
-                </p>
-                <p className="text-lg">
-                  Our state-of-the-art facilities and dedicated team of healthcare professionals ensure that every patient receives personalized care and attention.
-                </p>
-              </div>
-            </div>
+            <h2 className="text-4xl font-bold text-white mb-6">About Us</h2>
+            <p className="text-gray-300 max-w-3xl mx-auto">
+              With over 20 years of experience, Columbus Healthcare has been at the forefront of medical
+              excellence. Our commitment to innovative care and patient comfort sets us apart in the
+              healthcare industry.
+            </p>
           </motion.div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12">Our Services</h2>
+      <section id="services" className="py-20 px-6 bg-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-white text-center mb-16">Our Services</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service) => (
+            {[
+              {
+                title: 'Primary Care',
+                description: 'Comprehensive health services for all ages',
+              },
+              {
+                title: 'Specialized Treatment',
+                description: 'Expert care in various medical specialties',
+              },
+              {
+                title: 'Emergency Care',
+                description: '24/7 emergency medical services',
+              },
+            ].map((service, index) => (
               <motion.div
-                key={service.title}
+                key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
                 viewport={{ once: true }}
-                className="bg-white p-6 rounded-lg shadow-lg text-center"
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                className="bg-gray-800 p-6 rounded-lg"
               >
-                <div className="text-4xl mb-4">{service.icon}</div>
-                <h3 className="text-xl font-bold mb-2">{service.title}</h3>
-                <p>Comprehensive care and treatment provided by our expert medical staff.</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Departments Section */}
-      <section id="departments" className="py-20">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12">Our Departments</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {departments.map((dept) => (
-              <motion.div
-                key={dept.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-                className="bg-white p-6 rounded-lg shadow-lg text-center"
-              >
-                <div className="text-4xl mb-4">{dept.icon}</div>
-                <h3 className="text-xl font-bold mb-2">{dept.title}</h3>
-                <p>Dedicated professionals providing specialized care in {dept.title.toLowerCase()}.</p>
+                <h3 className="text-xl font-bold text-white mb-4">{service.title}</h3>
+                <p className="text-gray-300">{service.description}</p>
               </motion.div>
             ))}
           </div>
@@ -176,101 +170,79 @@ const App = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-blue-50">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12">Patient Testimonials</h2>
+      <section id="testimonials" className="py-20 px-6 bg-gray-800">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-white text-center mb-16">Patient Testimonials</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="bg-white p-8 rounded-lg shadow"
-            >
-              <p className="italic mb-4">"The care I received at Columbus Healthcare was exceptional. The staff was professional and caring."</p>
-              <p className="font-bold">- Sarah Johnson</p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="bg-white p-8 rounded-lg shadow"
-            >
-              <p className="italic mb-4">"Top-notch facilities and amazing doctors. I couldn't have asked for better care."</p>
-              <p className="font-bold">- Michael Smith</p>
-            </motion.div>
+            {[
+              {
+                text: 'The care I received was exceptional. The staff was professional and caring.',
+                author: 'Sarah Johnson',
+              },
+              {
+                text: 'State-of-the-art facilities and expert medical care. Highly recommended!',
+                author: 'Michael Chen',
+              },
+            ].map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                className="bg-gray-900 p-8 rounded-lg"
+              >
+                <p className="text-gray-300 italic mb-4">"{testimonial.text}"</p>
+                <p className="text-white font-bold">- {testimonial.author}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12">Contact Us</h2>
-          <div className="grid md:grid-cols-2 gap-12">
+      <section id="contact" className="py-20 px-6 bg-gray-900">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-4xl font-bold text-white text-center mb-16">Contact Us</h2>
+          <form className="space-y-6">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Get in Touch</h3>
-              <p className="mb-4">📍 123 Healthcare Avenue, Columbus, OH</p>
-              <p className="mb-4">📞 (555) 123-4567</p>
-              <p className="mb-4">✉️ info@columbushealthcare.com</p>
-              <div className="flex space-x-4 mt-4">
-                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400">Facebook</a>
-                <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400">Twitter</a>
-                <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400">LinkedIn</a>
-              </div>
+              <input
+                type="text"
+                placeholder="Your Name"
+                className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                required
+              />
             </div>
-            <form className="space-y-4">
-              <input type="text" placeholder="Name" className="w-full p-2 border rounded" required />
-              <input type="email" placeholder="Email" className="w-full p-2 border rounded" required />
-              <textarea placeholder="Message" rows="4" className="w-full p-2 border rounded" required></textarea>
-              <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
-                Send Message
-              </button>
-            </form>
-          </div>
+            <div>
+              <input
+                type="email"
+                placeholder="Your Email"
+                className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                required
+              />
+            </div>
+            <div>
+              <textarea
+                placeholder="Your Message"
+                rows="5"
+                className="w-full px-4 py-3 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                required
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-teal-500 text-white px-8 py-3 rounded-lg hover:bg-teal-600 transition-colors"
+            >
+              Send Message
+            </button>
+          </form>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-12">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">Columbus Healthcare</h3>
-              <p>Providing exceptional healthcare services since 1970.</p>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                <li><a href="#home" className="hover:text-blue-400">Home</a></li>
-                <li><a href="#about" className="hover:text-blue-400">About</a></li>
-                <li><a href="#services" className="hover:text-blue-400">Services</a></li>
-                <li><a href="#departments" className="hover:text-blue-400">Departments</a></li>
-                <li><a href="#contact" className="hover:text-blue-400">Contact</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">Connect</h3>
-              <div className="flex space-x-4">
-                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400">Facebook</a>
-                <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400">Twitter</a>
-                <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400">LinkedIn</a>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">Newsletter</h3>
-              <form className="flex flex-col space-y-2">
-                <input type="email" placeholder="Enter your email" className="w-full p-2 rounded text-black" required />
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                  Subscribe
-                </button>
-              </form>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-gray-700 text-center">
-            <p>&copy; 2024 Columbus Healthcare. All rights reserved.</p>
-          </div>
+      <footer className="bg-gray-800 py-8 px-6">
+        <div className="max-w-7xl mx-auto text-center text-gray-400">
+          <p>© 2024 Columbus Healthcare. All rights reserved.</p>
         </div>
       </footer>
     </div>
