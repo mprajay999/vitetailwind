@@ -1,159 +1,199 @@
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 const App = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  useEffect(() => {
+    const anchors = document.querySelectorAll('a[href^="#"]');
 
-  // Function to handle smooth scrolling
-  const handleNavClick = (e, targetId) => {
-    e.preventDefault();
-    const target = document.getElementById(targetId);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-      setIsMenuOpen(false); // Close menu after clicking
-    }
-  };
+    const handleScroll = (e) => {
+      e.preventDefault();
+      const targetId = e.currentTarget.getAttribute('href');
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth'
+        });
+      }
+    };
+
+    anchors.forEach(anchor => {
+      anchor.addEventListener('click', handleScroll);
+    });
+
+    // Cleanup event listeners on unmount
+    return () => {
+      anchors.forEach(anchor => {
+        anchor.removeEventListener('click', handleScroll);
+      });
+    };
+  }, []);
 
   return (
-    <div className="overflow-x-hidden">
-      {/* Header */}
-      <header className="fixed w-full bg-white shadow-md z-50">
-        <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <motion.h1 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-2xl font-bold cursor-pointer"
-            onClick={(e) => handleNavClick(e, 'home')}
-          >
-            Prajay's Store
-          </motion.h1>
-          
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-8">
-            <a href="#home" onClick={(e) => handleNavClick(e, 'home')} className="hover:text-blue-600 transition">Home</a>
-            <a href="#about" onClick={(e) => handleNavClick(e, 'about')} className="hover:text-blue-600 transition">About</a>
-            <a href="#products" onClick={(e) => handleNavClick(e, 'products')} className="hover:text-blue-600 transition">Products</a>
-            <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className="hover:text-blue-600 transition">Contact</a>
-          </div>
-          
-          <button className="hidden md:block bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
-            Shop Now
-          </button>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle Menu">
-              <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
-                )}
-              </svg>
-            </button>
-          </div>
-        </nav>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMenuOpen && (
+    <div className="font-sans">
+      {/* Navigation */}
+      <nav className="fixed w-full bg-[#1A237E] text-white z-50">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="md:hidden bg-white shadow-md"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1 }}
+              className="text-2xl font-bold"
             >
-              <div className="px-6 py-4 space-y-4">
-                <a href="#home" onClick={(e) => handleNavClick(e, 'home')} className="block hover:text-blue-600 transition">Home</a>
-                <a href="#about" onClick={(e) => handleNavClick(e, 'about')} className="block hover:text-blue-600 transition">About</a>
-                <a href="#products" onClick={(e) => handleNavClick(e, 'products')} className="block hover:text-blue-600 transition">Products</a>
-                <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className="block hover:text-blue-600 transition">Contact</a>
-                <button className="w-full bg-blue-600 text-white py-2 rounded-full hover:bg-blue-700 transition">
-                  Shop Now
-                </button>
-              </div>
+              Cruize IT Solutions
             </motion.div>
-          )}
-        </AnimatePresence>
-      </header>
+            <div className="hidden md:flex space-x-8">
+              <a href="#home" className="hover:text-[#FF6F00] transition">
+                Home
+              </a>
+              <a href="#about" className="hover:text-[#FF6F00] transition">
+                About
+              </a>
+              <a href="#services" className="hover:text-[#FF6F00] transition">
+                Services
+              </a>
+              <a href="#portfolio" className="hover:text-[#FF6F00] transition">
+                Portfolio
+              </a>
+              <a href="#contact" className="hover:text-[#FF6F00] transition">
+                Contact
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
 
       {/* Hero Section */}
-      <section id="home" className="h-screen bg-cover bg-center" style={{backgroundImage: 'url("https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80")'}}>
-        <div className="h-full bg-black bg-opacity-50 flex items-center">
-          <div className="container mx-auto px-6">
-            <motion.div
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-5xl font-bold text-white mb-4">Welcome to Prajay's Store</h2>
-              <p className="text-xl text-white mb-8">Discover quality products for your lifestyle</p>
-              <button onClick={(e) => handleNavClick(e, 'products')} className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg hover:bg-blue-700 transition">
-                Explore Products
+      <section
+        id="home"
+        className="h-screen relative bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center"
+      >
+        <div className="absolute inset-0 bg-[#1A237E] opacity-60"></div>
+        <div className="relative h-full flex items-center justify-center text-center text-white px-4">
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            <h1 className="text-5xl font-bold mb-6">Innovate. Transform. Succeed.</h1>
+            <p className="text-xl mb-8">Your trusted partner in digital transformation</p>
+            <a href="#contact">
+              <button className="bg-[#FF6F00] px-8 py-3 rounded-full hover:bg-[#FF8F00] transition">
+                Get Started
               </button>
-            </motion.div>
-          </div>
+            </a>
+          </motion.div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-gray-50">
+      <section id="about" className="py-20 bg-[#F5F5F5]">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ x: -50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-3xl font-bold mb-6">About Us</h3>
-              <p className="text-gray-600 mb-6">
-                Founded in 2010, Prajay's Store has been serving customers with premium quality products
-                and exceptional service. Our mission is to provide an unparalleled shopping experience
-                with carefully curated items that enhance your lifestyle.
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="grid md:grid-cols-2 gap-12 items-center"
+          >
+            <div>
+              <h2 className="text-3xl font-bold text-[#1A237E] mb-6">About Us</h2>
+              <p className="text-[#333333] mb-4">
+                Cruize IT Solutions is a leading technology company specializing in innovative digital solutions.
+                With over a decade of experience, we've helped businesses transform their digital presence and achieve remarkable growth.
               </p>
-              <p className="text-gray-600">
-                We believe in quality over quantity and strive to offer products that meet the highest standards.
-                Our dedicated team works tirelessly to ensure customer satisfaction and to keep up with the latest trends.
+              <p className="text-[#333333]">
+                Our team of experts combines technical excellence with creative problem-solving to deliver solutions that drive real business value.
               </p>
-            </motion.div>
-            <motion.img
-              initial={{ x: 50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              src="https://images.unsplash.com/photo-1472851294608-062f824d29cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-              className="rounded-lg shadow-xl w-full h-80 object-cover"
-              alt="Store interior"
-            />
+            </div>
+            <div className="rounded-lg overflow-hidden shadow-xl">
+              <img
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                alt="Team"
+                className="w-full h-auto object-cover"
+              />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="py-20">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center text-[#1A237E] mb-12">Our Services</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Web Development",
+                description: "Custom websites and web applications built with cutting-edge technologies.",
+                icon: "🌐"
+              },
+              {
+                title: "Mobile Apps",
+                description: "Native and cross-platform mobile applications for iOS and Android.",
+                icon: "📱"
+              },
+              {
+                title: "Cloud Solutions",
+                description: "Scalable cloud infrastructure and migration services.",
+                icon: "☁️"
+              }
+            ].map((service, index) => (
+              <motion.div
+                key={index}
+                initial={{ y: 50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition"
+              >
+                <div className="text-4xl mb-4">{service.icon}</div>
+                <h3 className="text-xl font-bold mb-2">{service.title}</h3>
+                <p className="text-[#757575]">{service.description}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Products Section */}
-      <section id="products" className="py-20">
+      {/* Portfolio Section */}
+      <section id="portfolio" className="py-20 bg-[#F5F5F5]">
         <div className="container mx-auto px-6">
-          <h3 className="text-3xl font-bold text-center mb-12">Our Products</h3>
+          <h2 className="text-3xl font-bold text-center text-[#1A237E] mb-12">Our Portfolio</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Example Products */}
-            {[1, 2, 3].map((item) => (
+            {[
+              {
+                title: "Project One",
+                description: "A cutting-edge web application for e-commerce solutions.",
+                image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+              },
+              {
+                title: "Project Two",
+                description: "A mobile app designed to streamline business operations.",
+                image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+              },
+              {
+                title: "Project Three",
+                description: "A robust cloud infrastructure setup for scalable applications.",
+                image: "https://images.unsplash.com/photo-1559526324-593bc073d938?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+              }
+            ].map((project, index) => (
               <motion.div
-                key={item}
-                initial={{ y: 30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                whileHover={{ y: -10 }}
-                className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer"
+                key={index}
+                initial={{ scale: 0.95, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
                 viewport={{ once: true }}
+                transition={{ delay: index * 0.2, duration: 0.5 }}
+                className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition"
               >
                 <img
-                  src={`https://source.unsplash.com/random/500x500?product-${item}`}
-                  className="w-full h-48 object-cover"
-                  alt={`Product ${item}`}
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-56 object-cover"
                 />
                 <div className="p-6">
-                  <h4 className="text-xl font-bold mb-2">Product Category {item}</h4>
-                  <p className="text-gray-600">High-quality products designed for your needs.</p>
+                  <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+                  <p className="text-[#757575]">{project.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -162,38 +202,52 @@ const App = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-50">
+      <section id="contact" className="py-20">
         <div className="container mx-auto px-6">
-          <h3 className="text-3xl font-bold text-center mb-12">Contact Us</h3>
-          <div className="max-w-lg mx-auto">
-            <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); /* Handle form submission */ }}>
+          <h2 className="text-3xl font-bold text-center text-[#1A237E] mb-12">Contact Us</h2>
+          <div className="max-w-2xl mx-auto">
+            <form className="space-y-6">
               <div>
+                <label htmlFor="name" className="block text-[#333333] mb-2">
+                  Name
+                </label>
                 <input
                   type="text"
-                  placeholder="Your Name"
+                  id="name"
+                  name="name"
                   required
-                  className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:border-blue-500"
+                  className="w-full p-3 rounded-lg border focus:border-[#FF6F00] outline-none"
+                  placeholder="Your Name"
                 />
               </div>
               <div>
+                <label htmlFor="email" className="block text-[#333333] mb-2">
+                  Email
+                </label>
                 <input
                   type="email"
-                  placeholder="Your Email"
+                  id="email"
+                  name="email"
                   required
-                  className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:border-blue-500"
+                  className="w-full p-3 rounded-lg border focus:border-[#FF6F00] outline-none"
+                  placeholder="Your Email"
                 />
               </div>
               <div>
+                <label htmlFor="message" className="block text-[#333333] mb-2">
+                  Message
+                </label>
                 <textarea
-                  placeholder="Your Message"
-                  rows="5"
+                  id="message"
+                  name="message"
                   required
-                  className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:border-blue-500"
+                  className="w-full p-3 rounded-lg border focus:border-[#FF6F00] outline-none h-32 resize-none"
+                  placeholder="Your Message"
                 ></textarea>
               </div>
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+                className="bg-[#FF6F00] text-white px-8 py-3 rounded-full hover:bg-[#FF8F00] transition w-full"
               >
                 Send Message
               </button>
@@ -203,51 +257,37 @@ const App = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-[#1A237E] text-white py-12">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <h4 className="text-xl font-bold mb-4">Prajay's Store</h4>
-              <p className="text-gray-400">Quality products for your lifestyle</p>
+              <h3 className="text-xl font-bold mb-4">Cruize IT Solutions</h3>
+              <p className="text-sm">
+                Transforming businesses through technology
+              </p>
             </div>
             <div>
-              <h4 className="text-xl font-bold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><a href="#home" onClick={(e) => handleNavClick(e, 'home')} className="text-gray-400 hover:text-white transition">Home</a></li>
-                <li><a href="#about" onClick={(e) => handleNavClick(e, 'about')} className="text-gray-400 hover:text-white transition">About</a></li>
-                <li><a href="#products" onClick={(e) => handleNavClick(e, 'products')} className="text-gray-400 hover:text-white transition">Products</a></li>
-                <li><a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className="text-gray-400 hover:text-white transition">Contact</a></li>
-              </ul>
+              <h3 className="text-xl font-bold mb-4">Contact</h3>
+              <p className="text-sm">Email: info@cruizeitsolutions.com</p>
+              <p className="text-sm">Phone: +1 (555) 123-4567</p>
             </div>
             <div>
-              <h4 className="text-xl font-bold mb-4">Contact Info</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>123 Store Street</li>
-                <li>City, State 12345</li>
-                <li>Phone: (123) 456-7890</li>
-                <li>Email: info@prajaystore.com</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xl font-bold mb-4">Newsletter</h4>
-              <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); /* Handle subscription */ }}>
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  required
-                  className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-blue-500"
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-                >
-                  Subscribe
-                </button>
-              </form>
+              <h3 className="text-xl font-bold mb-4">Follow Us</h3>
+              <div className="flex space-x-4">
+                <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF6F00] transition">
+                  LinkedIn
+                </a>
+                <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF6F00] transition">
+                  Twitter
+                </a>
+                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF6F00] transition">
+                  Facebook
+                </a>
+              </div>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Prajay's Store. All rights reserved.</p>
+          <div className="text-center mt-8 pt-8 border-t border-white/20">
+            <p>&copy; 2024 Cruize IT Solutions. All rights reserved.</p>
           </div>
         </div>
       </footer>
