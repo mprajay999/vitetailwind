@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import './App.css'; // Added CSS import
+
 
 // Added image imports (you'll need to add actual images)
 const images = {
