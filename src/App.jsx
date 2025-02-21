@@ -1,185 +1,241 @@
 
-import React, { useState } from 'react';
+// App.jsx
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 const App = () => {
-  // Chatbot state
+  // Navigation items
+  const navItems = ['Home', 'About', 'Services', 'Testimonials', 'Contact'];
+
+  // Services data
+  const services = [
+    {
+      title: 'IT Consulting',
+      icon: '💡',
+      description: 'Strategic technology guidance to optimize your business operations.',
+    },
+    {
+      title: 'Software Development',
+      icon: '💻',
+      description: 'Custom software solutions tailored to your specific needs.',
+    },
+    {
+      title: 'Cybersecurity',
+      icon: '🔒',
+      description: 'Comprehensive security solutions to protect your digital assets.',
+    },
+    {
+      title: 'Cloud Services',
+      icon: '☁️',
+      description: 'Scalable cloud solutions for modern business needs.',
+    },
+  ];
+
+  // Testimonials data
+  const testimonials = [
+    {
+      name: 'John Smith',
+      role: 'CEO, TechCorp',
+      text: 'Ragnova IT Solutions transformed our business operations with their innovative solutions.',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
+    },
+    {
+      name: 'Sarah Johnson',
+      role: 'CTO, InnovateHub',
+      text: 'Their cybersecurity services have given us peace of mind in this digital age.',
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
+    },
+  ];
+
+  // Chatbot State
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { sender: 'bot', text: 'Hello! How can I assist you today?' }
+    { sender: 'bot', text: 'Hello! How can I assist you today?' },
   ]);
   const [userInput, setUserInput] = useState('');
+  const messagesEndRef = useRef(null);
 
-  const toggleChat = () => {
-    setIsChatOpen(!isChatOpen);
+  // Function to handle smooth scroll
+  const handleNavClick = (e, section) => {
+    e.preventDefault();
+    const sectionRef = document.getElementById(section.toLowerCase());
+    if (sectionRef) {
+      sectionRef.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
+  // Function to handle chatbot message submission
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (userInput.trim() === '') return;
 
-    setMessages([...messages, { sender: 'user', text: userInput }]);
+    const newMessages = [...messages, { sender: 'user', text: userInput }];
+    setMessages(newMessages);
     setUserInput('');
 
-    // Simple bot response
+    // Simple bot response (echo)
     setTimeout(() => {
-      setMessages(prevMessages => [...prevMessages, { sender: 'bot', text: 'Thank you for your message! We will get back to you shortly.' }]);
+      setMessages([
+        ...newMessages,
+        { sender: 'bot', text: "I'm here to help! How else can I assist you?" },
+      ]);
     }, 1000);
   };
 
-  return (
-    <div className="font-sans scroll-smooth">
-      {/* Navbar */}
-      <motion.nav 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className="fixed w-full bg-white/90 backdrop-blur-sm shadow-lg z-50"
-      >
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <motion.a 
-            whileHover={{ scale: 1.05 }}
-            href="#home"
-            className="text-3xl font-bold text-blue-600"
-          >
-            Spectrum
-          </motion.a>
-          
-          <div className="hidden md:flex space-x-8">
-            <a href="#home" className="hover:text-blue-600 transition">Home</a>
-            <a href="#services" className="hover:text-blue-600 transition">Services</a>
-            <a href="#features" className="hover:text-blue-600 transition">Features</a>
-            <a href="#testimonials" className="hover:text-blue-600 transition">Testimonials</a>
-            <a href="#contact" className="hover:text-blue-600 transition">Contact</a>
-          </div>
+  // Scroll to bottom when messages update
+  React.useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
 
-          <motion.a
-            whileHover={{ scale: 1.05 }}
-            href="#contact"
-            className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition"
-          >
-            Get Started
-          </motion.a>
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header/Navigation */}
+      <nav className="fixed w-full bg-white shadow-md z-50">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-2xl font-bold text-blue-600 cursor-pointer"
+              onClick={(e) => handleNavClick(e, 'Home')}
+            >
+              Ragnova IT
+            </motion.div>
+            <div className="hidden md:flex space-x-8">
+              {navItems.map((item) => (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  onClick={(e) => handleNavClick(e, item)}
+                  className="text-gray-600 hover:text-blue-600 transition-colors duration-300"
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
-      </motion.nav>
+      </nav>
 
       {/* Hero Section */}
-      <section id="home" className="pt-24 pb-16 bg-gradient-to-r from-blue-50 to-indigo-50">
-        <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+      <section
+        id="home"
+        className="pt-24 pb-16 px-6 md:pt-32 bg-gradient-to-r from-blue-500 to-blue-700"
+      >
+        <div className="container mx-auto">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="text-center text-white"
           >
-            <h1 className="text-5xl font-bold leading-tight mb-6">
-              Lightning Fast Internet for Your Digital Life
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Innovative IT Solutions for Your Business
             </h1>
-            <p className="text-xl text-gray-600 mb-8">
-              Experience unlimited possibilities with Spectrum's high-speed internet services.
+            <p className="text-xl md:text-2xl mb-8">
+              Transforming businesses through technology
             </p>
-            <motion.a
+            <motion.button
               whileHover={{ scale: 1.05 }}
-              href="#contact"
-              className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg hover:bg-blue-700 transition inline-block"
+              whileTap={{ scale: 0.95 }}
+              onClick={(e) => handleNavClick(e, 'Contact')}
+              className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors duration-300"
             >
-              Sign Up Now
-            </motion.a>
+              Get Started
+            </motion.button>
           </motion.div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="py-16 px-6 bg-white">
+        <div className="container mx-auto">
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
           >
-            <img 
-              src="https://images.unsplash.com/photo-1562907550-096d3bf9b25c" 
-              alt="High speed internet"
-              className="rounded-lg shadow-xl w-full h-auto"
-            />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              About Us
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              At Ragnova IT Solutions, we believe in harnessing the power of technology
+              to drive business success. With years of experience and a team of dedicated
+              professionals, we deliver innovative solutions that help our clients stay
+              ahead in the digital age.
+            </p>
+          </motion.div>
+
+          {/* Additional About Content (Optional) */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12"
+          >
+            <div className="md:w-1/3">
+              <img
+                src="https://images.unsplash.com/photo-1518770660439-4636190af475"
+                alt="About Us"
+                className="rounded-lg shadow-lg"
+              />
+            </div>
+            <div className="md:w-2/3 text-left">
+              <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+                Our Mission
+              </h3>
+              <p className="text-gray-600">
+                To provide top-notch IT solutions that empower businesses to achieve their
+                goals efficiently and effectively.
+              </p>
+              <h3 className="text-2xl font-semibold text-gray-800 mt-6 mb-4">
+                Our Vision
+              </h3>
+              <p className="text-gray-600">
+                To be a global leader in IT services, recognized for our commitment to
+                innovation, quality, and customer satisfaction.
+              </p>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-16">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12">Our Internet Plans</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Basic",
-                speed: "100 Mbps",
-                price: "$49.99",
-                features: ["Ideal for small households", "HD streaming", "Fast downloads"]
-              },
-              {
-                title: "Premium",
-                speed: "400 Mbps",
-                price: "$69.99",
-                features: ["Perfect for gaming", "4K streaming", "Multiple devices"]
-              },
-              {
-                title: "Ultra",
-                speed: "940 Mbps",
-                price: "$109.99",
-                features: ["Best for business", "Ultimate performance", "Smart home ready"]
-              }
-            ].map((plan, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.03 }}
-                className="bg-white p-8 rounded-xl shadow-lg flex flex-col"
-              >
-                <h3 className="text-2xl font-bold mb-4">{plan.title}</h3>
-                <p className="text-4xl font-bold text-blue-600 mb-4">{plan.price}</p>
-                <p className="text-gray-600 mb-6">{plan.speed}</p>
-                <ul className="space-y-3 flex-grow">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-center">
-                      <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <button className="w-full mt-6 bg-blue-600 text-white py-2 rounded-full hover:bg-blue-700 transition">
-                  Choose Plan
-                </button>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <section id="services" className="py-16 px-6 bg-gray-100">
+        <div className="container mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Our Services
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              We offer a wide range of IT services to meet the diverse needs of our clients.
+            </p>
+          </motion.div>
 
-      {/* Features Section */}
-      <section id="features" className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12">Why Choose Spectrum</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Reliable Connection",
-                description: "99.9% uptime guarantee for uninterrupted service",
-                icon: "🔌"
-              },
-              {
-                title: "24/7 Support",
-                description: "Expert technical support whenever you need it",
-                icon: "🛠️"
-              },
-              {
-                title: "No Data Caps",
-                description: "Unlimited data usage for all your needs",
-                icon: "∞"
-              }
-            ].map((feature, index) => (
+          <div className="flex flex-wrap -mx-4">
+            {services.map((service, index) => (
               <motion.div
                 key={index}
-                whileHover={{ scale: 1.05 }}
-                className="bg-white p-6 rounded-xl shadow-lg text-center"
+                className="md:w-1/2 lg:w-1/4 px-4 mb-8"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
               >
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <div className="bg-white rounded-lg shadow-lg p-6 text-center h-full">
+                  <div className="text-4xl mb-4">{service.icon}</div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-600">{service.description}</p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -187,35 +243,45 @@ const App = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-16">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12">What Our Customers Say</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                name: "John Doe",
-                testimonial: "Spectrum has fantastic internet speeds and reliable service!",
-                avatar: "https://randomuser.me/api/portraits/men/32.jpg"
-              },
-              {
-                name: "Jane Smith",
-                testimonial: "Exceptional customer support and great value for money.",
-                avatar: "https://randomuser.me/api/portraits/women/44.jpg"
-              },
-              {
-                name: "Alex Johnson",
-                testimonial: "I've never had fewer connectivity issues. Highly recommend Spectrum!",
-                avatar: "https://randomuser.me/api/portraits/men/65.jpg"
-              }
-            ].map((customer, index) => (
+      <section id="testimonials" className="py-16 px-6 bg-white">
+        <div className="container mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Testimonials
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Hear what our satisfied clients have to say about our services.
+            </p>
+          </motion.div>
+
+          <div className="flex flex-wrap -mx-4">
+            {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
-                whileHover={{ scale: 1.03 }}
-                className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center text-center"
+                className="md:w-1/2 px-4 mb-8"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
               >
-                <img src={customer.avatar} alt={`${customer.name} avatar`} className="w-16 h-16 rounded-full mb-4" />
-                <p className="text-gray-600 mb-4">"{customer.testimonial}"</p>
-                <h4 className="text-lg font-bold">{customer.name}</h4>
+                <div className="bg-gray-100 rounded-lg shadow-lg p-6 flex">
+                  <img
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    className="w-16 h-16 rounded-full mr-4 object-cover"
+                  />
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-800">
+                      {testimonial.name}
+                    </h4>
+                    <p className="text-sm text-gray-500 mb-2">{testimonial.role}</p>
+                    <p className="text-gray-600">"{testimonial.text}"</p>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -223,117 +289,226 @@ const App = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12">Get In Touch</h2>
-          <div className="max-w-2xl mx-auto">
-            <form className="space-y-6">
-              <div>
-                <label className="block text-gray-700 mb-2">Name</label>
-                <input type="text" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-2">Email</label>
-                <input type="email" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-2">Message</label>
-                <textarea className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" rows="4"></textarea>
-              </div>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                type="submit"
-                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+      <section id="contact" className="py-16 px-6 bg-gray-100">
+        <div className="container mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Contact Us
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              We'd love to hear from you! Whether you have a question or want to start
+              a project, feel free to reach out.
+            </p>
+          </motion.div>
+
+          <div className="flex flex-col md:flex-row md:space-x-12">
+            {/* Contact Information */}
+            <div className="md:w-1/2 mb-8 md:mb-0">
+              <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+                Get in Touch
+              </h3>
+              <p className="text-gray-600 mb-4">
+                1234 Tech Avenue<br />
+                Silicon Valley, CA 94043
+              </p>
+              <p className="text-gray-600 mb-4">
+                Email: <a href="mailto:info@ragnovait.com" className="text-blue-600">info@ragnovait.com</a><br />
+                Phone: <a href="tel:+1234567890" className="text-blue-600">+1 (234) 567-890</a>
+              </p>
+            </div>
+
+            {/* Contact Form */}
+            <div className="md:w-1/2">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  // Placeholder for form submission logic
+                  alert('Thank you for contacting us!');
+                  e.target.reset();
+                }}
+                className="bg-white rounded-lg shadow-lg p-6"
               >
-                Send Message
-              </motion.button>
-            </form>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2" htmlFor="name">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    required
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    placeholder="Your Name"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2" htmlFor="email">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    required
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    placeholder="Your Email"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2" htmlFor="message">
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    required
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    rows="4"
+                    placeholder="Your Message"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+                >
+                  Send Message
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      {/* Footer Section */}
+      <footer className="bg-gray-800 py-8">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">Spectrum</h3>
-              <p className="text-gray-400">Connecting you to what matters most.</p>
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="text-white text-center md:text-left mb-4 md:mb-0">
+              © {new Date().getFullYear()} Ragnova IT Solutions. All rights reserved.
             </div>
-            <div>
-              <h4 className="text-lg font-bold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><a href="#home" className="text-gray-400 hover:text-white transition">Home</a></li>
-                <li><a href="#services" className="text-gray-400 hover:text-white transition">Services</a></li>
-                <li><a href="#features" className="text-gray-400 hover:text-white transition">Features</a></li>
-                <li><a href="#testimonials" className="text-gray-400 hover:text-white transition">Testimonials</a></li>
-                <li><a href="#contact" className="text-gray-400 hover:text-white transition">Contact</a></li>
-              </ul>
+            <div className="flex space-x-4">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">
+                <svg
+                  fill="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                </svg>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">
+                <svg
+                  fill="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0016.5 3c-2.5 0-4.5 2-4.5 4.5 0 .35.04.7.11 1.04C8.09 8.9 4.6 6.13 2.69 2.73a4.5 4.5 0 00-.61 2.28C2.09 6.7 4.6 9.5 7.5 10c-0.2 0.54-0.3 1.19-0.3 1.89V15c0 4.03 2.94 7.4 6.84 8.14a10.21 10.21 0 003.1.34c7.29 0 11.28-6.04 11.28-11.28 0-0.17-0.003-0.34-0.01-0.51A8.1 8.1 0 0023 3z"></path>
+                </svg>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                >
+                  <rect
+                    width="20"
+                    height="20"
+                    x="2"
+                    y="2"
+                    rx="5"
+                    ry="5"
+                  ></rect>
+                  <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line>
+                </svg>
+              </a>
             </div>
-            <div>
-              <h4 className="text-lg font-bold mb-4">Contact</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>1-800-SPECTRUM</li>
-                <li>support@spectrum.com</li>
-                <li>123 Internet Street</li>
-                <li>Digital City, DC 12345</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-bold mb-4">Follow Us</h4>
-              <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white transition">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162z"/></svg>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Spectrum Internet. All rights reserved.</p>
           </div>
         </div>
       </footer>
 
       {/* Chatbot */}
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className="fixed bottom-4 right-4">
         {isChatOpen ? (
-          <div className="bg-white rounded-lg shadow-lg w-80 h-96 flex flex-col">
-            <div className="bg-blue-600 text-white rounded-t-lg px-4 py-2 flex justify-between items-center">
-              <span>Chat with us</span>
-              <button onClick={toggleChat} className="text-white">✕</button>
+          <div className="flex flex-col h-80 w-80 bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="flex justify-between items-center bg-blue-600 text-white px-4 py-2">
+              <span>Chatbot</span>
+              <button onClick={() => setIsChatOpen(false)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414
+                    1.414L11.414 10l4.293 4.293a1 1 0
+                    01-1.414 1.414L10 11.414l-4.293
+                    4.293a1 1 0 01-1.414-1.414L8.586
+                    10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
             </div>
             <div className="flex-1 p-4 overflow-y-auto">
               {messages.map((msg, index) => (
-                <div key={index} className={`mb-4 flex ${msg.sender === 'bot' ? 'justify-start' : 'justify-end'}`}>
-                  <div className={`rounded-lg px-4 py-2 ${msg.sender === 'bot' ? 'bg-gray-200' : 'bg-blue-600 text-white'}`}>
+                <div
+                  key={index}
+                  className={`mb-2 flex ${
+                    msg.sender === 'user' ? 'justify-end' : 'justify-start'
+                  }`}
+                >
+                  <div
+                    className={`rounded-lg px-4 py-2 ${
+                      msg.sender === 'user'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-200 text-gray-800'
+                    }`}
+                  >
                     {msg.text}
                   </div>
                 </div>
               ))}
+              <div ref={messagesEndRef}></div>
             </div>
-            <form onSubmit={handleSendMessage} className="flex border-t px-4 py-2">
-              <input 
-                type="text" 
+            <form
+              onSubmit={handleSendMessage}
+              className="flex border-t border-gray-300"
+            >
+              <input
+                type="text"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
-                className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="flex-1 px-4 py-2 focus:outline-none"
                 placeholder="Type your message..."
               />
-              <button type="submit" className="ml-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-300"
+              >
                 Send
               </button>
             </form>
           </div>
         ) : (
-          <button 
-            onClick={toggleChat}
-            className="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg hover:bg-blue-700 transition"
+          <button
+            onClick={() => setIsChatOpen(true)}
+            className="w-16 h-16 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition-colors duration-300"
           >
             💬
           </button>
